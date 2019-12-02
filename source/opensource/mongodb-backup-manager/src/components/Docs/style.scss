@@ -1,0 +1,113 @@
+.docs {
+    display: flex;
+
+    .side-bar {
+        text-align: left;
+        margin-right: 2rem;
+        background: white;
+        padding: 2rem 1rem;
+        min-width: 300px;
+        overflow: auto;
+
+        .item {
+            margin-bottom: 10px;
+            flex-grow: 1;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            .title {
+                user-select: none;
+                background: #f1f1f1;
+                font-size: 1.2rem;
+                padding: 10px;
+                border-radius: 3px;
+                width: 100%;
+            }
+            
+            .item-tabs-wrapper {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height .6s ease;
+            }
+
+            .item-tabs {
+                transition: transform .4s ease;
+                transform: translateY(-1200%);
+
+                .tab {
+                    padding: 5px 0;
+                    color: #777;
+                    transition: color .25s ease;
+
+                    &.selected, &:hover {
+                        color: $blue;
+                    }
+                }
+            }
+
+            &.open {
+                .item-tabs-wrapper {
+                    max-height: 1000px;
+                }
+
+                .item-tabs {
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+
+    .docs-content {
+        flex-grow: 3;
+        background: white;
+        overflow: auto;
+        padding: 1rem;
+        color: #777;
+        font-weight: 400;
+        line-height: 1.5rem;
+
+        .content-title {
+            font-size: 2rem;
+            padding: 1rem;
+            text-align: center;
+            color: $blue;
+
+            &:first-letter {
+                text-transform: uppercase;
+            }
+        }
+        
+        img {
+            width: 100%;
+        }
+
+        p {
+          
+        }
+
+        ul {
+            list-style: none;
+
+            li {  
+                padding-left: 0 !important;           
+                &:not(:last-of-type) {
+                    margin-bottom: 1rem;
+                } 
+            }
+        }
+    
+        ul,code {
+            margin-top: 20px;
+            padding: 20px 10px;
+            background: #f0f0f0;
+            display: block;
+            border-radius: 5px;
+        }
+
+        pre {
+            width: 100%;
+        }
+    }
+}
