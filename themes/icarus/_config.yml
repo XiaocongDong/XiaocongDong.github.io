@@ -74,8 +74,11 @@ search:
 # https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Comment
 comment:
     # Name of the comment plugin
-    type: disqus
-    shortname: sunnydung
+    type: gitment
+    owner: XiaocongDong
+    repo: XiaocongDong.github.io
+    client_id: 9a8b4c4057518a9704d3
+    client_secret: 541c790c4f2386c7d15cec89076baa08d1a9a9ad
 # Donation entries
 # https://ppoffice.github.io/hexo-theme-icarus/categories/Donation/
 donate:
@@ -158,8 +161,7 @@ widgets:
         position: left
         # Links to be shown in the links widget
         links:
-            Hexo: 'https://hexo.io'
-            PPOffice: 'https://github.com/XiaocongDong'
+            掘金: 'https://juejin.im/user/5bf0c71df265da614e2bad68'
     -
         # Widget name
         type: category
