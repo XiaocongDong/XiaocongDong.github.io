@@ -117,7 +117,7 @@ console.log(greeting.trimStart())
 // 'Hello world! '
 ```
 这个方法还有一个别名函数，叫做trimLeft，它们具有一样的功能。
-## String.trimEnd
+## String.prototype.trimEnd
 这个方法和trimStart类似，只不过是将原字符串结尾的空格字符去掉，例子:
 ```javascript
 const greeting = '  Hello world!  '
