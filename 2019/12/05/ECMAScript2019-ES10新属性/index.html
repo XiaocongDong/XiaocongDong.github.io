@@ -19,7 +19,7 @@
 <meta property="og:description" content="每年都有一些新的属性进入ECMA262标准，今年发布的ECMAScript2019&#x2F;ES10同样也有很多新的特性，本文将会挑选一些普通开发者会用到的新属性进行深入的解读。 Array.prototype.flat() The flat() method creates a new array with all sub-array elements concatenated into it recu">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
-<meta property="og:updated_time" content="2019-12-05T10:20:17.458Z">
+<meta property="og:updated_time" content="2019-12-05T10:42:22.149Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 
@@ -153,7 +153,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    12 分钟 读完 (大约 1819 个字)
+                    12 分钟 读完 (大约 1820 个字)
                 </span>
                 
                 
@@ -193,7 +193,7 @@ var _hmt = _hmt || [];
 <h2 id="String-prototype-trimStart"><a href="#String-prototype-trimStart" class="headerlink" title="String.prototype.trimStart"></a>String.prototype.trimStart</h2><p>这个方法很简单，就是返回一个将原字符串开头的空格字符去掉的新的字符串，例子:</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> greeting = <span class="hljs-string">'    Hello world!  '</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(greeting.trimStart())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 'Hello world! '</span></span></pre></td></tr></table></figure>
 <p>这个方法还有一个别名函数，叫做trimLeft，它们具有一样的功能。</p>
-<h2 id="String-trimEnd"><a href="#String-trimEnd" class="headerlink" title="String.trimEnd"></a>String.trimEnd</h2><p>这个方法和trimStart类似，只不过是将原字符串结尾的空格字符去掉，例子:</p>
+<h2 id="String-prototype-trimEnd"><a href="#String-prototype-trimEnd" class="headerlink" title="String.prototype.trimEnd"></a>String.prototype.trimEnd</h2><p>这个方法和trimStart类似，只不过是将原字符串结尾的空格字符去掉，例子:</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> greeting = <span class="hljs-string">'  Hello world!  '</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(greeting.trimEnd())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ' Hello world!'</span></span></pre></td></tr></table></figure>
 <p>这个方法也有一个别名函数，叫做trimRight, 它们也具有一样的功能。</p>
 <h2 id="Symbol-prototype-description"><a href="#Symbol-prototype-description" class="headerlink" title="Symbol.prototype.description"></a>Symbol.prototype.description</h2><blockquote>
