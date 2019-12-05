@@ -192,7 +192,7 @@ try {
 console.log(testJSONObj)
 ```
 以上代码中无论testStr是不是一个合法的JSON字符串，testJSONObj永远都是一个空对象，因为JSON.parse函数名写错了，而你又忽略了错误处理，所以你永远不会知道这个typo。
-## 稳定的排序 Array.sort
+## 稳定的排序 Array.prototype.sort
 ECMAScript2019后Array.sort一定是个稳定的排序。什么是稳定排序？所谓的稳定排序就是：假如没排序之前有两个相同数值的元素a[i]和a[j]，而且i在j前面，即i < j，经过排序后元素a[i]依然排在a[j]元素的前面，也就是说稳定的排序不会改变原来数组里面相同数值的元素的先后关系。看个例子：
 ```javascript
 var users = [
