@@ -7,15 +7,19 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>Hexo</title>
+<title>详解ECMAScript2019/ES10新属性 - Hexo</title>
 
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+    <meta name="description" content="每年都有一些新的属性进入ECMA262标准，今年发布的ECMAScript2019&#x2F;ES10同样也有很多新的特性，本文将会挑选一些普通开发者会用到的新属性进行深入的解读。 Array.prototype.flat() The flat() method creates a new array with all sub-array elements concatenated into it recu">
+<meta name="keywords" content="JavaScript,ECMAScript,2019">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详解ECMAScript2019&#x2F;ES10新属性">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7&#x2F;index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="每年都有一些新的属性进入ECMA262标准，今年发布的ECMAScript2019&#x2F;ES10同样也有很多新的特性，本文将会挑选一些普通开发者会用到的新属性进行深入的解读。 Array.prototype.flat() The flat() method creates a new array with all sub-array elements concatenated into it recu">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
+<meta property="og:updated_time" content="2019-12-05T10:20:17.458Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 
@@ -83,7 +87,7 @@ var _hmt = _hmt || [];
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/gopherjs.png" alt="Hexo" height="28">
+                <img src="/images/gopherjs.png" alt="详解ECMAScript2019/ES10新属性" height="28">
             
             </a>
         </div>
@@ -91,7 +95,7 @@ var _hmt = _hmt || [];
             
             <div class="navbar-start">
                 
-                <a class="navbar-item is-active"
+                <a class="navbar-item"
                 href="/">Home</a>
                 
                 <a class="navbar-item"
@@ -133,7 +137,6 @@ var _hmt = _hmt || [];
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
-    
 <div class="card">
     
     <div class="card-content article ">
@@ -159,7 +162,7 @@ var _hmt = _hmt || [];
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/">详解ECMAScript2019/ES10新属性</a>
+                详解ECMAScript2019/ES10新属性
             
         </h1>
         <div class="content">
@@ -213,6 +216,15 @@ var _hmt = _hmt || [];
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(hello.toString())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//"function hello() &#123;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//  console.log('hello word')</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//&#125;"</span></span></pre></td></tr></table></figure>
         </div>
         
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/2019/" rel="tag">2019</a>, <a class="has-link-grey -link" href="/tags/ECMAScript/" rel="tag">ECMAScript</a>, <a class="has-link-grey -link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+                </div>
+            </div>
+        </div>
+        
         
         
     </div>
@@ -220,11 +232,61 @@ var _hmt = _hmt || [];
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="/images/wechat_pay.jpg" alt="微信"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
 
 
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '8756875624084759a41d58b401c8d83e',
+		owner: 'XiaocongDong',
+		repo: 'XiaocongDong.github.io',
+		oauth: {
+			client_id: '9a8b4c4057518a9704d3',
+			client_secret: '541c790c4f2386c7d15cec89076baa08d1a9a9ad',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -558,7 +620,7 @@ var _hmt = _hmt || [];
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/gopherjs.png" alt="Hexo" height="28">
+                    <img src="/images/gopherjs.png" alt="详解ECMAScript2019/ES10新属性" height="28">
                 
                 </a>
                 <p class="is-size-7">
