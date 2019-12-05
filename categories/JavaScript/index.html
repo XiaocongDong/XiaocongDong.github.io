@@ -7,13 +7,15 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>分类: JavaScript - Hexo</title>
+<title>分类: JavaScript - Xiaocong Dong</title>
 
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+    <meta name="description" content="Life is all about experiencing">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Xiaocong Dong">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;categories&#x2F;JavaScript&#x2F;index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Xiaocong Dong">
+<meta property="og:description" content="Life is all about experiencing">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 <meta name="twitter:card" content="summary">
@@ -83,7 +85,7 @@ var _hmt = _hmt || [];
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/gopherjs.png" alt="Hexo" height="28">
+                <img src="/images/gopherjs.png" alt="Xiaocong Dong" height="28">
             
             </a>
         </div>
@@ -151,7 +153,7 @@ var _hmt = _hmt || [];
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-12-05T18:04:15.000Z">2019-12-05</time>
+                <time class="level-item has-text-grey" datetime="2019-12-05T10:04:15.000Z">2019-12-05</time>
                 
                 <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/JavaScript/">JavaScript</a>
@@ -161,7 +163,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    12 分钟 读完 (大约 1820 个字)
+                    12 分钟 读完 (大约 1821 个字)
                 </span>
                 
                 
@@ -216,7 +218,7 @@ var _hmt = _hmt || [];
 <p>虽然这个新属性可以让你省略掉error，可是我觉得开发者应该避免使用这个属性，因为在我看来所有的错误都应该被处理，至少应该被console.error出来，否则可能会有一些潜在的bug，举个例子：</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">let</span> testJSONObj</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">try</span> &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">  testJSONObj = <span class="hljs-built_in">JSON</span>.prase(testStr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">&#125; <span class="hljs-keyword">catch</span> &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">  testJSONObj = &#123;&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(testJSONObj)</span></pre></td></tr></table></figure>
 <p>以上代码中无论testStr是不是一个合法的JSON字符串，testJSONObj永远都是一个空对象，因为JSON.parse函数名写错了，而你又忽略了错误处理，所以你永远不会知道这个typo。</p>
-<h2 id="稳定的排序-Array-sort"><a href="#稳定的排序-Array-sort" class="headerlink" title="稳定的排序 Array.sort"></a>稳定的排序 Array.sort</h2><p>ECMAScript2019后Array.sort一定是个稳定的排序。什么是稳定排序？所谓的稳定排序就是：假如没排序之前有两个相同数值的元素a[i]和a[j]，而且i在j前面，即i &lt; j，经过排序后元素a[i]依然排在a[j]元素的前面，也就是说稳定的排序不会改变原来数组里面相同数值的元素的先后关系。看个例子：</p>
+<h2 id="稳定的排序-Array-prototype-sort"><a href="#稳定的排序-Array-prototype-sort" class="headerlink" title="稳定的排序 Array.prototype.sort"></a>稳定的排序 Array.prototype.sort</h2><p>ECMAScript2019后Array.sort一定是个稳定的排序。什么是稳定排序？所谓的稳定排序就是：假如没排序之前有两个相同数值的元素a[i]和a[j]，而且i在j前面，即i &lt; j，经过排序后元素a[i]依然排在a[j]元素的前面，也就是说稳定的排序不会改变原来数组里面相同数值的元素的先后关系。看个例子：</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> users = [</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">  &#123;<span class="hljs-attr">name</span>: <span class="hljs-string">'Sean'</span>, <span class="hljs-attr">rating</span>: <span class="hljs-number">14</span>&#125;,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">  &#123;<span class="hljs-attr">name</span>: <span class="hljs-string">'Ken'</span>, <span class="hljs-attr">rating</span>: <span class="hljs-number">14</span>&#125;,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">  &#123;<span class="hljs-attr">name</span>: <span class="hljs-string">'Jeremy'</span>, <span class="hljs-attr">rating</span>: <span class="hljs-number">13</span>&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">users.sort(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.rating - b.rating)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 非稳定的排序结果可能是</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//   &#123;name: 'Jeremy', rating: 13&#125;, </span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//   &#123;name: 'Ken', rating: 14&#125;, </span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//   &#123;name: 'Sean', rating: 14&#125;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 虽然Sean和Ken具有同样的rating，可是非稳定的排序不能保证他们两个的顺序在排序后保持不变</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ECMAScript2019后，Array.sort将是一个稳定的排序，也就是说它可以保证Sean和Ken两个人的顺序在排序后不变</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//   &#123;name: 'Jeremy', rating: 13&#125;, </span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//   &#123;name: 'Sean', rating: 14&#125;, </span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//   &#123;name: 'Ken', rating: 14&#125;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ]</span></span></pre></td></tr></table></figure>
 <h2 id="改进Function-prototype-toString"><a href="#改进Function-prototype-toString" class="headerlink" title="改进Function.prototype.toString()"></a>改进Function.prototype.toString()</h2><p>ECMAScript2019之前，调用function的toString方法会将方法体里面的空格字符省略掉，例如:</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hello</span>(<span class="hljs-params"></span>) </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'hello word'</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(hello.toString())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//'function hello() &#123;\nconsole.log('hello word')\n&#125;'</span></span></pre></td></tr></table></figure>
@@ -390,7 +392,7 @@ var _hmt = _hmt || [];
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-05T18:04:15.000Z">2019-12-05</time></div>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-05T10:04:15.000Z">2019-12-05</time></div>
                     <a href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/" class="title has-link-black-ter is-size-6 has-text-weight-normal">详解ECMAScript2019/ES10新属性</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/JavaScript/">JavaScript</a>
@@ -487,7 +489,7 @@ var _hmt = _hmt || [];
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-05T18:04:15.000Z">2019-12-05</time></div>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-05T10:04:15.000Z">2019-12-05</time></div>
                     <a href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/" class="title has-link-black-ter is-size-6 has-text-weight-normal">详解ECMAScript2019/ES10新属性</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/JavaScript/">JavaScript</a>
@@ -569,11 +571,11 @@ var _hmt = _hmt || [];
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/gopherjs.png" alt="Hexo" height="28">
+                    <img src="/images/gopherjs.png" alt="Xiaocong Dong" height="28">
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 John Doe&nbsp;
+                &copy; 2019 Xiaocong Dong&nbsp;
                 Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
                         href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
                 
