@@ -7,15 +7,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>about - Xiaocong Dong</title>
+<title>JavaScript小技巧 - 数组篇 - Xiaocong Dong</title>
 
 
-    <meta name="description" content="大家好，我是董小聪。我2016年毕业于北京邮电大学通信工程本科专业。大学前三年过得浑浑噩噩，直到大三才主动去学习编程。刚开始做的是网络虚拟化相关的工作，在思科中国实习的时候参与了OpenDaylight控制器的研发，用的是Java。后面大学毕业去了美国硅谷工作了一年，在那一年里做了很多大大小小的项目，写过NodeJS也玩过Python。后面却鬼使神差回国做了前端，现在正努力成为一个全面的全栈开发。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;about&#x2F;index.html">
+    <meta name="description" content="本文整理了一些在日常工作可以用到的JavaScript数组小技巧 去重巧用Set特性 1const arr &#x3D; [1, 2, 2, 3, 4, 7, 7]2const uniqueArr &#x3D; [...new Set(arr)]3console.log(uniqueArr)4&#x2F;&#x2F; [1, 2, 3, 4, 7] 某一个位置插入元素改变原数组 1const arr &#x3D; [1, 2, 3, 5, 6,">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript小技巧 - 数组篇">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;11&#x2F;JavaScript%E5%B0%8F%E6%8A%80%E5%B7%A7-%E6%95%B0%E7%BB%84%E7%AF%87&#x2F;index.html">
 <meta property="og:site_name" content="Xiaocong Dong">
-<meta property="og:description" content="大家好，我是董小聪。我2016年毕业于北京邮电大学通信工程本科专业。大学前三年过得浑浑噩噩，直到大三才主动去学习编程。刚开始做的是网络虚拟化相关的工作，在思科中国实习的时候参与了OpenDaylight控制器的研发，用的是Java。后面大学毕业去了美国硅谷工作了一年，在那一年里做了很多大大小小的项目，写过NodeJS也玩过Python。后面却鬼使神差回国做了前端，现在正努力成为一个全面的全栈开发。">
+<meta property="og:description" content="本文整理了一些在日常工作可以用到的JavaScript数组小技巧 去重巧用Set特性 1const arr &#x3D; [1, 2, 2, 3, 4, 7, 7]2const uniqueArr &#x3D; [...new Set(arr)]3console.log(uniqueArr)4&#x2F;&#x2F; [1, 2, 3, 4, 7] 某一个位置插入元素改变原数组 1const arr &#x3D; [1, 2, 3, 5, 6,">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 <meta property="og:updated_time" content="2019-12-11T09:35:10.269Z">
@@ -86,7 +87,7 @@ var _hmt = _hmt || [];
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/gopherjs.png" alt="about" height="28">
+                <img src="/images/gopherjs.png" alt="JavaScript小技巧 - 数组篇" height="28">
             
             </a>
         </div>
@@ -106,7 +107,7 @@ var _hmt = _hmt || [];
                 <a class="navbar-item"
                 href="/tags">Tags</a>
                 
-                <a class="navbar-item is-active"
+                <a class="navbar-item"
                 href="/about">About</a>
                 
             </div>
@@ -140,16 +141,59 @@ var _hmt = _hmt || [];
     
     <div class="card-content article ">
         
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-12-11T09:32:16.000Z">2019-12-11</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 370 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                about
+                JavaScript小技巧 - 数组篇
             
         </h1>
         <div class="content">
-            <p>大家好，我是董小聪。我2016年毕业于北京邮电大学通信工程本科专业。大学前三年过得浑浑噩噩，直到大三才主动去学习编程。刚开始做的是网络虚拟化相关的工作，在思科中国实习的时候参与了OpenDaylight控制器的研发，用的是Java。后面大学毕业去了美国硅谷工作了一年，在那一年里做了很多大大小小的项目，写过NodeJS也玩过Python。后面却鬼使神差回国做了前端，现在正努力成为一个全面的全栈开发。</p>
-<p>我个人觉得其实没有太大必要区分前端后端，我更看重的是Software Engineer这个称号。我个人认为软件工程师就是利用程序去实现和创造一些有价值的东西，程序员的核心价值并不是他掌握了多少语言，能够使用多少工具，而是他自己分析问题和解决问题的能力，或者说系统设计能力(System Design)。</p>
-<p>我的梦想是通过自己的努力去改变别人，这就是改变世界。</p>
+            <p>本文整理了一些在日常工作可以用到的JavaScript数组小技巧</p>
+<h1 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h1><p>巧用Set特性</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> uniqueArr = [...new <span class="hljs-built_in">Set</span>(arr)]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(uniqueArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 7]</span></span></pre></td></tr></table></figure>
+<h1 id="某一个位置插入元素"><a href="#某一个位置插入元素" class="headerlink" title="某一个位置插入元素"></a>某一个位置插入元素</h1><p>改变原数组</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">arr.splice(<span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">4</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7]</span></span></pre></td></tr></table></figure>
+<p>不改变原数组</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> indexNeededToInsert = <span class="hljs-number">2</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> newArr = [...arr.slice(<span class="hljs-number">0</span>, indexNeededToInsert), <span class="hljs-number">3</span>, ...arr.slice(indexNeededToInsert)]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(newArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 4, 5]</span></span></pre></td></tr></table></figure>
+<h1 id="删除某一个位置的元素"><a href="#删除某一个位置的元素" class="headerlink" title="删除某一个位置的元素"></a>删除某一个位置的元素</h1><p>不改变原数组</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> indexToBeRemoved = <span class="hljs-number">3</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> filteredArr = arr.filter(<span class="hljs-function">(<span class="hljs-params">_, index</span>) =&gt;</span> index !== indexToBeRemoved)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(filteredArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 5]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5]</span></span></pre></td></tr></table></figure>
+<p>改变原数组</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> indexToBeRemoved = <span class="hljs-number">3</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">arr.splice(indexToBeRemoved, <span class="hljs-number">1</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 5]</span></span></pre></td></tr></table></figure>
+<h1 id="获取数组最后一个元素"><a href="#获取数组最后一个元素" class="headerlink" title="获取数组最后一个元素"></a>获取数组最后一个元素</h1><p>改变原数组</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> lastElement = arr.pop()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(lastElement)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 5</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4]</span></span></pre></td></tr></table></figure>
+<p>不改变原数组</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> lastElement = arr.slice(<span class="hljs-number">-1</span>)[<span class="hljs-number">0</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(lastElement)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 5</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5]</span></span></pre></td></tr></table></figure>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice" target="_blank" rel="noopener">slice</a>第一个参数如果是负数表示从后面开始数起的第几个元素，-1表示倒数第一个元素。</p>
+<h1 id="清空数组"><a href="#清空数组" class="headerlink" title="清空数组"></a>清空数组</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">arr.length = <span class="hljs-number">0</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// []</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr[<span class="hljs-number">0</span>])</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// undefined</span></span></pre></td></tr></table></figure>
+<h1 id="生成一定长度的数组"><a href="#生成一定长度的数组" class="headerlink" title="生成一定长度的数组"></a>生成一定长度的数组</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> newArr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(<span class="hljs-number">10</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(newArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [ &lt;10 empty items&gt; ]</span></span></pre></td></tr></table></figure>
+<h1 id="两个数组的交集"><a href="#两个数组的交集" class="headerlink" title="两个数组的交集"></a>两个数组的交集</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr1 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr2 = [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> intersectedArr = arr1.filter(<span class="hljs-function"><span class="hljs-params">item1</span> =&gt;</span> arr2.includes(item1))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(intersectedArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [2, 3]</span></span></pre></td></tr></table></figure>
+<h1 id="合并多个数组"><a href="#合并多个数组" class="headerlink" title="合并多个数组"></a>合并多个数组</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr1 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr2 = [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr3 = [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> mergedArr = [...arr1, ...arr2, ...arr3]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(mergedArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span></pre></td></tr></table></figure>
+<h1 id="移除数组的虚假-falsy-值"><a href="#移除数组的虚假-falsy-值" class="headerlink" title="移除数组的虚假(falsy)值"></a>移除数组的虚假(falsy)值</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> mixedArr = [<span class="hljs-number">0</span>, “blue”, “”, <span class="hljs-literal">NaN</span>, <span class="hljs-number">9</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">undefined</span>, “white”, <span class="hljs-literal">false</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> trueArr = mixedArr.filter(<span class="hljs-built_in">Boolean</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(trueArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [“blue”, 9, true, “white”]</span></span></pre></td></tr></table></figure>
+<h1 id="求和"><a href="#求和" class="headerlink" title="求和"></a>求和</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> nums = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> sum = nums.reduce(<span class="hljs-function">(<span class="hljs-params">currSum, num</span>) =&gt;</span> currSum + num)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(sum)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 15</span></span></pre></td></tr></table></figure>
 
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+                </div>
+            </div>
         </div>
         
         
@@ -190,6 +234,20 @@ var _hmt = _hmt || [];
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/">
+                <span class="level-item">详解ECMAScript2019/ES10新属性</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
 
 
 <div class="card">
@@ -201,7 +259,7 @@ var _hmt = _hmt || [];
 <script src="https://billts.site/js/gitment.js"></script>
 <script>
 	var gitment = new Gitment({
-		id: 'a7224db13f3a49096aa27c1876d1a947',
+		id: '12b9db361f3401cc2bad525e561dbff9',
 		owner: 'XiaocongDong',
 		repo: 'XiaocongDong.github.io',
 		oauth: {
@@ -585,7 +643,7 @@ var _hmt = _hmt || [];
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/gopherjs.png" alt="about" height="28">
+                    <img src="/images/gopherjs.png" alt="JavaScript小技巧 - 数组篇" height="28">
                 
                 </a>
                 <p class="is-size-7">
