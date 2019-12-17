@@ -1,14 +1,15 @@
 ---
 title: Svelte 3 初学者完全指南
 tags: Svelte
-# thumbnail: /gallery/svelte_intro.png
+date: 2019-12-17 12:04:50
 ---
-React, Vue和Angular差不多占据了Web开发的大部分江山，可是最近半年[Svelte](!https://svelte.dev/)开始逐渐吸引越来越多人的眼球。这个Svelte框架到底有什么过人之处呢？本文将会为大家分析一下Svelte火起来的原因，并且通过使用Svelte去搭建一个简单的书店应用（bookshop）来帮助大家快速入门。
+
+React, Vue和Angular差不多占据了Web开发的大部分江山，可是最近半年[Svelte](!https://svelte.dev/)开始逐渐吸引越来越多人的眼球。这个Svelte框架到底有什么过人之处呢？本文将会为大家分析一下Svelte火起来的原因，并且通过使用Svelte去搭建一个简单的书店应用（bookshop）来帮助大家快速入门这门框架。
 
 # Svelte为什么会火?
 要想知道Svelte为什么会火，首先得看看React和Vue这些框架存在什么问题。
-## big runtime 大的运行时
-React和Vue是基于runtime的框架。所谓基于runtime的框架就是框架本身的代码也会被打包到最终的bundle.js并被发送到用户浏览器。当用户在你的页面进行各种操作改变组件的状态时，框架的runtime会根据新的组件状态（state）计算（diff）出哪些DOM节点需要被更新，从而更新视图。那么这些runtime代码到底有多大呢，可以看一些社区的[统计数据](https://gist.github.com/Restuta/cda69e50a853aa64912d):
+## big runtime - 大的运行时
+React和Vue都是基于runtime的框架。所谓基于runtime的框架就是框架本身的代码也会被打包到最终的bundle.js并被发送到用户浏览器。当用户在你的页面进行各种操作改变组件的状态时，框架的runtime会根据新的组件状态（state）计算（diff）出哪些DOM节点需要被更新，从而更新视图。那么这些runtime代码到底有多大呢，可以看一些社区的[统计数据](https://gist.github.com/Restuta/cda69e50a853aa64912d):
 
 | Name                             | Size      |
 | -------------------------------- | --------- |
@@ -24,11 +25,11 @@ React和Vue是基于runtime的框架。所谓基于runtime的框架就是框架�
 | React 0.14.5 + React DOM + Redux | 139K      |
 | React 16.2.0 + React DOM         | **97.5K** |
 
-从上面的表格可以看出常用的框架中，最小的Vue都有58k，React更有97.5k。换句话说如果你使用了React作为开发的框架，即使你的业务代码很简单，你的首屏bundle size都要100k起步。当然100k不算很大，可是事物都是相对的，相对于大型的管理系统来说100k肯定不算什么，可是对于那些首屏加载时间敏感的应用（例如淘宝，京东主页），100k的bundle size在一些网络环境不好的情况或者手机端真的会影响用户体验。那么如何减少框架的runtime代码大小呢？要想减少runtime代码的最有效的方法就是压根不用runtime。其实回想一下Web开发的历史，很早之前在Jquery和Bootstrap一把梭的时候，我们的代码不就是不包含runtime的吗？当数据变化时直接通过JavaScript去改变原生DOM节点，没有框架那一系列diff和调度（React Fiber）的过程。这时你可能会问，要减少bundle size真的要回到那个刀耕火种的时代吗？有没有那种既可以让我用接近React和Vue的语法编写代码，同时又不包含框架runtime的办法。这恰恰就是Svelte要做的东西，它采用了Compiler-as-framework的理念，将框架的概念放在编译时而不是运行时。你编写的应用代码在用诸如Webpack和Rollup等工具打包的时候会被直接转换为JavaScript对DOM节点的原生操作，从而让bundle.js不包含框架的runtime。那么Svelte到底可以将bundle size减少多少呢？以下是[RealWorld](https://www.freecodecamp.org/news/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075/)这个项目的统计：![](/images/svelte3-intro/bundle-size.png)
-实现相同功能的应用Svelte的bundle size大小是Vue的1/4，是React的1/20！单纯从这个数据来看，Svelte这个框架对bundle size的优化真的很大。
+从上面的表格可以看出常用的框架中，最小的Vue都有58k，React更有97.5k。换句话说如果你使用了React作为开发的框架，即使你的业务代码很简单，你的首屏bundle size都要100k起步。当然100k不算很大，可是事物都是相对的，相对于大型的管理系统来说100k肯定不算什么，可是对于那些首屏加载时间敏感的应用（例如淘宝，京东主页），100k的bundle size在一些网络环境不好的情况或者手机端真的会影响用户体验。那么如何减少框架的runtime代码大小呢？要想减少runtime代码的最有效的方法就是压根不用runtime。其实回想一下Web开发的历史，很早之前在用Jquery和Bootstrap一把梭的时候，我们的代码不就是不包含runtime的吗？当数据变化时直接通过JavaScript去改变原生DOM节点，没有框架那一系列diff和调度（React Fiber）的过程。这时你可能会问，要减少bundle size真的要回到那个刀耕火种的时代吗？有没有那种既可以让我用接近React和Vue的语法编写代码，同时又不包含框架runtime的办法。这恰恰就是Svelte要做的东西，它采用了Compiler-as-framework的理念，将框架的概念放在编译时而不是运行时。你编写的应用代码在用诸如Webpack和Rollup等工具打包的时候会被直接转换为JavaScript对DOM节点的原生操作，从而让bundle.js不包含框架的runtime。那么Svelte到底可以将bundle size减少多少呢？以下是[RealWorld](https://www.freecodecamp.org/news/a-realworld-comparison-of-front-end-frameworks-with-benchmarks-2019-update-4be0d3c78075/)这个项目的统计：![](/images/svelte3-intro/bundle-size.png)
+由上面的图表可以看出实现相同功能的应用，Svelte的bundle size大小是Vue的1/4，是React的1/20！单纯从这个数据来看，Svelte这个框架对bundle size的优化真的很大。
 
 ## 低效的Virtual DOM Diff
-什么？Virtual DOM不是一直都很高效的吗？其实Virtual DOM高效是一个误解。说Virtual DOM高效的一个理由就是它不会直接操作原生的DOM节点，因为这个很消耗性能。当组件状态变化时它会通过某些diff算法去计算出本次数据更新真实的视图变化，然后只改变“需要改变”的DOM节点。用过React的人可能都会体会到React并没有想象中那么高效，框架有时候会做很多无用功，这体现在很多组件会被“无缘无故”进行重渲染（re-render）。注意这里说的re-render和对原生DOM进行操作是两码事！所谓的re-render是你定义的class Component的render方法被重新执行，或者你的组件函数被重新执行。组件被重渲染是因为Vitual DOM的高效是建立在diff算法上的，而要有diff一定要将组件重渲染才能知道组件的新状态和旧状态有没有发生改变，从而才能计算出哪些DOM需要被更新。你可能会说React Fiber不是出来了吗，这个应该不是问题了吧？其实Fiber这个架构解决的只是不让组件的重渲染和reconcile的过程阻塞主线程的执行，组件重渲染的问题依然存在的，而且据反馈，React Hooks出来后组件的重渲染更加频繁了。正是因为框架本身很难避免无用的渲染，React才允许你使用一些诸如shouldComponentUpdate，PureComponent和useMemo的API去告诉框架哪些组件不需要被重渲染，可是这也就引入了很多模板代码（boilerplate）。如果大家想了解更多关于Virtual DOM算法的问题，可以看一下[virtual dom is pure overhead](https://svelte.dev/blog/virtual-dom-is-pure-overhead)这篇文章。
+什么？Virtual DOM不是一直都很高效的吗？其实Virtual DOM高效是一个误解。说Virtual DOM高效的一个理由就是它不会直接操作原生的DOM节点，因为这个很消耗性能。当组件状态变化时它会通过某些diff算法去计算出本次数据更新真实的视图变化，然后只改变“需要改变”的DOM节点。用过React的人可能都会体会到React并没有想象中那么高效，框架有时候会做很多无用功，这体现在很多组件会被“无缘无故”进行重渲染（re-render）。注意这里说的re-render和对原生DOM进行操作是两码事！所谓的re-render是你定义的class Component的render方法被重新执行，或者你的组件函数被重新执行。组件被重渲染是因为Vitual DOM的高效是建立在diff算法上的，而要有diff一定要将组件重渲染才能知道组件的新状态和旧状态有没有发生改变，从而才能计算出哪些DOM需要被更新。你可能会说React Fiber不是出来了吗，这个应该不是问题了吧？其实Fiber这个架构解决的问题是不让组件的重渲染和reconcile的过程阻塞主线程的执行，组件重渲染的问题依然存在，而且据反馈，React Hooks出来后组件的重渲染更加频繁了。正是因为框架本身很难避免无用的渲染，React才允许你使用一些诸如shouldComponentUpdate，PureComponent和useMemo的API去告诉框架哪些组件不需要被重渲染，可是这也就引入了很多模板代码（boilerplate）。如果大家想了解更多关于Virtual DOM存在的问题，可以看一下[virtual dom is pure overhead](https://svelte.dev/blog/virtual-dom-is-pure-overhead)这篇文章。
 
 那么如何解决Vitual DOM算法低效的问题呢？最有效的解决方案就是**不用Virtual DOM**！其实作为一个框架要解决的问题是当数据发生改变的时候相应的DOM节点会被更新（reactive），Virtual DOM需要比较新老组件的状态才能达到这个目的，而更加高效的办法其实是**数据变化的时候直接更新对应的DOM节点**：
 ```javascript
@@ -46,19 +47,24 @@ Svelte是由[RollupJs](https://rollupjs.org/guide/en/)的作者Rich Harris编写
 * 默认就支持类似于CSS modules的CSS scope功能，让你避免CSS样式冲突的困扰。
 * 原生支持CSS animation。
 * 极其容易的组件状态管理（state management），减少开发者的模板代码编写（boilerplate less）。
-* 支持响应式定义（Reactive statements），有点类似redux store selector的概念。
+* 支持反应式定义（Reactive statement）。
 * 极其容易的应用全局状态管理，框架本身自带全局状态，类似于React的Redux和Vue的Vuex。
-* 支持context，极其容易地将组件状态传递给嵌套的子节点，避免props drilling。
+* 支持context，避免组件的props drilling。
 
-Svelte这个框架与Vue和React之间最大的区别是它除了管理组件的状态和追踪他们的渲染，还有很多附加的有用的功能。例如它原生支持CSS scope和CSS animation。如果你用React或者Vue是需要引入第三方库来实现同样的功能的，而第三方依赖的引入会给开发者增加学习和维护的成本。
+Svelte这个框架与Vue和React之间最大的区别是它除了管理组件的状态和追踪他们的渲染，还有很多其他有用的功能。例如它原生支持CSS scope和CSS animation。如果你用React或者Vue是需要引入第三方库来实现同样的功能的，而第三方依赖的引入会给开发者增加学习和维护的成本。
 
 # 用Svelte搭建一个Bookshop应用
 接下来我们会从头开始搭建一个基于Svelte框架的简单书店应用bookshop，通过这个demo，希望大家可以理解Svelte的一些基本概念和掌握它的一些基本用法并能够使用Svelte去搭建更加复杂的应用。
 ## 应用功能
 Bookshop应用支持以下功能：
-* 录入新图书
+* 管理员录入新图书
 * 展示书店图书列表
 * 将图书加到购物车
+* 展示购物车的数据信息
+
+## 对学习者的技术要求
+* 掌握html，css和javascript的基础用法
+* 有过React或者Vue的相关开发经验最佳
 
 项目的源代码可以在我的[github仓库](https://github.com/XiaocongDong/svelte-bookshop)找到。
 
@@ -84,7 +90,7 @@ yarn dev
 * src文件夹，这个文件夹用来存储我们的项目源代码，现在只有一个项目的主入口文件main.js和一个组件文件App.svelte。
 * public文件夹，这个文件夹是用来存储项目的静态文件（index.html, global.css和favicon.png）和rollup编译生成的静态文件（build文件夹底下的bundle.js和bundle.css以及它们各自的source map）。
 
-接着让我们具体看一下src文件夹底下的文件内容
+接着让我们具体看一下src文件夹底下的各个文件内容
 ### src/App.svelte
 ```javascript
 <script>
@@ -118,7 +124,7 @@ yarn dev
 	}
 </style>
 ```
-这个文件定义了一个叫做App的Svelte组件，这里要注意App.svelte文件内并没有定义组件的名称，**组件的名称是由它的文件名确定的**。Svelte组件的文件名都是以.svelte结尾的，一个组件文件通常会包含以下三部分内容：
+这个文件定义了一个叫做App的Svelte组件，这里要注意App.svelte文件内并没有定义组件的名称，**组件的名称是由它的文件名确定的**。**Svelte组件的文件名都是以.svelte结尾的**，一个组件文件通常会包含以下三部分内容：
 * **\<script\>标签**，和组件相关的任何JavaScript代码都可以放在这里，例如组件的状态定义或者一些异步Ajax请求。在这个App.svelte文件里面没有定义局部的组件状态，而是定义并export了一个name变量。对于Svelte框架，export一个变量就是将这个变量指定为当前组件的一个外部参数 - props。这种做法和React里面的将props作为组件的第一个参数的区别很大，可能大家一开始有点不习惯，不过后面习惯了，你可能也会爱上这种写法的。
 * **\<style\>标签**，和组件相关的CSS代码会放在这里。注意这里的CSS是局部生效的（scope），也就是说App.svelte中的h1标签的样式只会对App组件内的h1标签生效，而对项目其他的包括这个组件的子节点的h1标签失效。具体可以用浏览器的调试工具看一下h1标签的实际样式就明白了: ![](/images/svelte3-intro/bootstrap-h1-css.png)由上图可以看出Svelte在生成代码的时候会用一些随机的哈希值将组件的样式和其它组件的样式区别开来。
 * **组件的HTML标签**。组件的HTML标签可以直接在文件中写出来，例如App组件的HTML部分是：
@@ -273,7 +279,7 @@ function update(ctx, dirty) {
   if (dirty[0] & /*name*/ 1) set_data_dev(t1, /*name*/ ctx[0]);
 }
 ```
-p函数会在ctx上下文更新的时候去更新对应DOM节点的属性。具体就是当上下文变化的时候，检查一下name这个变量有没有变化，如果发生变化则更新DOM节点。
+p函数会在ctx上下文更新的时候去更新对应DOM节点的属性。大概就是当上下文变化的时候，检查一下name这个变量有没有变化，如果发生变化则更新DOM节点。
 #### d（destroy）
 ```javascript
 function destroy(detaching) {
@@ -372,13 +378,35 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
 </style>
 
 <div class="card">
+  <h1>title</h1>
+  <h2>price</h2>
+  <p>description</p>
+  <button>添加到购物车</button>
+</div>
+```
+### 变量使用
+定义和引入的变量可以在组件的HTML markup中直接使用，具体用法是在Markup中用花括号（curly braces）引用该变量，具体代码时：
+```html
+// src/BookCard.svelte
+<script>
+  export let title;
+  export let price;
+  export let description;
+</script>
+
+<style>
+...
+</style>
+
+<div class="card">
   <h1>{title}</h1>
   <h2>${price}</h2>
   <p>{description}</p>
   <button>添加到购物车</button>
 </div>
 ```
-然后在父级组件App中，将BookCard需要的参数并传给该组件：
+### 组件参数传递
+然后在父级组件App中，将BookCard需要的参数传给该组件：
 ```html
 // src/App.svelte
 <script>
@@ -399,9 +427,10 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
   </section>
 </main>
 ```
-这时候查看页面：![](/images/svelte3-intro/bookcard-props.png)
-我们可以看到BookCard现在展示的数据就是App传给它的数据了。其实Svelte为了开发者遍历，允许直接使用以下的写法去传递参数：
+这时候书本卡片的内容应该是传入的参数了：![](/images/svelte3-intro/bookcard-props.png)
+对于组件参数传递，Svelte还提供了以下更加方便的写法：
 ```html
+// src/App.svelte
 <main>
   <h1>Welcome to my online bookstore!</h1>
   <section>
@@ -438,9 +467,9 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
 </main>
 ```
 我们为App组件新建了一些input标签，并指定这些input标签的值为我们之前定义的变量，这时候我们试着改变输入框的内容：![](/images/svelte3-intro/book-input-not-bind.gif)
-这时候虽然输入框的初始值是变量对应的值，可是变量的值并不会随着输入框的值的改变而改变，也就是它们的值没有”绑定起来“，要想实现双向数据绑定，我们可以给输入框添加一个监听事件。
-### event listening
-**我们可以使用on关键字加事件名称给DOM添加事件监听器**，例如以下代码会监听input输入框的`input`事件：
+虽然输入框的初始值是变量对应的值，可是变量的值并不会随着输入框的值的改变而改变，也就是它们的值没有”绑定起来“，要想实现双向数据绑定，我们可以给输入框添加一个监听事件。
+### 事件绑定
+**我们可以使用on关键字加事件名称给DOM添加事件监听器**，以下代码将会监听input输入框的`input`事件：
 ```html
 <script>
   ...
@@ -468,9 +497,10 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
 ```
 这时候我们再改变input的值，会发现卡片里面的内容也发生了改变，说明我们成功改变了`title`变量的值：![](/images/svelte3-intro/book-input-event-bind.gif)
 
-### data auto binding
-可是如果每一个input标签都要手动添加一个事件监听的话我们的代码会有很多模板代码，为了解决这个问题，**Svelte允许我们直接用bind关键字加要绑定的属性进行双向数据的绑定**：
+### 自动数据双向绑定
+可是如果每一个input标签都要手动添加一个事件监听的话我们的代码会有很多模板代码，为了解决这个问题，**Svelte允许我们直接用bind关键字加要绑定的属性进行双向数据绑定**：
 ```html
+// src/App.svelte
 <script>
   ...
   let title = "JavaScript高级编程";
@@ -496,15 +526,16 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
   ...
 </main>
 ```
-同时我们还可以把各个变量的初始值去掉：
+这时候我们就可以把各个变量的初始值去掉：
 ```html
+// src/App.svelte
 <script>
   let title = "";
   let price = 0;
   let description = "";
 </script>
 ```
-这时候我们页面的输入框和所有变量”绑定“起来了：![](/images/svelte3-intro/book-input-bind.gif)
+这时候我们页面的输入框和所有变量都”绑定“起来了：![](/images/svelte3-intro/book-input-bind.gif)
 ## 展示书本列表
 我们的书店应该不止一本书，要用一个数组把所有的书本存起来：
 ```html
@@ -515,7 +546,7 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
   ...
 </script>
 ```
-接着我们再为刚刚的表单添加一个提交按钮，用户填完书本的信息后点击提交会新建一个book对象，新建的book对象会被加到books列表中去：
+接着我们再为刚刚新增的表单添加一个提交按钮，用户填完书本的信息后点击提交会新建一个book对象，新建的book对象会被加到books列表中去：
 ```html
 <script>
   ...
@@ -559,8 +590,8 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
   ...
 </main>
 ```
-### each block
-**我们可以使用each语法块去展示列表数据**：
+### 展示列表数据
+**我们可以使用each语法块去展示books列表的数据**：
 ```html
 // src/App.svelte
 <script>
@@ -590,6 +621,7 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
 ```
 **你也可以直接在each块定义的时候解构出被递归对象里面的内容**，上面的代码变为：
 ```html
+// src/App.svelte
   ...
   <section>
     {#each books as { title, price, description }}
@@ -598,7 +630,7 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
   </section>
   ...
 ```
-代码更改完后，你的页面应该就可以录入新书并展示书的列表了：![](/images/svelte3-intro/book-list.gif)
+代码更改完后，你的页面就可以录入新书并展示书的列表了：![](/images/svelte3-intro/book-list.gif)
 ## 购物车功能
 首先我们要为BookCard这个组件的按钮添加一个点击事件：用户点击书本卡片按钮的时候这本书会被加到购物车中。要实现这个效果我们可以为BookCard按钮定义一个**handleAddBook**的参数，这个参数由外面组件来提供，**handleAddBook**函数会在用户点击BookCard按钮的时候被调用并将该书添加购物车中。代码如下：
 ```html
@@ -651,9 +683,9 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
   </section>
 </main>
 ```
-这时候我们就可以看到我们的购物车了：![](/images/book-cart.gif)
-### if block
-我们还可以在购物车为空的时候展示一个空的状态，**Svelte可以用if语法块根据不同条件展示不同的内容**：
+这时候我们就可以看到我们的购物车了：![](/images/svelte3-intro/book-cart.gif)
+### 条件判断
+**Svelte可以用if语法块根据不同条件展示不同的内容**，我们可以在购物车为空的时候给用户展示一个空的状态：
 ```html
 // src/App.svelte
 ...
@@ -696,10 +728,10 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
 </section>
 ...
 ```
-不过这时候我们操作界面却发现购物车的数据变化时统计数据竟然没有变化：![](/images/svelte3-intro/book-cart-total.gif)
-数据没有变化的原因是我们每次添加书本到购物车的时候没有手动地去改变`booksNumInCart`和`totalCheckoutPrice`的值。如果需要在购物车数据发生变化的时候手动维护统计数据的话，代码会变得很丑陋。
-### Reactive assignment
-对于这种情况，Svelte提供了**响应式赋值（Reactive assignment**的方法来表示这种联动的数据，**具体做法就是将需要定义为响应式变量的变量用`$`符号定义而不是let**，以下是代码：
+这时候我们操作界面却发现购物车的数据变化时统计数据竟然没有变化：![](/images/svelte3-intro/book-cart-total.gif)
+数据没有变化的原因是我们每次添加书本到购物车的时候没有手动地去改变`booksNumInCart`和`totalCheckoutPrice`的值。不过如果需要在购物车数据发生变化的时候手动维护统计数据的话，代码会变得很丑陋。
+### 反应式定义
+对于这种情况，Svelte提供了**反应式定义（Reactive assignment）**的方法来表示这种联动的数据，**具体做法就是用`$`符号定义变量而不是let**，以下是代码：
 ```html
 <script>
   ...
@@ -717,9 +749,33 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
 这时候我们再对界面进行操作的话，会发现统计数据会随着购物车的数据变化而自动发生改变：![](/images/svelte3-intro/book-cart-reactive.gif)
 
 ## 总结
-很不容易我们终于把一个简易的书店系统用Svelte搭建出来，我相信在搭建这个应用的过程你已经掌握了Svelte的一些基本用法，可是我在这里覆盖Svelte一小部分的功能，要想构建一个复杂的应用这些简单的用法是远远不够的，剩下的东西大家可以参考[Svelte的官方文档](https://svelte.dev/tutorial/basics)继续学习。
+我们的简易书店系统（bookshop）大概就实现了这些功能，现在来总结一下在开发项目的时候覆盖到的Svelte框架基础知识：
+* 组件定义 - component definition
+* 变量使用 - using variables 
+* props定义和参数传递 - props definition and passing
+* 事件监听 - event listening
+* 数据绑定 - data binding
+* 条件判断 - if condition
+* 列表数据展示 - each block
 
-## 我个人对Svelte框架的一些看法
-我觉得Compiler-as-framework这个思路应该是前端未来框架发展的一个趋势，Svelte目前实现的功能其实也非常不错。可是就目前来说Svelte框架还有以下问题：
-* 可扩展性。就像我们在刚开始所说的那样因为React和Vue这个框架自带比较大的runtime会增加首屏加载的bundle.js，所以Svelte才选择了在编译的时候直接生成JavaScript指令来避免引入框架的runtime。可是当项目变得越来越大的时候，其实框架的runtime在打包出来的bundle里面占据的比例也越来越小，相反Svelte在大型的项目里面会不会生成很多重复的代码呢？这个时候是不是会产生比框架runtime大得多的bundle size呢？这个问题现在还没有具体的答案，只能等后人实践的时候给出答案了。
-* 生态不成熟。作为一个新的框架基本都会遇到这个问题，作为一个最近才火起来的框架，Svelte的生态远远不及已经普及那么多年的React和Vue，这也是我觉得就目前来说Svelte还撼动不了React和Vue的地位的原因。
+其实Svelte框架还有很多我没有提到的有用的功能特性，例如：
+* 事件传递 - event forwarding
+* 生命周期函数 - life-cycle functions
+* 全局状态管理 - stores
+* 上下文管理 - context
+* CSS 动画 - css animation
+*  ...
+
+由于文章篇幅的限制我在这里没有覆盖Svelte所有的属性，大家兴趣可以看一下svelte的[官方教程](https://svelte.dev/tutorial/basics)。
+
+# 我个人对Svelte框架的一些看法
+个人觉得由于Virtual DOM的各种问题，Compiler as framework这个思路应该是前端框架发展的一个趋势。Svelte目前实现的功能虽然已经非常不错了，可是就目前来说我觉得它还有以下问题：
+* Scalability - 可扩展性。React和Vue等框架自带的runtime虽然会增加首屏加载的bundle.js，可是当项目变得越来越大的时候，框架的runtime在bundle.js里面占据的比例也会越来越小，相反由于Svelte生成的代码的封装性没有React和Vue的好，它在大型项目中会不会堆积很多重复的代码呢？这个时候我们就得考虑一下是不是存在一个Svelte生成的代码大于React和Vue生成的代码的阈值了。这个问题现在还没有具体的答案，只能等后人实践的时候给出答案了，大家有兴趣可以看一下作者在[github上面的讨论](https://github.com/sveltejs/svelte/issues/2546)。
+* Ecosystem - 生态。作为一个最近才火起来的框架，Svelte的生态还远远不及已经普及那么多年的React和Vue，这也是我觉得就目前来说Svelte还撼动不了React和Vue的地位的原因。不过Svelte会不会因为它的先进性而迎来生态大爆发呢？我们可以拭目以待。
+
+不过有一点可以肯定的是，Svelte由于在一些不复杂的项目中生成的代码远远比React，Vue和Angular小的优势会在一些性能不那么好的嵌入式操作系统中大放异彩。
+
+# 学习Svelte有用的链接
+* [作者的Rethinking reactivity演讲](https://www.youtube.com/watch?v=AdNJ3fydeao)
+* [Svelte官网](https://svelte.dev/)
+* [Svelte github仓库](https://github.com/sveltejs/svelte)
