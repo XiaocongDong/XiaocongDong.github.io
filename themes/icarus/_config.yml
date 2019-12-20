@@ -143,11 +143,11 @@ widgets:
             RSS:
                 icon: fas fa-rss
                 url: /
-    -
-        # Widget name
-        type: toc
-        # Where should the widget be placed, left or right
-        position: left
+    # -
+    #     # Widget name
+    #     type: toc
+    #     # Where should the widget be placed, left or right
+    #     position: left
     # -
     #     # Widget name
     #     type: links
@@ -158,29 +158,29 @@ widgets:
     #         掘金: 'https://juejin.im/user/5bf0c71df265da614e2bad68'
     -
         # Widget name
-        type: category
-        # Where should the widget be placed, left or right
-        position: left
+        # type: category
+        # # Where should the widget be placed, left or right
+        # position: left
     # -
     #     # Widget name
     #     type: tagcloud
     #     # Where should the widget be placed, left or right
     #     position: left
-    -
-        # Widget name
-        type: recent_posts
-        # Where should the widget be placed, left or right
-        position: right
-    -
-        # Widget name
-        type: archive
-        # Where should the widget be placed, left or right
-        position: right
-    -
-        # Widget name
-        type: tag
-        # Where should the widget be placed, left or right
-        position: right
+    # -
+    #     # Widget name
+    #     type: recent_posts
+    #     # Where should the widget be placed, left or right
+    #     position: right
+    # -
+    #     # Widget name
+    #     type: archive
+    #     # Where should the widget be placed, left or right
+    #     position: right
+    # -
+    #     # Widget name
+    #     type: tag
+    #     # Where should the widget be placed, left or right
+    #     position: right
 # Other plugin settings
 plugins:
     # Enable page animations
