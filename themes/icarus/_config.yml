@@ -113,50 +113,42 @@ sidebar:
 # Sidebar widget settings
 # https://ppoffice.github.io/hexo-theme-icarus/categories/Widgets/
 widgets:
-    -
-        # Widget name
-        type: profile
-        # Where should the widget be placed, left or right
-        position: left
-        # Author name to be shown in the profile widget
-        author: Xiaocong Dong(董小聪)
-        # Title of the author to be shown in the profile widget
-        author_title: I'm a Javascript and Golang developer
-        # Author's current location to be shown in the profile widget
-        location: 深圳
-        # Path or URL to the avatar to be shown in the profile widget
-        avatar: /images/gopherjs.png
-        # Email address for the Gravatar to be shown in the profile widget
-        gravatar: 
-        # Whether to show avatar image rounded or square
-        avatar_rounded: false
-        # Path or URL for the follow button
-        follow_link: 'https://github.com/XiaocongDong'
-        # Links to be shown on the bottom of the profile widget
-        social_links:
-            Github:
-                icon: fab fa-github
-                url: 'https://github.com/XiaocongDong'
-            LinkedIn:
-                icon: fab fa-linkedin
-                url: 'https://www.linkedin.com/in/xiaocong-dong-1015a1106/'
-            RSS:
-                icon: fas fa-rss
-                url: /
+    # -
+    #     # Widget name
+    #     type: profile
+    #     # Where should the widget be placed, left or right
+    #     position: left
+    #     # Author name to be shown in the profile widget
+    #     author: Xiaocong Dong(董小聪)
+    #     # Title of the author to be shown in the profile widget
+    #     author_title: I'm a Javascript and Golang developer
+    #     # Author's current location to be shown in the profile widget
+    #     location: 深圳
+    #     # Path or URL to the avatar to be shown in the profile widget
+    #     avatar: /images/gopherjs.png
+    #     # Email address for the Gravatar to be shown in the profile widget
+    #     gravatar: 
+    #     # Whether to show avatar image rounded or square
+    #     avatar_rounded: false
+    #     # Path or URL for the follow button
+    #     follow_link: 'https://github.com/XiaocongDong'
+    #     # Links to be shown on the bottom of the profile widget
+    #     social_links:
+    #         Github:
+    #             icon: fab fa-github
+    #             url: 'https://github.com/XiaocongDong'
+    #         LinkedIn:
+    #             icon: fab fa-linkedin
+    #             url: 'https://www.linkedin.com/in/xiaocong-dong-1015a1106/'
+    #         RSS:
+    #             icon: fas fa-rss
+    #             url: /
     # -
     #     # Widget name
     #     type: toc
     #     # Where should the widget be placed, left or right
     #     position: left
     # -
-    #     # Widget name
-    #     type: links
-    #     # Where should the widget be placed, left or right
-    #     position: left
-    #     # Links to be shown in the links widget
-    #     links:
-    #         掘金: 'https://juejin.im/user/5bf0c71df265da614e2bad68'
-    -
         # Widget name
         # type: category
         # # Where should the widget be placed, left or right
