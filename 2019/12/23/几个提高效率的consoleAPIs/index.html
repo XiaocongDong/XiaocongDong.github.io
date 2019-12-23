@@ -7,17 +7,19 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>标签: JavaScript - Xiaocong Dong</title>
+<title>几个提高效率的console APIs - Xiaocong Dong</title>
 
 
-    <meta name="description" content="Life is all about experiencing">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Xiaocong Dong">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;tags&#x2F;JavaScript&#x2F;index.html">
+    <meta name="description" content="console.log我相信写过JavaScript人一定都有接触过，它可谓是我们debug的灵丹妙药。可是除了log方法，你知道console还有很多可以帮你快速提高代码debug效率（逼格）的方法吗？ console.log | console.info | console.debug | console.warn | console.error使用场景输出不同类型（level）的内容。 用法">
+<meta name="keywords" content="JavaScript,前端开发技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="几个提高效率的console APIs">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;23&#x2F;%E5%87%A0%E4%B8%AA%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84consoleAPIs&#x2F;index.html">
 <meta property="og:site_name" content="Xiaocong Dong">
-<meta property="og:description" content="Life is all about experiencing">
+<meta property="og:description" content="console.log我相信写过JavaScript人一定都有接触过，它可谓是我们debug的灵丹妙药。可是除了log方法，你知道console还有很多可以帮你快速提高代码debug效率（逼格）的方法吗？ console.log | console.info | console.debug | console.warn | console.error使用场景输出不同类型（level）的内容。 用法">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
+<meta property="og:updated_time" content="2019-12-23T04:50:01.394Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 
@@ -85,7 +87,7 @@ var _hmt = _hmt || [];
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/gopherjs.png" alt="Xiaocong Dong" height="28">
+                <img src="/images/gopherjs.png" alt="几个提高效率的console APIs" height="28">
             
             </a>
         </div>
@@ -134,18 +136,7 @@ var _hmt = _hmt || [];
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-12 has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/tags">标签</a></li>
-            <li class="is-active"><a href="#" aria-current="page">JavaScript</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    
+                <div class="column is-12 has-order-2 column-main">
 <div class="card">
     
     <div class="card-content article ">
@@ -167,23 +158,73 @@ var _hmt = _hmt || [];
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/12/23/%E5%87%A0%E4%B8%AA%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84consoleAPIs/">几个提高效率的console APIs</a>
+                几个提高效率的console APIs
             
         </h1>
         <div class="content">
             <p><code>console.log</code>我相信写过JavaScript人一定都有接触过，它可谓是我们debug的灵丹妙药。可是除了log方法，你知道console还有很多可以帮你快速提高代码debug效率（逼格）的方法吗？</p>
 <h2 id="console-log-console-info-console-debug-console-warn-console-error"><a href="#console-log-console-info-console-debug-console-warn-console-error" class="headerlink" title="console.log | console.info | console.debug | console.warn | console.error"></a>console.log | console.info | console.debug | console.warn | console.error</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>输出<code>不同类型</code>（level）的内容。</p>
 <h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>这几个方法用起来都差不多，只不过输出结果可能会存在颜色上的区别：<br><img src="/images/console/level.png" alt><br>注意console.debug如果没有输出可以将log level中的verbose选上（chrome）:<br><img src="/images/console/level-verbose.png" alt></p>
+<a id="more"></a> 
+<h2 id="替换字符串-string-substitution"><a href="#替换字符串-string-substitution" class="headerlink" title="替换字符串 - string substitution"></a>替换字符串 - string substitution</h2><h3 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h3><p>呈现输出时的上下文信息（context）。</p>
+<h3 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h3><p>现在支持以下替换字符串：</p>
+<table>
+<thead>
+<tr>
+<th>替换字符串</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>%o</code> 或者 <code>%O</code></td>
+<td align="right">JavaScript 对象，可以是整数、字符串或是 JSON 数据。</td>
+</tr>
+<tr>
+<td><code>%d</code>或者<code>%i</code></td>
+<td align="right">整数。</td>
+</tr>
+<tr>
+<td><code>%s</code></td>
+<td align="right">字符串。</td>
+</tr>
+<tr>
+<td><code>%f</code></td>
+<td align="right">浮点数。</td>
+</tr>
+</tbody></table>
+<p><img src="/images/console/string-substitution.png" alt></p>
+<h2 id="为输出添加CSS样式"><a href="#为输出添加CSS样式" class="headerlink" title="为输出添加CSS样式"></a>为输出添加CSS样式</h2><h3 id="使用场景-2"><a href="#使用场景-2" class="headerlink" title="使用场景"></a>使用场景</h3><p>让内容更加结构化而且可以极大地提高逼格。</p>
+<h3 id="用法-2"><a href="#用法-2" class="headerlink" title="用法"></a>用法</h3><p>使用<code>%c</code>为某部分的输出内容定义样式：<br><img src="/images/console/css.png" alt></p>
+<h2 id="console-assert"><a href="#console-assert" class="headerlink" title="console.assert"></a>console.assert</h2><h3 id="使用场景-3"><a href="#使用场景-3" class="headerlink" title="使用场景"></a>使用场景</h3><p>条件性输出。有些信息你可能只想在某些条件不满足的时候才进行输出，这个时候你可以用这种方法而不是加多个if判断。</p>
+<h3 id="用法-3"><a href="#用法-3" class="headerlink" title="用法"></a>用法</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.assert(condition, ...data)</span></pre></td></tr></table></figure>
+<p>注意只有condition是false的时候data才会被输出：<br><img src="/images/console/assert.png" alt></p>
+<h2 id="console-table"><a href="#console-table" class="headerlink" title="console.table"></a>console.table</h2><h3 id="使用情景"><a href="#使用情景" class="headerlink" title="使用情景"></a>使用情景</h3><p>以表格的形式输出数据。这个方法最适用的场景我觉得是对象的数组，因为他可以让你一目了然地看到数组内对象各个属性的值。</p>
+<h3 id="用法-4"><a href="#用法-4" class="headerlink" title="用法"></a>用法</h3><p><img src="/images/console/table.png" alt></p>
+<h2 id="console-group"><a href="#console-group" class="headerlink" title="console.group"></a>console.group</h2><h3 id="使用情景-1"><a href="#使用情景-1" class="headerlink" title="使用情景"></a>使用情景</h3><p>当你有大量的内容要输出到界面上时，可以使用console.group方法为输出的内容添加一定的缩进来更好地整理这些内容。</p>
+<h3 id="用法-5"><a href="#用法-5" class="headerlink" title="用法"></a>用法</h3><p><img src="/images/console/group.png" alt><br>这里要记住的是每个group都需要手动地调用groupEnd来退出。</p>
+<h2 id="console-trace"><a href="#console-trace" class="headerlink" title="console.trace"></a>console.trace</h2><h3 id="使用情景-2"><a href="#使用情景-2" class="headerlink" title="使用情景"></a>使用情景</h3><p>追踪函数的执行栈。当你想知道一个函数具体是怎样被调用的时，可以使用console.trace这个函数去追踪它的执行栈。</p>
+<h3 id="用法-6"><a href="#用法-6" class="headerlink" title="用法"></a>用法</h3><p><img src="/images/console/trace.png" alt></p>
+<h2 id="console-count"><a href="#console-count" class="headerlink" title="console.count"></a>console.count</h2><h3 id="使用场景-4"><a href="#使用场景-4" class="headerlink" title="使用场景"></a>使用场景</h3><p>统计代码的执行次数。</p>
+<h3 id="用法-7"><a href="#用法-7" class="headerlink" title="用法"></a>用法</h3><p><img src="/images/console/count.png" alt><br>你还可以使用label去区分不同的统计类型：<br><img src="/images/console/label-count.png" alt></p>
+<h2 id="console-time"><a href="#console-time" class="headerlink" title="console.time"></a>console.time</h2><h3 id="使用场景-5"><a href="#使用场景-5" class="headerlink" title="使用场景"></a>使用场景</h3><p>记录代码执行的耗时，以毫秒（ms）为单位。</p>
+<h3 id="用法-8"><a href="#用法-8" class="headerlink" title="用法"></a>用法</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">console.time(timerName)</span></pre></td></tr></table></figure>
+<p><img src="/images/console/time.png" alt></p>
+<h2 id="参考网站"><a href="#参考网站" class="headerlink" title="参考网站"></a>参考网站</h2><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Console" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/Console</a></li>
+<li><a href="https://medium.com/javascript-in-plain-english/mastering-js-console-log-like-a-pro-1c634e6393f9" target="_blank" rel="noopener">https://medium.com/javascript-in-plain-english/mastering-js-console-log-like-a-pro-1c634e6393f9</a></li>
+</ul>
+
         </div>
         
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/12/23/%E5%87%A0%E4%B8%AA%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84consoleAPIs/#more">阅读更多</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/JavaScript/" rel="tag">JavaScript</a>, <a class="has-link-grey -link" href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/" rel="tag">前端开发技巧</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -191,121 +232,75 @@ var _hmt = _hmt || [];
 
 
 
-
-
-
-
-
-    
 <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-12-11T09:32:16.000Z">2019-12-11</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 分钟 读完 (大约 371 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
             
-                <a class="has-link-black-ter" href="/2019/12/11/JavaScript%E5%B0%8F%E6%8A%80%E5%B7%A7-%E6%95%B0%E7%BB%84%E7%AF%87/">JavaScript小技巧 - 数组篇</a>
-            
-        </h1>
-        <div class="content">
-            <p>本文整理了一些在日常工作可以用到的JavaScript数组小技巧</p>
-<h1 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h1><p>巧用Set特性</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> uniqueArr = [...new <span class="hljs-built_in">Set</span>(arr)]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(uniqueArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 7]</span></span></pre></td></tr></table></figure>
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="/images/wechat_pay.jpg" alt="微信"></div>
+</a>
+
+                
         </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
         
         
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/12/11/JavaScript%E5%B0%8F%E6%8A%80%E5%B7%A7-%E6%95%B0%E7%BB%84%E7%AF%87/#more">阅读更多</a>
-                </div>
-            </div>
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/12/17/Svelte-3-%E5%88%9D%E5%AD%A6%E8%80%85%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">
+                <span class="level-item">Svelte 3 初学者完全指南</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
         </div>
-        
         
     </div>
 </div>
 
 
 
-
-
-
-
-
-    
 <div class="card">
-    
-    <div class="card-content article ">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
         
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-12-05T10:04:15.000Z">2019-12-05</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/JavaScript/">JavaScript</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    12 分钟 读完 (大约 1822 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/">详解ECMAScript2019/ES10新属性</a>
-            
-        </h1>
-        <div class="content">
-            <p>每年都有一些新的属性进入<a href="https://tc39.es/ecma262/#sec-intro" target="_blank" rel="noopener">ECMA262</a>标准，今年发布的ECMAScript2019/ES10同样也有很多新的特性，本文将会挑选一些普通开发者会用到的新属性进行深入的解读。</p>
-<h2 id="Array-prototype-flat"><a href="#Array-prototype-flat" class="headerlink" title="Array.prototype.flat()"></a>Array.prototype.flat()</h2><blockquote>
-<p>The flat() method creates a new array with all sub-array elements concatenated into it recursively up to the specified depth. – <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat" target="_blank" rel="noopener">MDN</a></p>
-</blockquote>
-<p>简单来说flat这个函数就是按照一定的深度depth将一个深层次嵌套的数组拍扁, 例子:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> nestedArr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, [<span class="hljs-number">7</span>, [<span class="hljs-number">8</span>], <span class="hljs-number">9</span>]]], <span class="hljs-number">10</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, [5, 6, [7, [8], 9]], 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">2</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, [7, [8], 9], 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">3</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, [8], 9, 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">4</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-literal">Infinity</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span></pre></td></tr></table></figure>
-<p>由上面的例子可以看出flat会按照指定的深度depth将一个数组扁平化，如果需要将数组完全拍扁变成一维数组，则指定depth为无限大，即是<strong>Infinity</strong>，相反如果不指定深度，其默认值是1。</p>
-        </div>
-        
-        
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/#more">阅读更多</a>
-                </div>
-            </div>
-        </div>
-        
-        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '8f9ee70d8df5487b25d3485c8428e067',
+		owner: 'XiaocongDong',
+		repo: 'XiaocongDong.github.io',
+		oauth: {
+			client_id: '9a8b4c4057518a9704d3',
+			client_secret: '541c790c4f2386c7d15cec89076baa08d1a9a9ad',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
     </div>
 </div>
-
-
-
-
-
-
-
-
 </div>
                 
                 
@@ -318,7 +313,7 @@ var _hmt = _hmt || [];
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/gopherjs.png" alt="Xiaocong Dong" height="28">
+                    <img src="/images/gopherjs.png" alt="几个提高效率的console APIs" height="28">
                 
                 </a>
                 <p class="is-size-7">

@@ -19,7 +19,7 @@
 <meta property="og:description" content="每年都有一些新的属性进入ECMA262标准，今年发布的ECMAScript2019&#x2F;ES10同样也有很多新的特性，本文将会挑选一些普通开发者会用到的新属性进行深入的解读。 Array.prototype.flat() The flat() method creates a new array with all sub-array elements concatenated into it recu">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
-<meta property="og:updated_time" content="2019-12-20T10:37:43.255Z">
+<meta property="og:updated_time" content="2019-12-23T04:50:01.394Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 
@@ -153,7 +153,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    12 分钟 读完 (大约 1821 个字)
+                    12 分钟 读完 (大约 1822 个字)
                 </span>
                 
                 
@@ -173,6 +173,7 @@ var _hmt = _hmt || [];
 <p>简单来说flat这个函数就是按照一定的深度depth将一个深层次嵌套的数组拍扁, 例子:</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> nestedArr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, [<span class="hljs-number">7</span>, [<span class="hljs-number">8</span>], <span class="hljs-number">9</span>]]], <span class="hljs-number">10</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, [5, 6, [7, [8], 9]], 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">2</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, [7, [8], 9], 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">3</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, [8], 9, 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">4</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-literal">Infinity</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span></pre></td></tr></table></figure>
 <p>由上面的例子可以看出flat会按照指定的深度depth将一个数组扁平化，如果需要将数组完全拍扁变成一维数组，则指定depth为无限大，即是<strong>Infinity</strong>，相反如果不指定深度，其默认值是1。</p>
+<a id="more"></a> 
 <h2 id="Array-prototype-flatMap"><a href="#Array-prototype-flatMap" class="headerlink" title="Array.prototype.flatMap()"></a>Array.prototype.flatMap()</h2><blockquote>
 <p>The flatMap() method first maps each element using a mapping function, then flattens the result into a new array. It is identical to a map() followed by a flat() of depth 1, but flatMap() is often quite useful, as merging both into one method is slightly more efficient. – <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap" target="_blank" rel="noopener">MDN</a></p>
 </blockquote>

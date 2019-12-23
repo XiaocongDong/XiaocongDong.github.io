@@ -10,16 +10,16 @@
 <title>JavaScript小技巧 - 数组篇 - Xiaocong Dong</title>
 
 
-    <meta name="description" content="本文整理了一些在日常工作可以用到的JavaScript数组小技巧 去重巧用Set特性 1const arr &#x3D; [1, 2, 2, 3, 4, 7, 7]2const uniqueArr &#x3D; [...new Set(arr)]3console.log(uniqueArr)4&#x2F;&#x2F; [1, 2, 3, 4, 7] 某一个位置插入元素改变原数组 1const arr &#x3D; [1, 2, 3, 5, 6,">
+    <meta name="description" content="本文整理了一些在日常工作可以用到的JavaScript数组小技巧 去重巧用Set特性 1const arr &#x3D; [1, 2, 2, 3, 4, 7, 7]2const uniqueArr &#x3D; [...new Set(arr)]3console.log(uniqueArr)4&#x2F;&#x2F; [1, 2, 3, 4, 7]">
 <meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript小技巧 - 数组篇">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;11&#x2F;JavaScript%E5%B0%8F%E6%8A%80%E5%B7%A7-%E6%95%B0%E7%BB%84%E7%AF%87&#x2F;index.html">
 <meta property="og:site_name" content="Xiaocong Dong">
-<meta property="og:description" content="本文整理了一些在日常工作可以用到的JavaScript数组小技巧 去重巧用Set特性 1const arr &#x3D; [1, 2, 2, 3, 4, 7, 7]2const uniqueArr &#x3D; [...new Set(arr)]3console.log(uniqueArr)4&#x2F;&#x2F; [1, 2, 3, 4, 7] 某一个位置插入元素改变原数组 1const arr &#x3D; [1, 2, 3, 5, 6,">
+<meta property="og:description" content="本文整理了一些在日常工作可以用到的JavaScript数组小技巧 去重巧用Set特性 1const arr &#x3D; [1, 2, 2, 3, 4, 7, 7]2const uniqueArr &#x3D; [...new Set(arr)]3console.log(uniqueArr)4&#x2F;&#x2F; [1, 2, 3, 4, 7]">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
-<meta property="og:updated_time" content="2019-12-20T10:37:43.255Z">
+<meta property="og:updated_time" content="2019-12-23T04:50:01.394Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 
@@ -149,7 +149,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    2 分钟 读完 (大约 370 个字)
+                    2 分钟 读完 (大约 371 个字)
                 </span>
                 
                 
@@ -165,6 +165,7 @@ var _hmt = _hmt || [];
             <p>本文整理了一些在日常工作可以用到的JavaScript数组小技巧</p>
 <h1 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h1><p>巧用Set特性</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> uniqueArr = [...new <span class="hljs-built_in">Set</span>(arr)]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(uniqueArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 7]</span></span></pre></td></tr></table></figure>
+<a id="more"></a> 
 <h1 id="某一个位置插入元素"><a href="#某一个位置插入元素" class="headerlink" title="某一个位置插入元素"></a>某一个位置插入元素</h1><p>改变原数组</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">arr.splice(<span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">4</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(arr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7]</span></span></pre></td></tr></table></figure>
 <p>不改变原数组</p>

@@ -19,7 +19,7 @@
 <meta property="og:description" content="React, Vue和Angular差不多占据了Web开发的大部分江山，可是最近半年Svelte开始逐渐吸引越来越多人的眼球。这个Svelte框架到底有什么过人之处呢？本文将会为大家分析一下Svelte火起来的原因，并且通过使用Svelte去搭建一个简单的书店应用（bookshop）来帮助大家快速入门这门框架。 Svelte为什么会火?要想知道Svelte为什么会火，首先得看看React和Vue这">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
-<meta property="og:updated_time" content="2019-12-20T10:37:43.255Z">
+<meta property="og:updated_time" content="2019-12-23T04:50:01.394Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 
@@ -149,7 +149,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    1 小时 读完 (大约 7053 个字)
+                    1 小时 读完 (大约 7054 个字)
                 </span>
                 
                 
@@ -164,6 +164,7 @@ var _hmt = _hmt || [];
         <div class="content">
             <p>React, Vue和Angular差不多占据了Web开发的大部分江山，可是最近半年<a href="!https://svelte.dev/">Svelte</a>开始逐渐吸引越来越多人的眼球。这个Svelte框架到底有什么过人之处呢？本文将会为大家分析一下Svelte火起来的原因，并且通过使用Svelte去搭建一个简单的书店应用（bookshop）来帮助大家快速入门这门框架。</p>
 <h1 id="Svelte为什么会火"><a href="#Svelte为什么会火" class="headerlink" title="Svelte为什么会火?"></a>Svelte为什么会火?</h1><p>要想知道Svelte为什么会火，首先得看看React和Vue这些框架存在什么问题。</p>
+<a id="more"></a> 
 <h2 id="big-runtime-大的运行时"><a href="#big-runtime-大的运行时" class="headerlink" title="big runtime - 大的运行时"></a>big runtime - 大的运行时</h2><p>React和Vue都是基于runtime的框架。所谓基于runtime的框架就是框架本身的代码也会被打包到最终的bundle.js并被发送到用户浏览器。当用户在你的页面进行各种操作改变组件的状态时，框架的runtime会根据新的组件状态（state）计算（diff）出哪些DOM节点需要被更新，从而更新视图。那么这些runtime代码到底有多大呢，可以看一些社区的<a href="https://gist.github.com/Restuta/cda69e50a853aa64912d" target="_blank" rel="noopener">统计数据</a>:</p>
 <table>
 <thead>
@@ -417,6 +418,13 @@ App组件最外层是一个main标签，main标签里面有一个h1标签和p标
 
 <div class="card card-transparent">
     <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/12/23/%E5%87%A0%E4%B8%AA%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84consoleAPIs/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">几个提高效率的console APIs</span>
+            </a>
+        </div>
         
         
         <div class="level-end">
