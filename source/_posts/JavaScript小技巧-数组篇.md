@@ -13,6 +13,7 @@ const uniqueArr = [...new Set(arr)]
 console.log(uniqueArr)
 // [1, 2, 3, 4, 7]
 ```
+<!-- more --> 
 # 某一个位置插入元素
 改变原数组
 ```javascript

@@ -8,6 +8,7 @@ React, Vue和Angular差不多占据了Web开发的大部分江山，可是最近
 
 # Svelte为什么会火?
 要想知道Svelte为什么会火，首先得看看React和Vue这些框架存在什么问题。
+<!-- more --> 
 ## big runtime - 大的运行时
 React和Vue都是基于runtime的框架。所谓基于runtime的框架就是框架本身的代码也会被打包到最终的bundle.js并被发送到用户浏览器。当用户在你的页面进行各种操作改变组件的状态时，框架的runtime会根据新的组件状态（state）计算（diff）出哪些DOM节点需要被更新，从而更新视图。那么这些runtime代码到底有多大呢，可以看一些社区的[统计数据](https://gist.github.com/Restuta/cda69e50a853aa64912d):
 

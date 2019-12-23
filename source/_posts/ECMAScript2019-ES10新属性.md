@@ -28,6 +28,7 @@ console.log(nestedArr.flat(Infinity))
 // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ```
 由上面的例子可以看出flat会按照指定的深度depth将一个数组扁平化，如果需要将数组完全拍扁变成一维数组，则指定depth为无限大，即是**Infinity**，相反如果不指定深度，其默认值是1。
+<!-- more --> 
 ## Array.prototype.flatMap()
 > The flatMap() method first maps each element using a mapping function, then flattens the result into a new array. It is identical to a map() followed by a flat() of depth 1, but flatMap() is often quite useful, as merging both into one method is slightly more efficient. -- [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap)
 
