@@ -7,19 +7,21 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>Xiaocong Dong</title>
+<title>窥探现代浏览器架构(一) - Xiaocong Dong</title>
 
 
-    <meta name="description" content="Life is all about experiencing">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Xiaocong Dong">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+    <meta name="description" content="前言本文是笔者对Mario Kosaka写的inside look at modern web browser系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。 CPU，GPU，内存和多进程架构在这个4集系列教程里面，我将会从Chrome浏览器的高层次架构（high-level architecture）开始说起，">
+<meta name="keywords" content="Chrome,浏览器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="窥探现代浏览器架构(一)">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;25&#x2F;%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%B8%80&#x2F;index.html">
 <meta property="og:site_name" content="Xiaocong Dong">
-<meta property="og:description" content="Life is all about experiencing">
+<meta property="og:description" content="前言本文是笔者对Mario Kosaka写的inside look at modern web browser系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。 CPU，GPU，内存和多进程架构在这个4集系列教程里面，我将会从Chrome浏览器的高层次架构（high-level architecture）开始说起，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
+<meta property="og:updated_time" content="2019-12-25T11:10:46.405Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
 
 
 
@@ -85,7 +87,7 @@ var _hmt = _hmt || [];
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/gopherjs.png" alt="Xiaocong Dong" height="28">
+                <img src="/images/gopherjs.png" alt="窥探现代浏览器架构(一)" height="28">
             
             </a>
         </div>
@@ -93,7 +95,7 @@ var _hmt = _hmt || [];
             
             <div class="navbar-start">
                 
-                <a class="navbar-item is-active"
+                <a class="navbar-item"
                 href="/">Home</a>
                 
                 <a class="navbar-item"
@@ -135,13 +137,12 @@ var _hmt = _hmt || [];
         <div class="container">
             <div class="columns">
                 <div class="column is-12 has-order-2 column-main">
-    
 <div class="card">
     
     <div class="card-image">
-        <a href="/2019/12/25/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%B8%80/" class="image is-7by1">
+        <span  class="image is-7by1">
             <img class="thumbnail" src="/gallery/thumbnails/chrome.png" alt="窥探现代浏览器架构(一)">
-        </a>
+        </span>
     </div>
     
     <div class="card-content article ">
@@ -167,7 +168,7 @@ var _hmt = _hmt || [];
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/12/25/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%B8%80/">窥探现代浏览器架构(一)</a>
+                窥探现代浏览器架构(一)
             
         </h1>
         <div class="content">
@@ -248,57 +249,15 @@ var _hmt = _hmt || [];
 
         </div>
         
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    
-<div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-12-23T04:41:49.000Z">2019-12-23</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 分钟 读完 (大约 721 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/12/23/%E5%87%A0%E4%B8%AA%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84consoleAPIs/">几个提高效率的console APIs</a>
-            
-        </h1>
-        <div class="content">
-            <p><code>console.log</code>我相信写过JavaScript人一定都有接触过，它可谓是我们debug的灵丹妙药。可是除了log方法，你知道console还有很多可以帮你快速提高代码debug效率（逼格）的方法吗？</p>
-<h2 id="console-log-console-info-console-debug-console-warn-console-error"><a href="#console-log-console-info-console-debug-console-warn-console-error" class="headerlink" title="console.log | console.info | console.debug | console.warn | console.error"></a>console.log | console.info | console.debug | console.warn | console.error</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>输出<code>不同类型</code>（level）的内容。</p>
-<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>这几个方法用起来都差不多，只不过输出结果可能会存在颜色上的区别：<br><img src="/images/console/level.png" alt><br>注意console.debug如果没有输出可以将log level中的verbose选上（chrome）:<br><img src="/images/console/level-verbose.png" alt></p>
-        </div>
-        
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/12/23/%E5%87%A0%E4%B8%AA%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84consoleAPIs/#more">阅读更多</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/Chrome/" rel="tag">Chrome</a>, <a class="has-link-grey -link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -306,171 +265,75 @@ var _hmt = _hmt || [];
 
 
 
-
-
-
-
-
-    
 <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-12-17T04:04:50.000Z">2019-12-17</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    1 小时 读完 (大约 7054 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
             
-                <a class="has-link-black-ter" href="/2019/12/17/Svelte-3-%E5%88%9D%E5%AD%A6%E8%80%85%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">Svelte 3 初学者完全指南</a>
-            
-        </h1>
-        <div class="content">
-            <p>React, Vue和Angular差不多占据了Web开发的大部分江山，可是最近半年<a href="!https://svelte.dev/">Svelte</a>开始逐渐吸引越来越多人的眼球。这个Svelte框架到底有什么过人之处呢？本文将会为大家分析一下Svelte火起来的原因，并且通过使用Svelte去搭建一个简单的书店应用（bookshop）来帮助大家快速入门这门框架。</p>
-<h1 id="Svelte为什么会火"><a href="#Svelte为什么会火" class="headerlink" title="Svelte为什么会火?"></a>Svelte为什么会火?</h1><p>要想知道Svelte为什么会火，首先得看看React和Vue这些框架存在什么问题。</p>
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="/images/wechat_pay.jpg" alt="微信"></div>
+</a>
+
+                
         </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
         
         
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/12/17/Svelte-3-%E5%88%9D%E5%AD%A6%E8%80%85%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/#more">阅读更多</a>
-                </div>
-            </div>
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/12/23/%E5%87%A0%E4%B8%AA%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84consoleAPIs/">
+                <span class="level-item">几个提高效率的console APIs</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
         </div>
-        
         
     </div>
 </div>
 
 
 
-
-
-
-
-
-    
 <div class="card">
-    
-    <div class="card-content article ">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
         
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-12-11T09:32:16.000Z">2019-12-11</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 分钟 读完 (大约 371 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/12/11/JavaScript%E5%B0%8F%E6%8A%80%E5%B7%A7-%E6%95%B0%E7%BB%84%E7%AF%87/">JavaScript小技巧 - 数组篇</a>
-            
-        </h1>
-        <div class="content">
-            <p>本文整理了一些在日常工作可以用到的JavaScript数组小技巧</p>
-<h1 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h1><p>巧用Set特性</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> uniqueArr = [...new <span class="hljs-built_in">Set</span>(arr)]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(uniqueArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 7]</span></span></pre></td></tr></table></figure>
-        </div>
-        
-        
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/12/11/JavaScript%E5%B0%8F%E6%8A%80%E5%B7%A7-%E6%95%B0%E7%BB%84%E7%AF%87/#more">阅读更多</a>
-                </div>
-            </div>
-        </div>
-        
-        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '9e64717c093e36e830b16375980d3ea2',
+		owner: 'XiaocongDong',
+		repo: 'XiaocongDong.github.io',
+		oauth: {
+			client_id: '9a8b4c4057518a9704d3',
+			client_secret: '541c790c4f2386c7d15cec89076baa08d1a9a9ad',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
     </div>
 </div>
-
-
-
-
-
-
-
-
-    
-<div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-12-05T10:04:15.000Z">2019-12-05</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/JavaScript/">JavaScript</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    12 分钟 读完 (大约 1822 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/">详解ECMAScript2019/ES10新属性</a>
-            
-        </h1>
-        <div class="content">
-            <p>每年都有一些新的属性进入<a href="https://tc39.es/ecma262/#sec-intro" target="_blank" rel="noopener">ECMA262</a>标准，今年发布的ECMAScript2019/ES10同样也有很多新的特性，本文将会挑选一些普通开发者会用到的新属性进行深入的解读。</p>
-<h2 id="Array-prototype-flat"><a href="#Array-prototype-flat" class="headerlink" title="Array.prototype.flat()"></a>Array.prototype.flat()</h2><blockquote>
-<p>The flat() method creates a new array with all sub-array elements concatenated into it recursively up to the specified depth. – <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat" target="_blank" rel="noopener">MDN</a></p>
-</blockquote>
-<p>简单来说flat这个函数就是按照一定的深度depth将一个深层次嵌套的数组拍扁, 例子:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> nestedArr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, [<span class="hljs-number">7</span>, [<span class="hljs-number">8</span>], <span class="hljs-number">9</span>]]], <span class="hljs-number">10</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, [5, 6, [7, [8], 9]], 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">2</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, [7, [8], 9], 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">3</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, [8], 9, 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-number">4</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(nestedArr.flat(<span class="hljs-literal">Infinity</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span></pre></td></tr></table></figure>
-<p>由上面的例子可以看出flat会按照指定的深度depth将一个数组扁平化，如果需要将数组完全拍扁变成一维数组，则指定depth为无限大，即是<strong>Infinity</strong>，相反如果不指定深度，其默认值是1。</p>
-        </div>
-        
-        
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/12/05/ECMAScript2019-ES10%E6%96%B0%E5%B1%9E%E6%80%A7/#more">阅读更多</a>
-                </div>
-            </div>
-        </div>
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 </div>
                 
                 
@@ -483,7 +346,7 @@ var _hmt = _hmt || [];
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/gopherjs.png" alt="Xiaocong Dong" height="28">
+                    <img src="/images/gopherjs.png" alt="窥探现代浏览器架构(一)" height="28">
                 
                 </a>
                 <p class="is-size-7">
