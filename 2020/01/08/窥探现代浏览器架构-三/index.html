@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.0.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>窥探现代浏览器架构-三 - Xiaocong Dong</title>
+
+
+    <meta name="description" content="前言本文是笔者对Mario Kosaka写的inside look at modern web browser系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。 渲染进程里面发生的事这篇文章是探究Chrome内部工作原理的四集系列文章中的第三篇。之前我们分别探讨了Chrome的多进程架构以及导航的过程都发生了什么。">
+<meta name="keywords" content="Chrome,浏览器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="窥探现代浏览器架构-三">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%B8%89&#x2F;index.html">
+<meta property="og:site_name" content="Xiaocong Dong">
+<meta property="og:description" content="前言本文是笔者对Mario Kosaka写的inside look at modern web browser系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。 渲染进程里面发生的事这篇文章是探究Chrome内部工作原理的四集系列文章中的第三篇。之前我们分别探讨了Chrome的多进程架构以及导航的过程都发生了什么。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
+<meta property="og:updated_time" content="2020-01-08T00:01:57.852Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/gopherjs.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?e89dd89c33d3b42b7d556cc0f001340c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-1-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/gopherjs.png" alt="窥探现代浏览器架构-三" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;" target="_blank" rel="noopener">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-12 has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/chrome.png" alt="窥探现代浏览器架构-三">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-01-08T00:00:50.000Z">2020-01-08</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    36 分钟 读完 (大约 5375 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                窥探现代浏览器架构-三
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文是笔者对<a href="https://developers.google.com/web/resources/contributors/kosamari" target="_blank" rel="noopener">Mario Kosaka</a>写的<a href="https://developers.google.com/web/updates/2018/09/inside-browser-part3" target="_blank" rel="noopener">inside look at modern web browser</a>系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。</p>
+<h2 id="渲染进程里面发生的事"><a href="#渲染进程里面发生的事" class="headerlink" title="渲染进程里面发生的事"></a>渲染进程里面发生的事</h2><p>这篇文章是探究Chrome内部工作原理的<strong>四集系列文章</strong>中的第三篇。之前我们分别探讨了<a href="https://xiaocongdong.github.io/2019/12/25/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%B8%80/" target="_blank" rel="noopener">Chrome的多进程架构</a>以及<a href="https://xiaocongdong.github.io/2019/12/27/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%BA%8C/" target="_blank" rel="noopener">导航的过程都发生了什么</a>。在本篇文章中，我们将要窥探一下渲染进程在渲染页面的时候具体都发生了什么事情。</p>
+<p>渲染进程会影响到Web性能的很多方面。页面渲染的时候发生的东西实在太多了，本篇文章只能作一个大体的介绍。如果你想要了解更多相关的内容，<a href="https://developers.google.com/web/fundamentals/performance/why-performance-matters/" target="_blank" rel="noopener">Web Fundamentals的Performance栏目</a>有很多资源可以查看。</p>
+<a id="more"></a>
+
+<h2 id="渲染进程处理页面内容"><a href="#渲染进程处理页面内容" class="headerlink" title="渲染进程处理页面内容"></a>渲染进程处理页面内容</h2><p>渲染进程负责标签（tab）内发生的所有事情。在渲染进程里面，主线程（main thread）处理了绝大多数你发送给用户的代码。如果你使用了web worker或者service worker，相关的代码将会由工作线程（worker thread）处理。合成（compositor）以及光栅（raster）线程运行在渲染进程里面用来高效流畅地渲染出页面内容。</p>
+<p><strong>渲染进程的主要任务是将HTML，CSS，以及JavaScript转变为我们可以进程交互的网页内容</strong>。<br><img src="/images/chrome/renderer.png" alt></p>
+<p align="center">渲染进程里面有：一个主线程（main thread），几个工作线程（worker threads），一个合成线程（compositor thread）以及一个光栅线程（raster thread）</p>
+
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><h3 id="构建DOM"><a href="#构建DOM" class="headerlink" title="构建DOM"></a>构建DOM</h3><p>前面文章提到，渲染进程在导航结束的时候会收到来自浏览器进程提交导航（commit navigation）的消息，在这之后渲染进程就会开始接收HTML数据，同时主线程也会开始解析接收到的文本数据（text string）并把它转化为一个DOM（<strong>D</strong>ocument <strong>O</strong>bject <strong>M</strong>odel）对象</p>
+<p><strong>DOM对象既是浏览器对当前页面的内部表示，也是Web开发人员通过JavaScript与网页进行交互的数据结构以及API</strong>。</p>
+<p>如何将HTML文档解析为DOM对象是在<a href="https://html.spec.whatwg.org/" target="_blank" rel="noopener">HTML标准</a>中定义的。不过在你的web开发生涯中，你可能从来没有遇到过浏览器在解析HTML的时候发生错误的情景。<strong>这是因为浏览器对HTML的错误容忍度很大</strong>。举些例子：如果一个段落缺失了闭合p标签（&lt;/p&gt;），这个页面还是会被当做为有效的HTML来处理；Hi! &lt;b&gt;I’m &lt;i&gt;Chrome&lt;/b&gt;!&lt;/i&gt; (闭合b标签写在了闭合i标签的前面) ，虽然有语法错误，不过浏览器会把它处理为Hi! &lt;b&gt;I’m &lt;i&gt;Chrome&lt;/i&gt;&lt;/b&gt;&lt;i&gt;!&lt;/i&gt;。如果你想知道浏览器是如何对这些错误进行容错处理的，可以参考HTML规范里面的<a href="https://html.spec.whatwg.org/multipage/parsing.html#an-introduction-to-error-handling-and-strange-cases-in-the-parser" target="_blank" rel="noopener">An introduction to error handling and strange cases in the parser</a>内容。</p>
+<h3 id="子资源加载"><a href="#子资源加载" class="headerlink" title="子资源加载"></a>子资源加载</h3><p>除了HTML文件，网站通常还会使用到一些诸如图片，CSS样式以及JavaScript脚本等子资源。这些文件会从缓存或者网络上获取。主线程会按照在构建DOM树时遇到各个资源的循序一个接着一个地发起网络请求，可是为了提升效率，浏览器会同时运行“预加载扫描”（preload scanner）程序。如果在HTML文档里面存在诸如&lt;img&gt;或者&lt;link&gt;这样的标签，预加载扫描程序会在HTML解析器生成的token里面找到对应要获取的资源，并把这些要获取的资源告诉浏览器进程里面的网络线程。<br><img src="/images/chrome/dom.png" alt></p>
+<p align="center">主线程会解析HTML内容并且构建出DOM树</p>
+
+<h3 id="JavaScript会阻塞HTML的解析过程"><a href="#JavaScript会阻塞HTML的解析过程" class="headerlink" title="JavaScript会阻塞HTML的解析过程"></a>JavaScript会阻塞HTML的解析过程</h3><p>当HTML解析器碰到script标签的时候，它会停止HTML文档的解析从而转向JavaScript代码的加载，解析以及执行。为什么要这样做呢？因为script标签中的JavaScript可能会使用诸如<code>document.write()</code>这样的代码改变文档流（document）的形状，从而使整个DOM树的结构发生根本性的改变（HTML规范里面的<a href="https://html.spec.whatwg.org/multipage/parsing.html#overview-of-the-parsing-model" target="_blank" rel="noopener">overview of the parsing model部分</a>有很好的示意图）。因为这个原因，HTML解析器不得不等JavaScript执行完成之后才能继续对HTML文档流的解析工作。如果你想知道JavaScipt的执行过程都发生了什么，V8团队有很多关于这个话题的<a href="https://mathiasbynens.be/notes/shapes-ics" target="_blank" rel="noopener">讨论以及博客</a>。</p>
+<h2 id="给浏览器一点如何加载资源的提示"><a href="#给浏览器一点如何加载资源的提示" class="headerlink" title="给浏览器一点如何加载资源的提示"></a>给浏览器一点如何加载资源的提示</h2><p>Web开发者可以通过很多方式告诉浏览器如何才能更加优雅地加载网页需要用到的资源。如果你的JavaScript不会使用到诸如<code>document.write()</code>的方式去改变文档流的内容的话，你可以为script标签添加一个<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attr-async" target="_blank" rel="noopener">async</a>或者<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attr-defer" target="_blank" rel="noopener">defer</a>属性来使JavaScript脚本进行异步加载。当然如果能满足到你的需求，你也可以使用<a href="https://developers.google.com/web/fundamentals/primers/modules" target="_blank" rel="noopener">JavaScript Module</a>。同时<code>&lt;link rel=&quot;preload&quot;&gt;</code>资源预加载可以用来告诉浏览器这个资源在当前的导航肯定会被用到，你想要尽快加载这个资源。更多相关的内容，你可阅读<a href="https://developers.google.com/web/fundamentals/performance/resource-prioritization" target="_blank" rel="noopener">Resource Prioritization - Getting the Browser to Help You</a>这篇文章。</p>
+<h2 id="样式计算-Style-calculation"><a href="#样式计算-Style-calculation" class="headerlink" title="样式计算 - Style calculation"></a>样式计算 - Style calculation</h2><p>拥有了DOM树我们还不足以知道页面的外貌，因为我们通常会为页面的元素设置一些样式。主线程会解析页面的CSS从而确定每个DOM节点的计算样式（computed style）。计算样式是主线程根据CSS样式选择器（CSS selectors）计算出的每个DOM元素应该具备的具体样式，你可以打开devtools来查看每个DOM节点对应的计算样式。<br><img src="/images/chrome/computedstyle.png" alt></p>
+<p align="center">主线程解析CSS来确定每个元素的计算样式</p>
+
+<p>即使你的页面没有设置任何自定义的样式，每个DOM节点还是会有一个计算样式属性，这是因为每个浏览器都有自己的默认样式表。因为这个样式表的存在，页面上的h1标签一定会比h2标签大，而且不同的标签会有不同的magin和padding。如果你想知道Chrome的默认样式是长什么样的，你可以直接查看<a href="https://cs.chromium.org/chromium/src/third_party/blink/renderer/core/html/resources/html.css" target="_blank" rel="noopener">代码</a>。</p>
+<h2 id="布局-Layout"><a href="#布局-Layout" class="headerlink" title="布局 - Layout"></a>布局 - Layout</h2><p>前面这些步骤完成之后，渲染进程就已经知道页面的具体文档结构以及每个节点拥有的样式信息了，可是这些信息还是不能最终确定页面的样子。举个例子，假如你现在想通过电话告诉你的朋友你身边的一幅画的内容：“画布上有一个红色的大圆圈和一个蓝色的正方形”，单凭这些信息你的朋友是很难知道这幅画具体是什么样子的，因为他不知道大圆圈和正方形具体在页面的什么位置，是正方形在圆圈前面呢还是圆圈在正方形的前面。<br><img src="/images/chrome/tellgame.png" alt></p>
+<p align="center">你站在一幅画面前通过电话告诉你朋友画上的内容</p>
+
+<p>渲染网页也是同样的道理，只知道网站的文档流以及每个节点的样式是远远不足以渲染出页面内容的，还需要通过布局（layout）来计算出每个节点的<strong>几何信息</strong>（geometry）。布局的具体过程是：主线程会遍历刚刚构建的DOM树，根据DOM节点的计算样式计算出一个布局树（layout tree）。布局树上每个节点会有它在页面上的x，y坐标以及盒子大小（bounding box sizes）的具体信息。布局树长得和先前构建的DOM树差不多，不同的是这颗树只有那些可见的（visible）节点信息。举个例子，如果一个节点被设置为了<strong>display:none</strong>，这个节点就是不可见的就不会出现在布局树上面（<strong>visibility:hidden</strong>的节点会出现在布局树上面，你可以思考一下这是为什么）。同样的，如果一个伪元素（pseudo class）节点有诸如<code>p::before{content:&quot;Hi!&quot;}</code>这样的内容，它会出现在布局上，而不存在于DOM树上。<br><img src="/images/chrome/layout.png" alt></p>
+<p align="center">主线程会遍历每个DOM tree节点的计算样式信息来生成一棵布局树</p>
+
+<p>即使页面的布局十分简单，布局这个过程都是非常复杂的。例如页面就是简单地从上而下展示一个又一个段落，这个过程就很复杂，因为你需要考虑段落中的字体大小以及段落在哪里需要进行换行之类的东西，它们都会影响到段落的大小以及形状，继而影响到接下来段落的布局。<br><img src="/images/chrome/tree.png" alt></p>
+<p align="center">浏览器得考虑段落是不是要换行</p>
+
+<p>如果考虑到CSS的话将会更加复杂，因为CSS是一个很强大的东西，它可以让元素悬浮（float）到页面的某一边，还可以遮挡住页面溢出的（overflow）元素，还可以改变内容的书写方向，所以单是想一下你就知道布局这个过程是一个十分艰巨和复杂的任务。对于Chrome浏览器，我们有一整个负责布局过程的工程师团队。如果你想知道他们工作的具体内容，他们在<a href="https://www.youtube.com/watch?v=Y5Xa4H2wtVA" target="_blank" rel="noopener">BlinkOn Conference</a>上面的相关讨论被录制了下来，有时间的话你可以去看一下。</p>
+<h2 id="绘画-Paint"><a href="#绘画-Paint" class="headerlink" title="绘画 - Paint"></a>绘画 - Paint</h2><p>知道了DOM节点以及它的样式和布局其实还是不足以渲染出页面来的。为什么呢？举个例子，假如你现在想对着一幅画画一幅一样的画，你已经知道了画布上每个元素的大小，形状以及位置，你还是得思考一下每个元素的绘画顺序，因为画布上的元素是会互相遮挡的（z-index）。</p>
+<p><img src="/images/chrome/drawgame.png" alt></p>
+<p align="center">一个人拿着画笔站在画布前面，在思考着是先画一个圆还是先画一个正方形</p>
+
+<p>举个例子，如果页面上的某些元素设置了<strong>z-index</strong>属性，绘制元素的顺序就会影响到页面的正确性。</p>
+<p><img src="/images/chrome/zindex.png" alt></p>
+<p align="center">单纯按照HTML布局的顺序绘制页面的元素是错误的，因为元素的z-index元素没有被考虑到</p>
+
+<p>在绘画这个步骤中，主线程会遍历之前的到的布局树（layout tree）来生成一系列的绘画记录（paint records）。绘画记录是对绘画过程的注释，例如“首先画背景，然后是文本，最后画矩形”。如果你曾经在canvas画布上有使用过JavaScript绘制元素，你可能会觉着这个过程不是很陌生。</p>
+<p><img src="/images/chrome/paint.png" alt></p>
+<p align="center">主线程遍历布局树来生成绘画记录</p>
+
+<h2 id="高成本的渲染流水线（rendering-pipeline）更新"><a href="#高成本的渲染流水线（rendering-pipeline）更新" class="headerlink" title="高成本的渲染流水线（rendering pipeline）更新"></a>高成本的<strong>渲染流水线</strong>（rendering pipeline）更新</h2><p>关于渲染流水线有一个十分重要的点就是流水线的每一步都要使用到前一步的结果来生成新的数据，这就意味着如果某一步的内容发生了改变的话，这一步后面所有的步骤都要被重新执行以生成新的记录。举个例子，如果布局树有些东西被改变了，文档上那些被影响到的部分的绘画顺序是要重新生成的。<br><img src="/images/chrome/trees.gif" alt></p>
+<p align="center">DOM+Style，布局以及绘画树</p>
+
+<p>如果你的页面元素有动画效果（animating），浏览器就不得不在每个渲染帧的间隔中通过渲染流水线来更新页面的元素。我们大多数显示器的刷新频率是一秒钟60次（60fps），如果你在每个渲染帧的间隔都能通过流水线移动元素，人眼就会看到流畅的动画效果。可是如果流水线更新时间比较久，动画存在丢帧的状况的话，页面看起来就会很“卡顿”。</p>
+<p><img src="/images/chrome/pagejank1.png" alt></p>
+<p align="center">流水线更新没有赶上屏幕刷新，动画就有点卡</p>
+
+<p>即使你的渲染流水线更新是和屏幕的刷新频率保持一致的，这些更新是运行在主线程上面的，这就意味着它可能被同样运行在主线程上面的JavaScript代码阻塞。</p>
+<p><img src="/images/chrome/pagejank2.png" alt></p>
+<p align="center">某些动画帧被JavaScript阻塞了</p>
+
+<p>对于这种情况，你可以将要被执行的JavaScript操作拆分为更小的块然后通过<code>requestAnimationFrame</code>这个API把他们放在每个动画帧中执行。想知道更多关于这方面的信息的话，可以参考<a href="https://developers.google.com/web/fundamentals/performance/rendering/optimize-javascript-execution" target="_blank" rel="noopener">Optimize JavaScript Execution</a>。当然你还可以将JavaScript代码放在<a href="https://www.youtube.com/watch?v=X57mh8tKkgE" target="_blank" rel="noopener">WebWorkers</a>中执行来避免它们阻塞主线程。</p>
+<p><img src="/images/chrome/raf.png" alt></p>
+<p align="center">在动画帧上运行一小段JavaScript代码</p>
+
+<h2 id="合成"><a href="#合成" class="headerlink" title="合成"></a>合成</h2><h3 id="如何绘制一个页面？"><a href="#如何绘制一个页面？" class="headerlink" title="如何绘制一个页面？"></a>如何绘制一个页面？</h3><p>到目前为止，浏览器已经知道了关于页面以下的信息：文档结构，元素的样式，元素的几何信息以及它们的绘画顺序。那么浏览器是如何利用这些信息来绘制出页面来的呢？<strong>将以上这些信息转化为显示器的像素的过程叫做光栅化（rasterizing）</strong>。</p>
+<p>可能一个最简单的做法就是只光栅化视口内（viewport）的网页内容。如果用户进行了页面滚动，就移动光栅帧（rastered frame）并且光栅化更多的内容以补上页面缺失的部分。Chrome的第一个版本其实就是这样做的。然而，对于现代的浏览器来说，它们往往采取一种更加复杂的叫做合成（compositing）的做法。</p>
+<p><img src="/images/chrome/rasterizing.gif" alt></p>
+<p align="center">最简单的光栅化过程</p>
+
+<h3 id="什么是合成"><a href="#什么是合成" class="headerlink" title="什么是合成"></a>什么是合成</h3><p>合成是一种将页面分成若干层，然后分别对它们进行光栅化，最后在一个单独的线程 - 合成线程（compositor thread）里面合并成一个页面的技术。当用户滚动页面时，由于页面各个层都已经被光栅化了，浏览器需要做的只是合成一个新的帧来展示滚动后的效果罢了。页面的动画效果实现也是类似，将页面上的层进行移动并构建出一个新的帧即可。</p>
+<p>你可以通过<a href="https://blog.logrocket.com/eliminate-content-repaints-with-the-new-layers-panel-in-chrome-e2c306d4d752?gi=cd6271834cea" target="_blank" rel="noopener">Layers panel</a>在DevTools查看你的网站是如何被浏览器分成不同的层的。</p>
+<p><img src="/images/chrome/composit.gif" alt></p>
+<p align="center">页面合成过程</p>
+
+<h3 id="页面分层"><a href="#页面分层" class="headerlink" title="页面分层"></a>页面分层</h3><p>为了确定哪些元素需要放置在哪一层，主线程需要遍历渲染树来创建一棵层次树（Layer Tree）（在DevTools中这一部分工作叫做“Update Layer Tree”）。如果页面的某些部分应该被放置在一个单独的层上面（滑动菜单）可是却没有的话，你可以通过使用<code>will-change</code> CSS属性来告诉浏览器对其分层。</p>
+<p><img src="/images/chrome/layer.png" alt></p>
+<p align="center">主线程遍历布局树来生成层次树</p>
+
+<p>你可能会想要给页面上所有的元素一个单独的层，然而当页面的层超过一定的数量后，层的合成操作要比在每个帧中光栅化页面的一小部分还要慢，因此衡量你应用的渲染性能是十分重要的一件事情。想要获取关于这方面的更多信息，可以参考文章<a href="https://developers.google.com/web/fundamentals/performance/rendering/stick-to-compositor-only-properties-and-manage-layer-count" target="_blank" rel="noopener">Stick to Compositor-Only Properties and Manage Layer Count</a>。</p>
+<h3 id="在主线程之外光栅化和合成页面"><a href="#在主线程之外光栅化和合成页面" class="headerlink" title="在主线程之外光栅化和合成页面"></a>在主线程之外光栅化和合成页面</h3><p>一旦页面的层次树创建出来并且页面元素的绘制顺序确定后，主线程就会向合成线程（compositor thread）提交这些信息。然后合成线程就会光栅化页面的每一层。因为页面的一层可能有整个网页那么大，所以合成线程需要将它们切分为一块又一块的小图块（tiles）然后将图块发送给一系列光栅线程（raster threads）。光栅线程会栅格化每个图块并且把它们存储在GPU的内存中。</p>
+<p><img src="/images/chrome/raster.png" alt></p>
+<p align="center">光栅线程创建图块的位图并发送给GPU</p>
+
+<p>合成线程可以给不同的光栅线程赋予不同的优先级（prioritize），进而使那些在视口中的或者视口附近的页面可以先被光栅化。为了响应用户对页面的放大和缩小操作，页面的图层（layer）会为不同的清晰度配备不同的图块。</p>
+<p>当图层上面的图块都被栅格化后，合成线程会收集图块上面叫做<strong>绘画四边形</strong>（draw quads）的信息来构建一个<strong>合成帧</strong>（compositor frame）。</p>
+<ul>
+<li>绘画四边形：包含图块在<strong>内存的位置</strong>以及图层合成后图块在页面的位置之类的信息。</li>
+<li>合成帧：代表页面一个帧的内容的绘制四边形<strong>集合</strong>。</li>
+</ul>
+<p>上面的步骤完成之后，合成线程就会通过IPC向浏览器进程（browser process）提交（commit）一个渲染帧。这个时候可能有另外一个合成帧被浏览器进程的UI线程（UI thread）提交以改变浏览器的UI。这些合成帧都会被发送给GPU从而展示在屏幕上。如果合成线程收到页面滚动的事件，合成线程会构建另外一个合成帧发送给GPU来更新页面。</p>
+<p><img src="/images/chrome/composit.png" alt></p>
+<p align="center">合成线程构建出合成帧，合成帧会被发送给浏览器进程然后再发送给GPU</p>
+
+<p>合成的好处在于这个过程没有涉及到主线程，所以合成线程不需要等待样式的计算以及JavaScript完成执行。这也就是为什么说<a href="https://www.html5rocks.com/en/tutorials/speed/high-performance-animations/" target="_blank" rel="noopener">只通过合成来构建页面动画</a>是构建流畅用户体验的最佳实践的原因了。如果页面需要被重新布局或者绘制的话，主线程一定会参与进来的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在这篇文章中，我们探讨了从解析HTML文件到合成页面整个的渲染流水线。希望你读完后，可以自己去看一些关于页面性能优化的文章了。</p>
+<p>在接下来也是最后一篇本系列的文章中，我们将要查看合成线程更多的细节，来了解一下当用户在页面移动鼠标（<strong>mouse move</strong>）以及进行点击（<strong>click</strong>）的时候浏览器会做些什么事情。</p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/Chrome/" rel="tag">Chrome</a>, <a class="has-link-grey -link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="/images/wechat_pay.jpg" alt="微信"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/12/27/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%BA%8C/">
+                <span class="level-item">窥探现代浏览器架构(二)</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: 'ffc0a8f20e82eda7516e6e97d68d6626',
+		owner: 'XiaocongDong',
+		repo: 'XiaocongDong.github.io',
+		oauth: {
+			client_id: '9a8b4c4057518a9704d3',
+			client_secret: '541c790c4f2386c7d15cec89076baa08d1a9a9ad',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+                
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/gopherjs.png" alt="窥探现代浏览器架构-三" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 Xiaocong Dong&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+<script>
+var IcarusThemeSettings = {
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+    
+    
+<script src="/js/animation.js"></script>
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+    
+    
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+    
+    
+<a id="back-to-top" title="回到顶端" href="javascript:;" target="_blank" rel="noopener">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
