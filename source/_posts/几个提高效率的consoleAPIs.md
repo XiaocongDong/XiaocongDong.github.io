@@ -87,3 +87,7 @@ console.time(timerName)
 ## 参考网站
 * https://developer.mozilla.org/en-US/docs/Web/API/Console
 * https://medium.com/javascript-in-plain-english/mastering-js-console-log-like-a-pro-1c634e6393f9
+
+## 个人技术动态
+欢迎关注公众号**进击的大葱**一起学习成长
+![](/images/wechat_qr.jpg)

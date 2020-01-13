@@ -118,3 +118,6 @@ const sum = nums.reduce((currSum, num) => currSum + num)
 console.log(sum)
 // 15
 ```
+## 个人技术动态
+欢迎关注公众号**进击的大葱**一起学习成长
+![](/images/wechat_qr.jpg)

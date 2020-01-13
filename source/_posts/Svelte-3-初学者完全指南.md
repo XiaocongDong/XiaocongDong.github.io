@@ -780,3 +780,7 @@ BookCard组件虽然出来了，我们得定义一些CSS让它变得更好看一
 * [作者的Rethinking reactivity演讲](https://www.youtube.com/watch?v=AdNJ3fydeao)
 * [Svelte官网](https://svelte.dev/)
 * [Svelte github仓库](https://github.com/sveltejs/svelte)
+
+## 个人技术动态
+欢迎关注公众号**进击的大葱**一起学习成长
+![](/images/wechat_qr.jpg)
