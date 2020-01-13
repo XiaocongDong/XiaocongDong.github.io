@@ -19,7 +19,7 @@
 <meta property="og:description" content="本文整理了一些在日常工作可以用到的JavaScript数组小技巧 去重巧用Set特性 1const arr &#x3D; [1, 2, 2, 3, 4, 7, 7]2const uniqueArr &#x3D; [...new Set(arr)]3console.log(uniqueArr)4&#x2F;&#x2F; [1, 2, 3, 4, 7]">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
-<meta property="og:updated_time" content="2020-01-10T08:50:28.967Z">
+<meta property="og:updated_time" content="2020-01-13T03:12:56.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;og_image.png">
 
@@ -157,7 +157,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    2 分钟 读完 (大约 371 个字)
+                    3 分钟 读完 (大约 399 个字)
                 </span>
                 
                 
@@ -193,6 +193,7 @@ var _hmt = _hmt || [];
 <h1 id="合并多个数组"><a href="#合并多个数组" class="headerlink" title="合并多个数组"></a>合并多个数组</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr1 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr2 = [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> arr3 = [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> mergedArr = [...arr1, ...arr2, ...arr3]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(mergedArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span></pre></td></tr></table></figure>
 <h1 id="移除数组的虚假-falsy-值"><a href="#移除数组的虚假-falsy-值" class="headerlink" title="移除数组的虚假(falsy)值"></a>移除数组的虚假(falsy)值</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> mixedArr = [<span class="hljs-number">0</span>, “blue”, “”, <span class="hljs-literal">NaN</span>, <span class="hljs-number">9</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">undefined</span>, “white”, <span class="hljs-literal">false</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> trueArr = mixedArr.filter(<span class="hljs-built_in">Boolean</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(trueArr)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// [“blue”, 9, true, “white”]</span></span></pre></td></tr></table></figure>
 <h1 id="求和"><a href="#求和" class="headerlink" title="求和"></a>求和</h1><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> nums = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> sum = nums.reduce(<span class="hljs-function">(<span class="hljs-params">currSum, num</span>) =&gt;</span> currSum + num)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">console</span>.log(sum)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 15</span></span></pre></td></tr></table></figure>
+<h2 id="个人技术动态"><a href="#个人技术动态" class="headerlink" title="个人技术动态"></a>个人技术动态</h2><p>欢迎关注公众号<strong>进击的大葱</strong>一起学习成长<br><img src="/images/wechat_qr.jpg" alt></p>
 
         </div>
         

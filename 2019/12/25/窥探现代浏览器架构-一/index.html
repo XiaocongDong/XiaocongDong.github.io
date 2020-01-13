@@ -19,7 +19,7 @@
 <meta property="og:description" content="前言本文是笔者对Mario Kosaka写的inside look at modern web browser系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。 CPU，GPU，内存和多进程架构在这个4集系列教程里面，我将会从Chrome浏览器的高层次架构（high-level architecture）开始说起，">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
-<meta property="og:updated_time" content="2020-01-10T08:50:28.967Z">
+<meta property="og:updated_time" content="2020-01-13T03:12:56.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
 
@@ -167,7 +167,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    25 分钟 读完 (大约 3728 个字)
+                    25 分钟 读完 (大约 3756 个字)
                 </span>
                 
                 
@@ -256,6 +256,7 @@ var _hmt = _hmt || [];
 
 <p>网站隔离技术汇聚了我们工程师好几年的研发努力，它其实远远没有想象中那样只是为不同站点的iframe分配一个独立的渲染进程那么简单，因为它从根本上改变了各个iframe之间的通信方式。网站隔离后，对于有iframe的网站，当用户打开右边的devtool时，Chrome浏览器其实要做很多幕后工作才能让开发者感觉不出这和之前的有什么区别，这其实是很难实现的。对于一些很简单的功能，例如在devtool里面用Ctrl + F键在页面搜索某个关键词，Chrome都要遍历多个渲染进程去完成。所以我们的浏览器工程师在网站隔离这个功能发布后都感叹这是一个里程碑式的成就。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在本篇文章中，我们探讨了浏览器高层次的架构设计以及多进程架构的带来的好处。同时我们还讨论了服务化和网站隔离这些和浏览器多进程架构息息相关的技术。在下一篇文章中我们要开始深入了解这些进程和线程是如何呈现我们的网站页面的了。</p>
+<h2 id="个人技术动态"><a href="#个人技术动态" class="headerlink" title="个人技术动态"></a>个人技术动态</h2><p>欢迎关注公众号<strong>进击的大葱</strong>一起学习成长<br><img src="/images/wechat_qr.jpg" alt></p>
 
         </div>
         

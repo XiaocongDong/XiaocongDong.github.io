@@ -19,7 +19,7 @@
 <meta property="og:description" content="前言本文是笔者对Mario Kosaka写的inside look at modern web browser系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。 到达合成线程的输入这篇文章是探究Chrome内部工作原理的四集系列文章中的最后一篇了。在上一篇文章中，我们探讨了一下浏览器渲染页面的过程以及学习了一些关于">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
-<meta property="og:updated_time" content="2020-01-10T08:50:28.967Z">
+<meta property="og:updated_time" content="2020-01-13T03:12:56.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;gallery&#x2F;thumbnails&#x2F;chrome.png">
 
@@ -167,7 +167,7 @@ var _hmt = _hmt || [];
                 <span class="level-item has-text-grey">
                     
                     
-                    18 分钟 读完 (大约 2674 个字)
+                    18 分钟 读完 (大约 2702 个字)
                 </span>
                 
                 
@@ -227,6 +227,7 @@ var _hmt = _hmt || [];
 <h3 id="学习如何衡量性能"><a href="#学习如何衡量性能" class="headerlink" title="学习如何衡量性能"></a>学习如何衡量性能</h3><p>不同网站的性能调整可能会有所不同，你要自己衡量自己网站的性能并确定最适合提升你的网站性能的方案。 你可以查看Chrome DevTools团队的一些教程来学习如何才能<a href="https://developers.google.com/web/tools/chrome-devtools/speed/get-started" target="_blank" rel="noopener">衡量自己网站的性能</a>。</p>
 <h3 id="为你的站点添加Feature-Policy"><a href="#为你的站点添加Feature-Policy" class="headerlink" title="为你的站点添加Feature Policy"></a>为你的站点添加Feature Policy</h3><p>如果你想更进一步，你可以了解一下<a href="https://developers.google.com/web/updates/2018/06/feature-policy" target="_blank" rel="noopener">Feature Policy</a>这个新的Web平台功能，这个功能可以在你构建项目的时候提供一些保护让您的应用程序具有某些行为并防止你犯下错误。例如，如果你想确保你的应用代码不会阻塞页面的解析（parsing），你可以在同步脚本策略（synchronius scripts policy）中运行你的应用。具体做法是将<code>sync-script</code>设置为’none’，这样那些会阻塞页面解析的JavaScript代码会被禁止执行。这样做的好处是避免你的代码阻塞页面的解析，而且浏览器无须担心解析器（parser）暂停。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是所有和浏览器架构和运行原理相关的内容了，我们以后在开发web应用的时候，不应该只考虑代码的优雅性，还要多多从浏览器是如何解析运行我们的代码的方面进行思考，从而为用户提供更好的用户体验。</p>
+<h2 id="个人技术动态"><a href="#个人技术动态" class="headerlink" title="个人技术动态"></a>个人技术动态</h2><p>欢迎关注公众号<strong>进击的大葱</strong>一起学习成长<br><img src="/images/wechat_qr.jpg" alt></p>
 
         </div>
         
