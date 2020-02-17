@@ -81,7 +81,7 @@ $my-project: yarn constraints query "workspace_has_dependency(Cwd, 'lodash', Ran
 ```
 个人感觉上面的依赖查询很像在MySQL数据库里面用SELECT语法查询数据库，是一个十分强大而且有用的功能。
 ### 依赖零安装 （Zero-Installs）
-[依赖零安装](https://next.yarnpkg.com/features/zero-installs)更像是一个理念而不是一个功能，它的思路是希望我们每次在使用git更新完代码后，不需要再次使用`yarn install`命令来更新本地仓库的依赖来提高开发效率和避免一些问题的发生。它的具体做法是让开发者将本地的依赖包也提交到远端的git仓库中，看到这里你可能回想：“不就是将node_modules也提交吗？这个做法很蠢吧！”。确实如果直接将node_modules提交到远端仓库的话，每次提交都是一个噩梦，因为node_modules的文件很多（几万个文件很常见），首先你上传和下载代码的速度会变得很慢，其次很影响别人对你的代码进行review。为了解决这个问题，v2版本默认开启了Plug'n'Play + zip loading的功能，这个功能开启后你的项目将不再存在node_modules文件夹，所有的依赖都会被压缩成一个文件放在特定的地方，由于压缩后的包体积很小，而且包的数量不会很多，所以就不会存在以上说到的node_modules存在的问题。
+[依赖零安装](https://next.yarnpkg.com/features/zero-installs)更像是一个理念而不是一个功能，它的思路是希望我们每次在使用git更新完代码后，不需要再次使用`yarn install`命令来更新本地仓库的依赖来提高开发效率和避免一些问题的发生。它的具体做法是让开发者将本地的依赖包也提交到远端的git仓库中，看到这里你可能会想：“不就是将node_modules也提交吗？这个做法很蠢吧！”。确实如果直接将node_modules提交到远端仓库的话，每次提交都是一个噩梦，因为node_modules的文件很多（几万个文件很常见），首先你上传和下载代码的速度会变得很慢，其次很影响别人对你的代码进行review。为了解决这个问题，v2版本默认开启了Plug'n'Play + zip loading的功能，这个功能开启后你的项目将不再存在node_modules文件夹，所有的依赖都会被压缩成一个文件放在特定的地方，由于压缩后的包体积很小，而且包的数量不会很多，所以就不会存在以上说到的node_modules存在的问题。
 
 可是为什么要做到依赖零安装呢？这是因为它有以下的好处：
 * 更好的开发体验
@@ -138,7 +138,7 @@ v2版本对Windows开发环境有了更好的兼容。你之前可能会遇到�
 想要查看v2版本所有更新内容的朋友可以看Maël Nison的文章 - [Introducing Yarn 2](https://dev.to/arcanis/introducing-yarn-2-4eh1)或者直接查看它的[change log](https://github.com/yarnpkg/berry/blob/master/CHANGELOG.md)。
 ### Yarn的未来计划
 * v1最后一个版本v1.22已经发布，作者从此不会再在v1的代码上添加任何新的功能了。Yarn所有的新功能都只会在v2版本的代码库上开发。
-* v1的代码仓库将会被从`yarnpkg/yarn`迁移到`yarnpkg/legacy`，这个仓库会继续开放一定的时间用来修复一些bug，然后会在一两年后achieve掉。v2版本的代码由于历史遗留问题不会迁移到`yarnpkg/yarn`，而且会在未来很长的一段事件保留在`yarnpkg/berry`。
+* v1的代码仓库将会被从`yarnpkg/yarn`迁移到`yarnpkg/legacy`，这个仓库会继续开放一定的时间用来修复一些bug，然后会在一两年后achieve掉。v2版本的代码由于历史遗留问题不会迁移到`yarnpkg/yarn`，而且会在未来很长的一段时间保留在`yarnpkg/berry`。
 * v1的官方网站会被搬到legacy.yarnpkg.com，yarnpkg.com官网的内容已经是v2版本next.yarnpkg.com的内容了。
 * npm仓库中，`legacy`标签指向的是最新的v1版本代码，`latest`标签会继续指向v1的最新版本的代码几周，然后指向v2的代码。`berry`标签将会一直指向v2版本的最新版本。
 * 大概在今年4月的时候，[Node 14版本的Docker镜像可能会默认自带v2版本](https://github.com/nodejs/docker-node/issues/1180)，这样你就可以直接在容器里使用v2的功能了。
