@@ -6,6 +6,7 @@ tags:
 categories:
   - 前端
 date: 2020-04-29 11:58:29
+thumbnail: /gallery/thumbnails/react-hook.jpg
 ---
 
 自从React 16.8发布Hook之后，笔者已经在实际项目中使用Hook快一年了，虽然Hook在使用中存在着一些坑，但是总的来说它是一个很好的功能，特别是在减少模板代码和提高代码复用率这些方面特别有用。为了让更多的人了解和使用Hook，我决定写一系列和Hook相关的文章，**本篇文章就是这个系列的第一篇**，主要和大家聊一下**React为什么需要Hook**。
