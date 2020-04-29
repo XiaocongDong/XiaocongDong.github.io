@@ -35,9 +35,9 @@ class UserDetail extends React.Component {
   componentDidUpdate(prevProps) {
     // 用户信息发生了变化
     if (prevProps.userId != this.props.userId) {
-      // 取消上个用户的状态订阅
+      // 取消上一个用户的状态订阅
       userService.unSubscribeUserStatus(this.props.userId, this.handleUserStatusUpdate)
-      // 订阅下个用户的状态
+      // 订阅下一个用户的状态
       userService.subscribeUserStatus(this.props.userId, this.handleUserStatusUpdate)
     }
   }
@@ -139,7 +139,7 @@ function useTabTitle(title) {
   }, [title])
 }
 
-// UserDetail中说使用useTabTitle Hook
+// UserDetail中使用useTabTitle Hook
 function UserDetail = (props) => {
   useTabTitle(props.userName)
   ...
