@@ -1,13 +1,16 @@
 ---
-title: 我们为什么需要React Hook
+title: React为什么需要Hook
 tags:
   - React
   - Hook
 categories:
   - 前端
+date: 2020-04-29 11:58:29
 ---
-自从React 16.8发布Hook之后，笔者已经在实际项目中使用Hook快一年了，虽然Hook在使用中存在着一些坑，但是总的来说它是一个很好的功能，特别是在减少模板代码和提高代码复用率这些方面特别有用。为了让更多的人了解和使用Hook，我决定写一系列和Hook相关的文章，**本篇文章就是这个系列的第一篇**，主要和大家聊一下**我们为什么需要React Hook**。
 
+自从React 16.8发布Hook之后，笔者已经在实际项目中使用Hook快一年了，虽然Hook在使用中存在着一些坑，但是总的来说它是一个很好的功能，特别是在减少模板代码和提高代码复用率这些方面特别有用。为了让更多的人了解和使用Hook，我决定写一系列和Hook相关的文章，**本篇文章就是这个系列的第一篇**，主要和大家聊一下**React为什么需要Hook**。
+
+<!-- more -->
 ## Hook解决的问题
 ### Component非UI逻辑复用困难
 对于React或者其它的基于Component的框架来说，页面是由一个个UI组件构成的。独立的组件可以在同一个项目中甚至不同项目中进行复用，这十分有利于前端开发效率的提高。可是除了UI层面上的复用，一些**状态相关**（stateful）或者**副作用相关**（side effect）的**非UI逻辑**在不同组件之间复用起来却十分困难。对于React来说，你可以使用[高阶组件](https://reactjs.org/docs/higher-order-components.html)（High-order Component）或者[renderProps](https://reactjs.org/docs/render-props.html)的方法来复用这些逻辑，可是这两种方法都不是很好，存在各种各样的问题。如果你之前没有复用过这些非UI逻辑的话，我们可以先来看一个高阶组件的例子。
@@ -124,7 +127,7 @@ export default withUserStatus(UserDetail)
 除了用来替代难用的HOC和renderProps来解决组件非UI逻辑复用的问题之外，其实Hook还解决了以下这些问题。
 
 ### 组件的生命周期函数不适合side effect逻辑的管理
-在上面UserDetail组件中我们将`获取用户的在线状态`这个side effect的相关逻辑分散到了`componentDidMount`，`componentWillUnmount`，`componentDidUpdate`三个生命周期函数中，**这些互相关联的逻辑被分散到不同的函数中会导致bug的发生和产生数据不一致的情况**。除了这个，**我们还可能会在组件的同一个声明周期函数放置很多互不关联的side effect逻辑**。举个例子，如果我们想在用户查看某个用户的详情页面的时候将浏览器当前标签页的title改为当前用户名的话，就需要在组件的componentDidMount生命周期函数里面添加`document.title = this.props.userName`这段代码，可是这段代码和之前订阅用户状态的逻辑是互不关联的，而且随着组件的功能变得越来越复杂，这些不关联而又放在一起的代码只会变得越来越多，于是你的组件逐渐变得难以测试。由此可见Class Component的生命周期函数并不适合用来管理组件的side effect逻辑。
+在上面UserDetail组件中我们将`获取用户的在线状态`这个side effect的相关逻辑分散到了`componentDidMount`，`componentWillUnmount`，`componentDidUpdate`三个生命周期函数中，**这些互相关联的逻辑被分散到不同的函数中会导致bug的发生和产生数据不一致的情况**。除了这个，**我们还可能会在组件的同一个生命周期函数放置很多互不关联的side effect逻辑**。举个例子，如果我们想在用户查看某个用户的详情页面的时候将浏览器当前标签页的title改为当前用户名的话，就需要在组件的componentDidMount生命周期函数里面添加`document.title = this.props.userName`这段代码，可是这段代码和之前订阅用户状态的逻辑是互不关联的，而且随着组件的功能变得越来越复杂，这些不关联而又放在一起的代码只会变得越来越多，于是你的组件逐渐变得难以测试。由此可见Class Component的生命周期函数并不适合用来管理组件的side effect逻辑。
 
 那么这个问题Hook又是如何解决的呢？由于每个Hook都是一个函数，所以你可以**将和某个side effect相关的逻辑都放在同一个函数（Hook）里面**（useEffect Hook）。这种做法有很多好处，首先关联的代码都放在一起，可以十分方便代码的维护，其次实现了某个side effect的Hook还可以被不同的组件进行复用来提高开发效率。举个例子，我们就可以将改变标签页title的逻辑封装在一个自定的Hook中，如果其它组件有相同逻辑的话就可以使用这个Hook了：
 ```js
@@ -157,12 +160,12 @@ class UserDetail extends React.Component {
 }
 ```
 
-除了对开发者不友好，Class Component对机器也很不友好。例如Class Component的生命周期函数很难被minified。其次，Class Component的存在可能会阻碍React后面的发展。举个例子，随着新的理念 - Compiler as Framework的兴起，一些诸如[Svelte](https://svelte.dev/), [Angular](https://angular.io/)和[Glimmer](https://glimmerjs.com/)的框架将框架的概念放到了编译时以去除production code里面的runtime代码来加快应用的首屏加载速度，这个方案已经开始被逐渐采纳了，而且未来有可能会成为潮流。React已经存在了5年，它如果想要继续存在多五年的话也要跟上这个潮流，出于这个原因，React团队和[Prepack](https://prepack.io/)团队进行了一些和Compiler as Framework相关的尝试，而且就目前实验的结果来说这个思路有很大的想象空间。不过在这个过程中React的开发者也发现了一个严重的问题，那就是开发者可能会以一种非常规的模式来使用Class Component，而这些模式会降低这个方案带来的优化效果。
+除了对开发者不友好，Class Component对机器也很不友好。例如Class Component的生命周期函数很难被minified。其次，Class Component的存在可能会阻碍React后面的发展。举个例子，随着新的理念 - Compiler as Framework的兴起，一些诸如[Svelte](https://svelte.dev/), [Angular](https://angular.io/)和[Glimmer](https://glimmerjs.com/)的框架将框架的概念放到了编译时以去除production code里面的runtime代码来加快应用的首屏加载速度，这个方案已经开始被逐渐采纳了，而且未来有可能会成为潮流。如果大家不是很了解Compiler as Framework理念的话，可以看我的另外一篇文章：[Svelte 3 初学者完全指南](https://superseany.com/2019/12/17/Svelte-3-%E5%88%9D%E5%AD%A6%E8%80%85%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/)。React已经存在了5年，它如果想要继续存在多五年的话也要跟上这个潮流，出于这个原因，React团队和[Prepack](https://prepack.io/)团队进行了一些和Compiler as Framework相关的尝试，而且就目前实验的结果来说这个思路有很大的想象空间。不过在这个过程中React的开发者也发现了一个严重的问题，那就是开发者可能会以一种非常规的模式来使用Class Component，而这些模式会降低这个方案带来的优化效果。
 
-因此React要想得到进一步的发展的话，就必须让开发者更多地使用Function Component而不是Class Component。而开发者偏向于使用Class Component而不是Function Component的一个主要原因是Function Component没有状态管理和生命周期函数等功能。基于这个原因，React的开发者就创造了Hook来**允许Function Component也可以具有Class Component的一些属性**，例如使用useState来管理状态以及使用useEffect来管理side effect。最重要的是，React将所有复杂的实现都封装在框架里面了，开发者无需学习函数式编程和响应式编程的概念也可以很好地使用Hook来进行开发。
+因此React要想得到进一步的发展的话，就必须让开发者更多地使用Function Component而不是Class Component。而开发者偏向于使用Class Component而不是Function Component的一个主要原因是Function Component没有状态管理和生命周期函数等功能。Hook出来后这个问题就不存在了，因为开发者可以使用**useState** Hook来在Function Component使用**state**以及**useEffect** Hook来实现一些和**生命周期函数类似的功能**。最重要的是，React将所有复杂的实现都封装在框架里面了，开发者无需学习函数式编程和响应式编程的概念也可以很好地使用Hook来进行开发。
 
 ## 总结
-本篇文章我主要论述了我们为什么需要在项目中使用Hook，总的来说是以下三个原因：
+本篇文章我主要论述了React为啥要有Hook，总的来说是以下三个原因：
 * Component非UI逻辑复用困难。
 * 组件的生命周期函数不适合side effect逻辑的管理。
 * 不友好的Class Component。
@@ -172,3 +175,7 @@ class UserDetail extends React.Component {
 ## 参考文献
 * [React Today and Tomorrow and 90% Cleaner React With Hooks](https://www.youtube.com/watch?v=dpw9EHDh2bM)
 * [React Hook RFC](https://github.com/reactjs/rfcs/pull/68)
+
+## 个人技术动态
+欢迎关注公众号**进击的大葱**一起学习成长
+![](/images/wechat_qr.jpg)
