@@ -1,115 +1,761 @@
-最近在研究JAMStack的一些相关内容，发现这的确是个好东西，所以想写一篇文章把这个概念分享给还不了解JAMStack的同学。本篇文章主要包含以下的内容：
-* 什么是JAMStack
-* JAMStack有什么优势
-* JAMStack适合什么应用
-* 我的个人思考
+在[React为什么需要Hook](https://juejin.im/post/5ea9015be51d454dd15ef310)这篇文章中我们探讨了React开发团队为什么要为Function Component添加Hook的原因，在本篇文章中我将会为大家提供一份较为全面的React Hook实践指南，其中包括以下方面的内容：
+* 什么是React Hook
+* 常用Hook介绍
+  * useState
+  * useEffect
+  * useRef
+  * useCallback
+  * useMemo
+  * useContext
+  * useReducer
+* 自定义Hook
 
-## 什么是JAMStack
-### 概念
-**JAM**Stack中的JAM其实是三个词的缩写，它们分别是**J**avaScript, **A**PIs以及**M**arkdown。而Stack用中文的说法就是技术栈（Tech Stack），也就是我们在构建应用的时候具体使用到的技术的集合。举个例子，国外现在比较火的一个Stack叫做Mean Stack，它表示使用MongoDB + Express.js + AngularJS + Node.js这些技术来构建一个Web应用。因此用最通俗易懂的话来描述JAMStack就是：**使用JavaScript，APIs和Markdown三种技术来构建Web应用**。所以JAMStack是一种**问题解决方案**，而不是一个具体的实现。
+## 什么是React Hook
+React Hook是React 16.8版本之后添加的新属性，用最简单的话来说，**React Hook就是一些React提供的内置函数，这些函数可以让Function Component和Class Component一样能够拥有组件状态（state）以及进行副作用（side effect）**。
 
-接着我们再具体看一下JavaScript，APIs和Markdown这三种技术在JAMStack的世界中是起到什么作用的。
+## 常用Hook介绍
+接下来我将会为大家介绍一些常用的Hook，对于每一个Hook，我都会覆盖以下方面的内容：
+* 作用
+* 用法
+* 注意事项
 
-### JavaScript
-在JAMStack的概念中，JavaScript指的是在客户端（client）实现动态网页效果的JavaScript，它既可以是React和Vue这种Web框架，也可以是原生的JavaScript。它主要负责网页**动态的内容**。
+### useState
+#### 作用
+`useState`理解起来非常简单，和Class Component的`this.state`一样，都是用来**管理组件状态的**。在React Hook没出来之前，Function Component也叫做Functional Stateless Component（FSC），这是因为Function Component每次执行的时候都会生成新的函数作用域所以同一个组件的不同渲染（render）之间是不能够共用状态的，因此开发者一旦需要在组件中引入状态就需要将原来的Function Component改成Class Component，这使得开发者的体验十分不好。`useState`就是用来解决这个问题的，**它允许Function Component将自己的状态持久化到React运行时（runtime）的某个地方（memory cell），这样在组件每次重新渲染的时候都可以从这个地方拿到该状态，而且当该状态被更新的时候，组件也会重渲染**。
 
-### APIs
-这里的API和我们平时开发调用的API是一样的。JAMStack的Web应用会通过JavaScript给后端API发送AJAX请求或者GraphQL query，后端API会以某种格式（一般是JSON）返回数据给前端来实现一些用户交互。
+#### 用法
+```javascript
+const [state, setState] = useState(initialState)
+```
+`useState`接收一个`initialState`变量作为状态的初始值，返回值是一个数组。返回数组的第一个元素代表当前`state`的最新值，第二个元素是一个用来更新`state`的函数。这里要注意的是`state`和`setState`这两个变量的命名不是固定的，应该根据你业务的实际情况选择不同的名字，可以是`text`和`setText`，也可以是`width`和`setWidth`这类的命名。（对上面数组解构赋值不熟悉的同学可以看下[MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)的介绍）。
 
-### Markdown
-[Mardown](markdown_百度百科)是一种轻量级的标记语言。在JAMStack的世界中，Markdown类型的文件通常是用来作为生成静态HTML文件的数据源。有用过[hexo](Hexo)写博客的同学对这个概念肯定不会陌生，因为hexo的原理就是将我们编写的Markdown文件根据我们指定的主题或者模板生成一些静态的HTML然后托管在github pages或者其它类似的**静态网站服务器**来供别人访问的。
+我们在实际开发中，一个组件可能不止一个state，如果组件有多个state，则可以在组件内部多次调用`useState`，以下是一个简单的例子：
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 
-除了Markdown文件之外，JAMStack的静态数据源还可以是其它的东西，例如我们后面说到的[Gatsby](https://www.gatsbyjs.org/)（JAMStack的一种实现）就允许通过插件的方式使用SQL直接读取数据库的内容来生成静态页面。
+const App = () => {
+  const [counter, setCounter] = useState(0)
+  const [text, setText] = useState('')
 
-了解了这三个概念的具体内容后，我们再通过一个[Gatsby](GatsbyJS)的小demo来体会一下JAMStack的应用是如何工作的。
+  const handleTextChange = (event) => {
+    setText(event.target.value)
+  }
 
-### Gatsby Demo
-由于文章篇幅的限制，我将不在这里为大家讲述Gatsby的具体用法，不过我后面会写一系列文章来教大家如何用Gatsby来免费构建一个比较大的内容网站（CMS），大家可以留意一下。
+  return (
+    <>
+      <div>Current counter: {counter}</div>
+      <button
+        onClick={() => setCounter(counter + 1)}
+      >
+        Increase counter
+      </button>
+      <input
+        onChange={handleTextChange}
+        value={text}
+      />
+    </>
+  )
+}
 
-简单来说，[Gatsby](GatsbyJS)是一个可以让开发者使用**React**，**GraphQL**等现代技术快速开发网站的静态网站生成器（static-site generator）。**它是存在于网站构建（build）阶段的一个工具**。为了给大家一个直观点的认识，我使用Gatsby搭建了一个简单的个人博客网站，网站的源代码可以在我的[github仓库](XiaocongDong/gatsby-demo)找到。
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+和Class Component的[this.setState](https://reactjs.org/docs/react-component.html#setstate) API类似，`setCounter`和`setText`都可以接收一个函数为参数，这个函数叫做`updater`，`updater`接收的参数是当前状态的**最新值**，返回值是**下一个状态**。例如setCounter的参数可以改成一个函数：
+```javascript
+<button
+  onClick={() => {
+    setCounter(counter => counter + 1)
+  }}
+>
+  Increase counter
+</button>
+```
+`useState`的`initialState`也可以是一个用来生成状态初始值的函数，这种做法主要是避免组件每次渲染的时候`initialState`需要被重复计算。下面是个简单的例子：
+```javascript
+const [state, setState] = useState(() => {
+  const initialState = someExpensiveComputation(props)
+  return initialState
+})
+```
 
-博客网站包含以下的功能：
-* 博客列表页面：展示我发表的所有博客。（静态内容）
-* 博客详情页面：展示每一篇博客的具体内容。（静态内容）
-* 博客评论列表：游客评论博客以及展示游客对这篇博客的评论列表。（动态内容）
+#### 注意事项
+##### setState是全量替代
+Function Component的`setState`和Class Component的`this.setState`函数的一个重要区别是`this.setState`函数是**将当前设置的state浅归并（shallowly merge）到旧state的操作**。而`setState`函数则是将**新state直接替换旧的state（replace）**。因此我们在编写Function Component的时候，就要合理划分state，避免将没有关系的状态放在一起管理，例如下面这个是不好的设计：
+```jsx
+const [state, setState] = useState({ left: 0, top: 0, width: 0, height: 0 })
+```
+在上面代码中，由于我们将互不关联的DOM位置信息`{left: 0, top: 0}`和大小信息`{width: 0, height: 0}`绑定在同一个`state`，所以我们在更新任意一个状态的时候也要维护一下另外一个状态：
+```jsx
+const handleContainerResize = ({ width, height }) => {
+  setState({...state, width, height})
+}
 
-细心的你一定注意到了我在上面每个功能点的右边标出了这个功能是静态的还是动态的。所谓静态的内容就是那些**不会经常发生变化的内容**，这些内容在一段时间内不同用户访问的时候都会得到同样的结果。而动态的内容就是那些**频繁发生变化的内容**，例如游客对我的博客的评论。那么我为什么要区分开这两种类型的内容呢？要回答这个问题我们可以先看看如果使用服务端渲染（SSR）的方案这个博客应用是如何运行的。首先游客会向SSR服务器发送一个查看某个博客的请求，SSR服务器收到请求后向后端服务请求这个博客的内容然后渲染出一个HTML页面然后返回给用户。这时候如果其他用户也向SSR服务器请求了同样的资源，SSR服务器还是会做同样的工作，请求资源 + 渲染页面。这个时候其实SSR服务器消耗了很多IO和CPU资源来做这些重复性的渲染，而且随着你的博客访问量的增大这些无用的资源消耗也会越来越多，在不升级服务端资源的前提下用户体验也会随之变差。到这里你可能会问，既然服务端渲染这么浪费资源，我们不进行SSR，直接将webpack打包生成的文件放在一个静态服务器然后页面都是在浏览器渲染不就行了吗？从实现博客功能的层面上来说这是没有问题的，可是这对搜索引擎优化（SEO）很不友好，百度收录不了你的博客，你的网站火不起来啊！
+const handleContainerMove = ({ left, top }) => {
+  setState({...state, left, top})
+}
+```
+这种写法十分不方便而且容易引发bug，更加合理的做法应该是将位置信息和大小信息**放在两个不同的state里面**，这样可以避免更新某个状态的时候要手动维护另一个状态：
+```javascript
+// separate state into position and size states
+const [position, setPosition] = useState({ left: 0, top: 0 })
+const [size, setSize] = useState({ width: 0, height: 0})
 
-为了避免重复性的无用渲染而且能对SEO友好，Gatsby采取了**区分网站静态内容和动态内容**的技术方案。对于那些**不经常变动的而且希望被搜索引擎收录的**静态内容，Gatsby会在Webpack打包阶段就生成，这样就不需要在用户访问该页面的时候才浪费资源来渲染页面了，而且这些静态文件还可以通过CDN来优化用户体验。而对于那些数据经常发生变化的且不需要被搜索引擎收录的内容，它们会等到浏览器实际渲染对应组件的时候才通过APIs动态获取数据渲染出来。
+const handleContainerResize = ({ width, height }) => {
+  setSize({width, height})
+}
 
-我们接着来看一下博客网站的代码目录结构：
+const handleContainerMove = ({ left, top }) => {
+  setPosition({left, top})
+}
+```
+如果你确实要将多个互不关联的状态放在一起的话，建议你使用[useReducer](#usereducer)来管理你的状态，这样你的代码会更好维护。
 
-![](https://user-gold-cdn.xitu.io/2020/4/22/171a1bf123f2ef3a?w=584&h=1264&f=png&s=129853)
+##### 设置相同的state值时setState会[bailing out of update](https://reactjs.org/docs/hooks-reference.html#bailing-out-of-a-state-update)
+如果setState接收到的`新的state`和`当前的state`是一样的（判断方法是[Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is#Description)），React将不会重新渲染子组件或者触发`side effect`。这里要注意的是虽然React不会渲染子组件，不过它还是会重新渲染当前的组件的，如果你的组件渲染有些很耗性能的计算的话，可以考虑使用[useMemo](#usememo)来优化性能。
 
-上面代码中，server文件夹存放的是一个简单的管理用户评论的express应用，src文件夹才是Gatsby操作的前端资源，它包括以下内容：
-* blogs：这个文件夹是用来存放博客内容的，每一个Markdown文件都会生成一个静态的HTML文件。
-* components: 存放React组件用的。
-* images：存放博客的一些图片资源。
-* pages: 网站的路由文件夹，这个文件夹下的每一个文件都会被生成一个对应的HTML静态文件，当请求该路由时会直接返回该静态文件。例如现在pages底下有两个路由，404的路由对应着的是没找到资源的页面，而index路由则是博客的主页面。
-* templates: 网站的模板文件夹，该文件夹底下只有一个叫做blog-post.js的模板文件，在Gatsby构建网站的时候blogs文件夹底下的每一个Markdown文件都会通过这个模板文件生成一个对应的HTML文件，这样当用户访问服务器的时候博客的HTML文件就会被直接返回而无需进行服务端渲染了。
+##### setState没有回调函数
+无论是`useState`还是Class Component的`this.setState`都是**异步调用**的，也就是说每次组件调用完它们之后都不能拿到最新的state值。为了解决这个问题，Class Component的`this.setState`允许你通过一个回调函数来获取到最新的state值，用法如下：
+```jsx
+this.setState(newState, state => {
+  console.log("I get new state", state)
+})
+```
+而Function Component的setState函数不存在这么一个可以拿到最新state的回调函数，不过我们可以使用[useEffect](#useeffect)来实现相同的效果，具体可以参见StackOverflow的这个[讨论](https://stackoverflow.com/questions/54954091/how-to-use-callback-with-usestate-hook-in-react)。
 
-接着我们可以看一下Gatsby打包会生成哪些文件：
+### useEffect
+#### 作用
+`useEffect`是用来使Function Component也可以进行副作用的。那么什么是副作用呢？我们可以先来看看维基百科的定义：
+> In computer science, an operation, function or expression is said to have a side effect if it modifies some state variable value(s) outside its local environment, that is to say has an observable effect besides returning a value (the main effect) to the invoker of the operation.
 
-![](https://user-gold-cdn.xitu.io/2020/4/22/171a1bf39ff3775b?w=1160&h=1372&f=png&s=254369)
+通俗来说，**函数的副作用就是函数除了返回值外对外界环境造成的其它影响**。举个例子，假如我们每次执行一个函数，该函数都会操作全局的一个变量，那么对全局变量的操作就是这个函数的副作用。而在React的世界里，我们的副作用大体可以分为两类，一类是**调用浏览器的API**，例如使用`addEventListener`来添加事件监听函数等，另外一类是**发起获取服务器数据的请求**，例如当用户卡片挂载的时候去异步获取用户的信息等。在Hook出来之前，如果我们需要在组件中进行副作用的话就需要将组件写成Class Component，然后在组件的生命周期函数里面写副作用，这其实会引起很多代码设计上的问题，具体大家可以查看我的上篇文章[React为什么需要Hook](https://superseany.com/2020/04/29/React%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81Hook/)。Hook出来之后，开发者就可以在Function Component中使用`useEffect`来定义副作用了。虽然`useEffect`基本可以覆盖`componentDidMount`， `componentDidUpdate`，`componentWillUnmount`等生命周期函数组合起来使用的所有场景，但是`useEffect`和生命周期函数的设计理念还是存在本质上的区别的，如果一味用生命周期函数的思考方式去理解和使用`useEffect`的话，可能会引发一些奇怪的问题，大家有兴趣的话，可以看看React核心开发Dan写的这篇文章：[A Complete Guide to useEffect](https://overreacted.io/a-complete-guide-to-useeffect/)，里面阐述了使用`useEffect`的一个比较正确的思考方式（mental model）。
 
-由上图可以看出，Gatsby会为每一个pages文件夹底下的文件生成一个对应的html文件，以及为每一个blogs文件夹底下的博客生成一个静态的HTML文件，同时还有一些在客户端执行的JS文件。生成的文件可以直接使用静态网站服务器来为用户提供服务，同时你还可以把它们放在CDN中来让用户访问起来更快。
+#### 用法
+```javascript
+useEffect(effect, dependencies?)
+```
+useEffect的第一个参数effect是要执行的副作用函数，它可以是任意的用户自定义函数，用户可以在这个函数里面操作一些浏览器的API或者和外部环境进行交互，这个函数会在**每次组件渲染完成之后**被调用，例如下面是一个简单的例子：
+```javascript
+import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 
-最后让我们来看一下这个博客网站的运行效果吧：
+const UserDetail = ({ userId }) => {
+  const [userDetail, setUserDetail] = useState({})
 
-![](https://user-gold-cdn.xitu.io/2020/4/22/171a1bf5d3cd6300?w=640&h=328&f=gif&s=1172729)
+  useEffect(() => {
+    fetch(`https://myapi/users/${userId}`)
+      .then(response => response.json())
+      .then(user => setUserDetail(userDetail))
+  })
 
-上图中我点击了“如何马上实现财富自由”这个博客，进入到博客详情页时浏览器没有重新向服务端请求博客详情的HTML文件，而是直接在浏览器完成渲染，用户体验非常之流畅。这其实是Gatsby应用的一个很大的亮点，那就是：Gatsby打包的应用在浏览器首次请求获得提前生成的静态HTML文件后，会演变成一个React SPA应用，接下来的用户交互就和一般的SPA应用没有任何差别了，换句话来说，Gatsby既保留了SSR方案SEO友好的优点又保留了SPA应用的流畅用户体验，可谓是各取所长，扬长补短了！
+  return (
+    <div>
+      <div>User Name: {userDetail.name}</div>
+    </div>
+  )
+}
 
-### 其他例子
-其实JAMStack的应用现在已经有很多了，只不过我们平时没有留意到而已。举个例子，React开发者十分熟悉的React官网[reactjs.org](http://reactjs.org/)就是用Gatsby构建。那么除了这些比较简单的文档性和博客网站，JAMStack可以用来构建复杂的商业应用吗？答案是肯定的，除了一些简单的CMS平台，JAMStack还可以用来搭建诸如[braun](Hair Removal, Grooming & Hair Care Products | Braun CA)这类电商平台，你可能想不到的是著名的程序员学习网站[freeCodeCamp](https://www.freecodecamp.org/)也是使用JAMStack技术栈来搭建的，大家可以去网上（Google）查一下关于freeCodeCamp架构设计的视频或文章，看完之后我相信你会对JAMStack有更深入的理解的。
+ReactDOM.render(<UserDetail />, document.getElementById('root'))
+```
+上面定义的获取用户详情信息的副作用会在`UserDetail组件`每次**完成渲染后**执行，所以当该组件第一次挂载的时候就会向服务器发起获取用户详情信息的请求然后更新`userDetail`的值，这里的第一次挂载我们可以类比成Class Component的`componentDidMount`。可是如果试着运行一下上面的代码的话，你会发现代码进入了死循环：组件会不断向服务端发起请求。出现这个死循环的原因是`useEffect`里面调用了`setUserDetail`，这个函数会更新`userDetail`的值，从而使组件重渲染，而重渲染后`useEffect`的`effect`继续被执行，进而组件再次重渲染。。。为了避免重复的副作用执行，`useEffect`允许我们通过第二个参数`dependencies`来限制该副作用什么时候被执行：指明了`dependencies`的副作用，**只有在`dependencies`数组里面的元素的值发生变化时才会被执行**，因此如果要避免上面的代码进入死循环我们就要将`userId`指定为我们定义的副作用的`dependencies`：
+```javascript
+import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 
-## JAMStack的优势
-在上面的介绍中我已经大概说了一些JAMStack的优势了，其中包括SEO友好还有流畅的用户体验，那么除了这些，JAMStack还有没有其它吸引人的地方呢？
+const UserDetail = ({ userId }) => {
+  const [userDetail, setUserDetail] = useState({})
 
-### 高性能
-为什么JAMStack是高性能的呢？这是因为JAMStack的应用将网站的静态部分和动态部分区分开来了，那些不会频繁发生变化的内容会被提前生成，从而无需使用额外的计算资源来进行服务端渲染。这样用户首次访问某个页面的时候速度会变得很快，而且这些静态的资源还可以被放在CDN来进一步提升用户体验。将动态内容和静态内容区分开来还有另外一个好处，就是我们后端接口的职责更加明确了，API接口的数量会变得更少，性能也会变得更好。
+  useEffect(() => {
+    fetch(`https://myapi/users/${userId}`)
+      .then(response => response.json())
+      .then(user => setUserDetail(userDetail))
+  }, [userId])
 
-### 高性价比以及高可扩展性
-由于我们前端的内容都是一些静态的文件没有服务端渲染的要求，而静态资源服务器对性能的要求并不高，所以我们在购买服务器方面不需要很大的成本，我们甚至还可以使用一些诸如[netlify](https://www.netlify.com/)和[Gatsby Cloud](https://www.gatsbyjs.com/cloud/)等免费资源来托管我们的文件。对于后端来说由于我们已经将前后端彻底分离了，所以后端可以使用一些廉价的Baas或者Serverless服务，例如可以使用[Auth0](Auth0: Identity is Complex. Deal with it.)作为我们的用户鉴权服务，使用[Firebase](https://firebase.google.com/)作为我们的接口服务等等。使用这些Baas和Serverless服务有一个好处就是它们很便宜，而且它们是按照接口使用量来收费的，你的用户量决定了你的支出，如果你的用户很少，你甚至不需要花一分钱。
+  return (
+    <div>
+      <div>User Name: ${userDetail.name}</div>
+    </div>
+  )
+}
 
-除了极高的性价比，JAMStack还有很好的扩展性。举个例子，假如你现在的博客网站因为某一篇博客突然火了，访问用户激增。如果你的前端静态文件使用的是CDN网络的话，你的网站很容易就可以扩展了，一切都是自动的，无需你做任何东西，而后端如果你使用了Serverless和Baas的解决方案的话，一切也是自动的，用户不会感觉到有使用体验的差别，而你只需要给使用到的服务平台多一点点费用而已。
+ReactDOM.render(<UserDetail />, document.getElementById('root'))
+```
+除了发起服务端的请求外，我们往往还需要在`useEffect`里面调用浏览器的API，例如使用`addEventListener`来添加浏览器事件的监听函数等。我们一旦使用了`addEventListener`就必须在合适的时候调用`removeEventListener`来移除对事件的监听，否则会有性能问题，`useEffect`允许我们在副作用函数里面返回一个`cleanup`函数，这个函数会在组件**重新渲染之前**被执行，我们可以在这个返回的函数里面移除对事件的监听，下面是一个具体的例子：
+```javascript
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
 
-### 更好的开发者体验
-拿我们前面提到的Gatsby来举例，它就允许我们使用一些现代的前端技术来进行开发，例如React，Styled-components和GraphQL等，这些都是我们前端开发者十分熟悉的技术了，没有很大的学习成本所以开发者体验会很好。除此之外，由于Gatsby使用了React，所以它间接上接入了React的生态系统，这样开发者在开发Gatsby应用时就可以使用React生态的各种最佳实践和库实现了，这无疑可以大大提高我们的开发效率。
+const WindowScrollListener = () => {
+  useEffect(() => {
+    const handleWindowScroll = () => console.log('yean, window is scrolling!')
+    window.addEventListener('scroll', handleWindowScroll)
 
-### 更高的安全性
-由于JAMStack是一种前后端分离的技术，没有了后端渲染所以可以降低被攻击的风险。举个例子采用Gatsby生成的CMS平台就比传统的WordPress平台安全很多：）。
+    // this is clean up function
+    return () => {
+      window.removeEventListener(handleWindowScroll)
+    }
+  }, [])
 
-## JAMStack适合什么应用
-既然JAMStack有那么多好处，我们是不是一把梭在所有的项目中都使用JAMStack呢？答案是否定的，由于JAMStack需要我们将网站的静态部分和动态部分区分开来，静态部分的内容会在构建的时候就生成而动态的内容会在浏览器进行渲染，这个特点就注定了它不适合于构建以下类型的应用：
-* 掘金，知乎这种主要由第三方用户创建内容的应用。由于这些应用的内容都是由平台用户创建的，而且用户可以不断地修改和删除已经创建的内容，如果使用JAMStack的话网站的内容就需要被频繁构建，这显然是不合理的。
-* 微博，推特这种社交应用。这类应用的内容除了频繁更新之外，还有就是动态内容多于静态内容，例如用户的主页只会展示他关注的人发表的动态，所以也不适合使用JAMStack。
-* 一些不需要SEO的应用。JAMStack一个很大的优点就是对SEO友好，如果你的应用没有被搜索引擎收录的需求的话，就没必要使用JAMStack了。
-* 内容很多的应用。由于JAMStack需要我们每次都构建出所有的静态资源，所以对于那些静态内容很多的应用（例如页面数超过50k）的话，每次构建应用都需要大量的时间，因此这种类型的网站也不适合用JAMStack。
+  return (
+    <div>
+      I can listen to the window scroll event!
+    </div>
+  )
+}
+
+ReactDOM.render(<WindowScrollListener />, document.getElementById('root'))
+```
+上面的代码中我们会在`WindowScrollListener`组件首次渲染完成后注册一个监听页面滚动事件的函数，并在组件下一次渲染前移除该监听函数。由于我们指定了一个空数组作为这个副作用的`dependencies`，所以这个副作用只会在组件首次渲染时被执行一次，而它的cleanup函数只会在组件`unmount`时才被执行，这就避免了频繁注册页面监听函数从而影响页面的性能。
+
+#### 注意事项
+##### 避免使用“旧的”变量
+我们在实际使用`useEffect`的过程中可能遇到最多的问题就是我们的effect函数被调用的时候，拿到的某些state, props或者是变量不是**最新**的变量而是之前**旧的**变量。出现这个问题的原因是：我们定义的副作用其实就是一个函数，而JS的作用域是词法作用域，所以函数使用到的变量值是它被**定义时**就确定的，用最简单的话来说就是，useEffect的effect会**记住**它被定义时的外部变量的值，所以它被调用时使用到的值可能不是**最新**的值。解决这个问题的办法有两种，一种是将那些你希望每次effect被调用时拿到的都是最新值的变量保存在一个ref里面，并且在每次组件渲染的时候更新该ref的值：
+```javascript
+const [someState, setSomeState] = useState()
+const someStateRef = useRef()
+
+someStateRef.current = someState
+
+useEffect(() => {
+  ...
+  const latestSomeState = someStateRef.current
+  console.log(latestSomeState)
+}, [otherDependencies...])
+```
+这种做法虽然不是很优雅，不过可以解决我们的问题，如果你没有了解过`useRef`用法的话，可以查看本篇文章[useRef](#useref)这部分内容。解决这个问题的另外一个做法是将副作用**使用**到的所有变量都加到effect的`dependencies`中去，这也是比较推荐的做法。在实际开发中我们可以使用facebook自家的[eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks#installation)的[exhaustive-deps](https://github.com/facebook/react/issues/14920)规则来进行编码约束，在你的项目加上这个约束之后，在代码开发阶段eslint就会告诉你要将someState放到`useEffect`的`dependencies`中去，这样就可以不使用`useRef`来存储someState的值了，例如下面代码：
+```javascript
+const [someState, setSomeState] = useState()
+
+useEffect(() => {
+  ...
+  console.log(someState)
+}, [otherDependencies..., someState])
+```
+### useRef
+#### 作用
+`useRef`是用来在组件不同渲染之间共用一些数据的，它的作用和我们在Class Component里面为`this`赋值是一样的。
+#### 用法
+```javascript
+const refObject = useRef(initialValue)
+```
+`useRef`接收`initialValue`作为初始值，它的返回值是一个`ref`对象，这个对象的`.current`属性就是该数据的最新值。使用`useRef`的一个最简单的情况就是在Function Component里面存储对DOM对象的引用，例如下面这个例子：
+```javascript
+import { useRef, useEffect } from 'react'
+import ReactDOM from 'react-dom'
+
+const AutoFocusInput = () => {
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    // auto focus when component mount
+    inputRef.current.focus()
+  }, [])
+
+  return (
+    <input ref={inputRef} type='text' />
+  )
+}
+
+ReactDOM.render(<AutoFocusInput />, document.getElementById('root'))
+```
+在上面代码中inputRef其实就是一个`{current: inputDomInstance}`对象，只不过它可以保证在组件每次渲染的时候拿到的都是同一个对象。
+#### 注意事项
+##### 更新ref对象不会触发组件重渲染
+`useRef`返回的ref object被重新赋值的时候不会引起组件的**重渲染**，如果你有这个需求的话请使用`useState`来存储数据。
+### useCallback
+#### 作用
+随着Hook的出现，开发者开始越来越多地使用Function Component来开发需求。当开发者在定义Function Component的时候往往需要在函数体内定义一些内嵌函数（inline function），这些内嵌函数会在组件每次重新渲染的时候被重新定义，如果它们作为props传递给了子组件的话，即使其它props的值没有发生变化，它都会使子组件重新渲染，而无用的组件重渲染可能会产生一些性能问题。每次重新生成新的内嵌函数还有另外一个问题就是当我们把内嵌函数作为`dependency`传进`useEffect`的`dependencies`数组的话，因为该函数频繁被重新生成，所以`useEffect`里面的effect就会频繁被调用。为了解决上述问题，React允许我们使用`useCallback`来**记住**（memoize）当前定义的函数，并在下次组件渲染的时候返回之前定义的函数而不是使用新定义的函数。
+#### 用法
+```javascript
+const memoizedCallback = useCallback(callback, dependencies)
+```
+`useCallback`接收两个参数，第一个参数是需要被记住的函数，第二个参数是这个函数的`dependencies`，只有`dependencies`数组里面的元素的值发生变化时`useCallback`才会返回新定义的函数，否则`useCallback`都会返回之前定义的函数。下面是一个简单的使用`useCallback`来优化子组件频繁被渲染的例子：
+```javascript
+import React, { useCallback } from 'react'
+import useSearch from 'hooks/useSearch'
+import ReactDOM from 'react-dom'
+
+// this list may contain thousands of items, so each re-render is expensive
+const HugeList = ({ items, onClick }) => {
+  return (
+    <div>
+      {
+        items.map((item, index) => (
+          <div
+            key={index}
+            onClick={() => onClick(index)}
+          >
+            {item}
+          </div>
+        ))
+      }
+    </div>
+  )
+}
+
+const MemoizedHugeList = React.memo(HugeList)
+
+const SearchApp = ({ searchText }) => {
+  const handleClick = useCallback(item => {
+    console.log('You clicked', item)
+  }, [])
+  const items = useSearch(searchText)
+
+  return (
+    <MemoizedHugeList
+      items={items}
+      onClick={handleClick}
+    />
+  )
+}
+
+ReactDOM.render(<SearchApp />, document.getElementById('root'))
+```
+上面的例子中我定义了一个`HugeList`组件，由于这个组件需要渲染一个大的列表（items），所以每次重渲染都是十分消耗性能的，因此我使用了`React.memo`函数来让该组件只有在`onClick`函数和`items`数组发生变化的时候才被渲染，如果大家对`React.memo`不是很熟悉的话，可以看看我写的[这篇文章](https://juejin.im/post/5c8edf626fb9a0710d65c7fc)。接着我在`SearchApp`里面使用`MemoizedHugeList`，由于要避免该组件的重复渲染，所以我使用了`useCallback`来记住定义的`handleClick函数`，这样在组件后面渲染的时候，`handleClick`变量指向的都是同一个函数，所以`MemorizedHugeList`只有在items发生变化时才会重新渲染。这里要注意的是由于我的`handleClick`函数没有使用到任何的外部依赖所以它的`dependencies`才是个空数组，如果你的函数有使用到外面的依赖的话，记得一定要将该依赖放进`useCallback`的`dependencies`参数中，不然会有bug发生。
+
+#### 注意事项
+##### 避免在函数里面使用“旧的”变量
+和`useEffect`类似，我们也需要将所有在`useCallback`的callback中使用到的外部变量写到`dependencies`数组里面，不然我们可能会在`callback`调用的时候使用到“旧的”外部变量的值。
+
+##### 不是所有函数都要使用useCallback
+> Performance optimizations are not free. They ALWAYS come with a cost but do NOT always come with a benefit to offset that cost.
+
+**任何优化都会有代价**，`useCallback`也是一样的。当我们在Function Component里面调用`useCallback`函数的时候，React背后要做一系列计算才能保证当`dependencies`不发生变化的时候，我们拿到的是同一个函数，因此如果我们滥用`useCallback`的话，并不会带来想象中的性能优化，反而会影响到我们的性能，例如下面这个例子就是一个不好的使用`useCallback`的例子：
+```javascript
+import React, { useCallback } from 'react'
+import ReactDOM from 'react-dom'
+
+const DummyButton = () => {
+  const handleClick = useCallback(() => {
+    console.log('button is clicked')
+  }, [])
+
+  return (
+    <button onClick={handleClick}>
+      I'm super dummy
+    </button>
+  )
+}
+
+ReactDOM.render(<DummyButton />, document.getElementById('root'))
+```
+上面例子使用的`useCallback`没有起到任何优化代码性能的作用，因为上面的代码执行起来其实相当于下面的代码：
+```javascript
+import React, { useCallback } from 'react'
+import ReactDOM from 'react-dom'
+
+const DummyButton = () => {
+  const inlineClick = () => {
+    console.log('button is clicked')
+  }
+  const handleClick = useCallback(inlineClick, [])
+
+  return (
+    <button onClick={handleClick}>
+      I'm super dummy
+    </button>
+  )
+}
+
+ReactDOM.render(<DummyButton />, document.getElementById('root'))
+```
+从上面的代码我们可以看出，即使我们使用了`useCallback`函数，浏览器在执行`DummyButton`这个函数的时候还是需要创建一个新的内嵌函数`inlineClick`，这和不使用`useCallback`的效果是一样的，而且除此之外，优化后的代码由于还调用了`useCallback`函数，所以它消耗的计算资源其实比没有优化之前还多，而且由于`useCallback`函数内部存储了一些额外的变量（例如之前的`dependencies`）所以它消耗的内存资源也会更多。因此我们并不能一味地将所有的内嵌函数使用`useCallback`来包裹，只对那些真正需要被记住的函数使用`useCallback`。
+
+### useMemo
+#### 作用
+`useMemo`和`useCallback`的作用十分类似，只不过它允许你`记住`任何类型的变量（不只是函数）。
+#### 用法
+```javascript
+const memoizedValue = useMemo(() => valueNeededToBeMemoized, dependencies)
+```
+`useMemo`接收一个函数，该函数的返回值就是需要被记住的变量，当`useMemo`的第二个参数`dependencies`数组里面的元素的值没有发生变化的时候，`memoizedValue`使用的就是上一次的值。下面是一个例子：
+```javascript
+import React, { useMemo } from 'react'
+import ReactDOM from 'react-dom'
+
+const RenderPrimes = ({ iterations, multiplier }) => {
+  const primes = React.useMemo(() => calculatePrimes(iterations, multiplier), [
+    iterations,
+    multiplier
+  ])
+
+  return (
+    <div>
+      Primes! {primes}
+    </div>
+  )
+}
+
+ReactDOM.render(<RenderPrimes />, document.getElementById('root'))
+```
+上面的例子中[calculatePrimes](https://developer.mozilla.org/en-US/docs/Tools/Performance/Scenarios/Intensive_JavaScript)是用来计算素数的，因此每次调用它都需要消耗大量的计算资源。为了提高组件渲染的性能，我们可以使用`useMemo`来记住计算的结果，当`iterations`和`multiplier`保持不变的时候，我们就不需要重新执行calculatePrimes函数来重新计算了，直接使用上一次的结果即可。
+
+#### 注意事项
+##### 不是所有的变量要包裹在useMemo里面
+和`useCallback`类似，我们只将那些确实有需要被记住的变量使用`useMemo`来封装，切记不能滥用`useMemo`，例如下面就是一个滥用`useMemo`的例子：
+```javascript
+import React, { useMemo } from 'react'
+import ReactDOM from 'react-dom'
+
+const DummyDisplay = () => {
+  const items = useMemo(() => ['1', '2', '3'], [])
   
-相反JAMStack十分适合构建以下类型的应用：
-* 项目文档之类的网站，例如React的官网等。
-* 企业或者组织的官方网站。
-* 个人管理的博客网站。
-* 中小型规模的CMS平台。
-* 中小型的电商平台。
-* 既有需要被SEO的静态内容又有动态的不需要SEO的内容的混合应用。例如一些To B的平台，里面既有用户的工作台又有一些操作文档相关的静态内容。
+  return (
+    <>
+      {
+        items.map(item => <div key={item}>{item}</div>)
+      }
+    </>
+  )
+}
 
-当然了我在这里列出来的无论是适用还是不适用JAMStack的应用其实都是一些很笼统的分类，我们在实际开发时还得具体问题具体分析，根据实际情况来评估我们的应用是不是适合使用JAMStack来开发。
+ReactDOM.render(<DummyDisplay />, document.getElementById('root'))
+```
+上面的例子中直接将items定义在组件外面会更好：
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-## 我的个人思考
-在最后我想说一下我自己对JAMStack的一些思考。
+const items = ['1', '2', '3']
 
-首先我个人十分看好这个技术栈，也会在日后的开发中使用这个技术栈。因为它帮我解决了网站SEO的问题。在不了解JAMStack之前，如果我想我的网站被搜索引擎收录要么就是刀耕火种地硬写HTML和原生JS，这种方案明显开发效率十分低下。还有一种方案就是我使用React等现代开发技术，这样我就得学习next.js等SSR技术来实现SEO，这个方案有一个问题就是学习next.js有一定的学习成本，而且在项目上线后我得维护一个后端服务来进行服务端渲染，所以会有一定的运维成本。可是使用了JAMStack或者说是Gatsby后这些问题就迎刃而解了，因为我可以继续使用我熟悉的React技术栈来快速开发Web应用，还无需考虑服务端渲染的问题就可以达到SEO的效果，这不是美滋滋？
+const DummyDisplay = () => {  
+  return (
+    <>
+      {
+        items.map(item => <div key={item}>{item}</div>)
+      }
+    </>
+  )
+}
 
-其次我觉得JAMStack这个技术栈十分有利于我们实践一些自己想到的不确定能不能成功的点子（创业想法）。上面在介绍JAMStack优势的时候，我提到了一点就是使用JAMStack其实你可以免费部署你的应用，因为你可以将前端的静态代码放在一些免费的静态资源托管服务器，然后后端使用一些免费的Baas API服务，当然了这只适合于我们平台用户量不大的情景，当用户量大的时候我们还是得付费的。可是我们网站刚起步的时候用户量不都是不大的吗？如果我们一大早就买好服务器资源和域名，后面却发现这个想法根本行不通的话，这些钱就算是赔进去了。相反，使用免费服务的话，即使我们做的东西黄了，我们也不会有什么损失。
+ReactDOM.render(<DummyDisplay />, document.getElementById('root'))
+```
 
-总的来说我对JAMStack这个技术栈是很有信心的，特别是在CMS内容管理平台这方面我相信它一定会逐渐火起来，而且有可能可以取代WordPress的地位。
+### useContext
+#### 作用
+我们知道React中组件之间传递参数的方式是props，假如我们在父级组件中定义了某些状态，而这些状态需要在该组件深层次嵌套的子组件中被使用的话就需要将这些状态以props的形式层层传递，这就造成了`props drilling`的问题。为了解决这个问题，React允许我们使用`Context`来在父级组件和底下任意层次的子组件之间传递状态。在Function Component中我们可以使用`useContext` Hook来使用`context`。
+#### 用法
+```javascript
+const value = useContext(MyContext)
+```
+`useContext`接收一个`context`对象为参数，该`context`对象是由`React.createContext`函数生成的。`useContext`的返回值是当前`context`的值，这个值是由最邻近的`<MyContext.Provider>`来决定的。一旦在某个组件里面使用了`useContext`这就相当于该组件订阅了这个`context`的变化，当最近的`<MyContext.Provider>`的`context`值发生变化时，使用到该`context`的子组件就会被触发重渲染，且它们会拿到`context`的最新值。下面是一个具体的例子：
+```javascript
+import React, { useContext, useState } from 'react'
+import ReactDOM from 'react-dom'
+
+// define context
+const NumberContext = React.createContext()
+
+const NumberDisplay = () => {
+  const [currentNumber, setCurrentNumber] = useContext(NumberContext)
+
+  const handleCurrentNumberChange = () => {
+    setCurrentNumber(Math.floor(Math.random() * 100))
+  }
+
+  return (
+    <>
+      <div>Current number is: {currentNumber}</div>
+      <button onClick={handleCurrentNumberChange}>Change current number</button>
+    </>
+  )
+}
+
+const ParentComponent = () => {
+  const [currentNumber, setCurrentNumber] = useState({})
+
+  return (
+    <NumberContext.Provider value={[currentNumber, setCurrentNumber]}>
+      <NumberDisplay />
+    </NumberContext.Provider>
+  )
+}
+
+ReactDOM.render(<ParentComponent />, document.getElementById('root'))
+```
+#### 注意事项
+##### 避免无用渲染
+我们在上面已经提到如果一个Function Component使用了`useContext(SomeContext)`的话它就订阅了这个`SomeContext`的变化，这样当`SomeContext.Provider`的`value`发生变化的时候，这个组件就会被重新渲染。这里有一个问题就是，我们可能会把很多不同的数据放在同一个`context`里面，而不同的子组件可能只关心这个`context`的某一部分数据，当`context`里面的任意值发生变化的时候，无论这些组件用不用到这些数据它们都会被重新渲染，这可能会造成一些性能问题。下面是一个简单的例子：
+```javascript
+import React, { useContext, useState } from 'react'
+import ExpensiveTree from 'somewhere/ExpensiveTree'
+import ReactDOM from 'react-dom'
+
+const AppContext = React.createContext()
+
+const ChildrenComponent = () => {
+  const [appContext] = useContext(AppContext)
+  const theme = appContext.theme
+
+  return (
+    <div>
+      <ExpensiveTree theme={theme} />
+    </div>
+  )
+}
+
+const App = () => {
+  const [appContext, setAppContext] = useState({ theme: { color: 'red' }, configuration: { showTips: false }})
+
+  return (
+    <AppContext.Provider value={[appContext, setAppContext]}>
+      <ChildrenComponent />
+    </AppContext.Provider>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+在上面的例子中，ChildrenComponent只使用到了appContext的`.theme`属性，可是当appContext其它属性例如configuration被更新时，ChildrenComponent也会被重新渲染，而ChildrenComponent调用了一个十分耗费性能的ExpensiveTree组件，所以这些无用的渲染会影响到我们页面的性能，解决上面这个问题的方法有下面三种：
+###### 拆分Context
+这个方法是最被推荐的做法，和`useState`一样，我们可以将不需要同时改变的`context`拆分成不同的`context`，让它们的职责更加分明，这样子组件只会订阅那些它们需要订阅的`context`从而避免无用的重渲染。例如上面的代码可以改成这样：
+```javascript
+import React, { useContext, useState } from 'react'
+import ExpensiveTree from 'somewhere/ExpensiveTree'
+import ReactDOM from 'react-dom'
+
+const ThemeContext = React.createContext()
+const ConfigurationContext = React.createContext()
+
+const ChildrenComponent = () => {
+  const [themeContext] = useContext(ThemeContext)
+
+  return (
+    <div>
+      <ExpensiveTree theme={themeContext} />
+    </div>
+  )
+}
+
+const App = () => {
+  const [themeContext, setThemeContext] = useState({ color: 'red' })
+  const [configurationContext, setConfigurationContext] = useState({ showTips: false })
+
+  return (
+    <ThemeContext.Provider value={[themeContext, setThemeContext]}>
+      <ConfigurationContext.Provider value={[configurationContext, setConfigurationContext]}>
+        <ChildrenComponent />
+      </ConfigurationContext.Provider>
+    </ThemeContext.Provider>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+###### 拆分你的组件，使用memo来优化消耗性能的组件
+如果出于某些原因你不能拆分`context`，你仍然可以通过将消耗性能的组件和父组件的其他部分分离开来，并且使用`memo`函数来优化消耗性能的组件。例如上面的代码可以改为：
+```javascript
+import React, { useContext, useState } from 'react'
+import ExpensiveTree from 'somewhere/ExpensiveTree'
+import ReactDOM from 'react-dom'
+
+const AppContext = React.createContext()
+
+const ExpensiveComponentWrapper = React.memo(({ theme }) => {
+  return (
+    <ExpensiveTree theme={theme} />
+  )
+})
+
+const ChildrenComponent = () => {
+  const [appContext] = useContext(AppContext)
+  const theme = appContext.theme
+
+  return (
+    <div>
+      <ExpensiveComponentWrapper theme={theme} />
+    </div>
+  )
+}
+
+const App = () => {
+  const [appContext, setAppContext] = useState({ theme: { color: 'red' }, configuration: { showTips: false }})
+
+  return (
+    <AppContext.Provider value={[appContext, setAppContext]}>
+      <ChildrenComponent />
+    </AppContext.Provider>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+###### 不拆分组件，也可以使用useMemo来优化
+当然我们也可以不拆分组件使用`useMemo`来将上面的代码进行优化，代码如下：
+```javascript
+import React, { useContext, useState, useMemo } from 'react'
+import ExpensiveTree from 'somewhere/ExpensiveTree'
+import ReactDOM from 'react-dom'
+
+const AppContext = React.createContext()
+
+const ChildrenComponent = () => {
+  const [appContext] = useContext(AppContext)
+  const theme = appContext.theme
+
+  return useMemo(() => (
+      <div>
+        <ExpensiveTree theme={theme} />
+      </div>
+    ),
+    [theme]
+  )
+}
+
+const App = () => {
+  const [appContext, setAppContext] = useState({ theme: { color: 'red' }, configuration: { showTips: false }})
+
+  return (
+    <AppContext.Provider value={[appContext, setAppContext]}>
+      <ChildrenComponent />
+    </AppContext.Provider>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+### useReducer
+#### 作用
+`useReducer`用最简单的话来说就是允许我们在Function Component里面像使用[redux](https://redux.js.org/)一样通过`reducer`和`action`来管理我们组件状态的变换（state transition）。
+#### 用法
+```javascript
+const [state, dispatch] = useReducer(reducer, initialArg, init?)
+```
+`useReducer`和`useState`类似，都是用来管理组件状态的，只不过和`useState`的`setState`不一样的是，`useReducer`返回的`dispatch`函数是用来触发某些改变`state`的`action`而不是直接设置`state`的值，至于不同的`action`如何产生新的state的值则在`reducer`里面定义。`useReducer`接收的三个参数分别是：
+* reducer: 这是一个函数，它的签名是`(currentState, action) => newState`，从它的函数签名可以看出它会接收当前的state和当前`dispatch`的`action`为参数，然后返回下一个state,也就是说它负责状态转换（state transition）的工作。
+* initialArg：如果调用者没有提供第三个`init`参数，这个参数代表的是这个`reducer`的初始状态，如果`init`参数有被指定的话，`initialArg`会被作为参数传进`init`函数来生成初始状态。
+* init: 这是一个用来生成初始状态的函数，它的函数签名是`(initialArg) => initialState`，从它的函数签名可以看出它会接收`useReducer`的第二个参数`initialArg`作为参数，并生成一个初始状态`initialState`。
+下面是`useReducer`的一个简单的例子：
+```javascript
+import React, { useState, useReducer } from 'react'
+
+let todoId = 1
+
+const reducer = (currentState, action) => {
+  switch(action.type) {
+    case 'add':
+      return [...currentState, {id: todoId++, text: action.text}]
+    case 'delete':
+      return currentState.filter(({ id }) => action.id !== id)
+    default:
+      throw new Error('Unsupported action type')
+  }
+}
+
+const Todo = ({ id, text, onDelete }) => {
+  return (
+    <div>
+      {text}
+      <button
+        onClick={() => onDelete(id)}
+      >
+        remove
+      </button>
+    </div>
+  )
+}
+
+const App = () => {
+  const [todos, dispatch] = useReducer(reducer, [])
+  const [text, setText] = useState('')
+
+  return (
+    <>
+      {
+        todos.map(({ id, text }) => {
+          return (
+            <Todo
+              text={text}
+              key={id}
+              id={id}
+              onDelete={id => {
+                dispatch({ type: 'delete', id })
+              }}
+            />
+          )
+        })
+      }
+      <input onChange={event => setText(event.target.value)} />
+      <button
+        onClick={() => {
+          dispatch({ type: 'add', text })
+          setText('')
+        }}
+      >
+        add todo
+      </button>
+    </>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+#### 注意事项
+##### useReducer vs useState
+`useReducer`和`useState`都可以用来管理组件的状态，它们之间最大的区别就是，`useReducer`将状态和状态的变化统一管理在`reducer`函数里面，这样对于一些复杂的状态管理会十分方便我们debug，因为它对状态的改变是`封闭的`。而由于`useState`返回的`setState`可以直接在任意地方设置我们状态的值，当我们组件的状态转换逻辑十分复杂时，它将很难debug，因为它是`开放的`状态管理。总体的来说，在`useReducer`和`useState`如何进行选择的问题上我们可以参考以下这些原则：
+* 下列情况使用`useState`
+  * `state`的值是JS原始数据类型（primitives），如`number`, `string`和`boolean`等
+  * `state`的转换逻辑十分简单
+  * 组件内不同的状态是没有关联的，它们可以使用多个独立的`useState`来单独管理
+* 下列情况使用`useReducer`
+  * `state`的值是`object`或者`array`
+  * `state`的转换逻辑十分复杂, 需要使用`reducer`函数来统一管理
+  * 组件内多个`state`互相关联，改变一个状态时也需要改变另外一个，将他们放在同一个`state`内使用reducer来统一管理
+  * 状态定义在父级组件，不过需要在深层次嵌套的子组件中使用和改变父组件的状态，可以同时使用`useReducer`和`useContext`两个hook，将`dispatch`方法放进context里面来避免组件的`props drilling`
+  * 如果你希望你的状态管理是可预测的（predictable）和可维护的（maintainable），请`useReducer`
+  * 如果你希望你的状态变化可以被测试，请使用`useReducer`
+## 自定义Hook
+上面介绍了React内置的常用Hook的用法，接着我们看一下如何编写我们自己的Hook。
+### 作用
+自定义Hook的目的是让我们封装一些可以在不同组件之间**共用的非UI逻辑**来提高我们开发业务代码的效率。
+### 什么是自定义Hook
+之前我们说过Hook其实就是一个函数，所以自定义Hook也是一个函数，只不过`它在内部使用了React的内置Hook或者其它的自定义Hook`。虽然我们可以任意命名我们的自定义Hook，可是为了另其它开发者更容易理解我们的代码以及方便一些开发工具例如`eslint-plugin-react-hooks`来给我们更好地提示，我们需要将我们的Hook以`use`作为开头，并且使用驼峰发进行命名，例如`useLocation`，`useLocalStorage`和`useQueryString`等等。
+### 例子
+下面举一个最简单的自定义hook的例子：
+```javascript
+import React, { useState, useCallback } from 'react'
+import ReactDOM from 'react-dom'
+
+const useCounter = () => {
+  const [counter, setCounter] = useState(0)
+  
+  const increase = useCallback(() => setCounter(counter => ++counter), [])
+  const decrease = useCallback(() => setCounter(counter => --counter), [])
+
+  return {
+    counter,
+    increase,
+    decrease
+  }
+}
+
+const App = () => {
+  const { counter, increase, decrease } = useCounter()
+
+  return (
+    <>
+      <div>Counter: {counter}</div>
+      <button onClick={increase}>increase</button>
+      <button onClick={decrease}>decrease</button>
+    </>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+## 总结
+在本篇文章中我给大家介绍了React一些常用的内置Hook以及如何定义我们自己的Hook。React Hook总的来说是一个十分强大的功能，合理地使用它可以提高我们代码的复用率和业务代码的开发效率，不过它也有很多隐藏的各式各样的坑，大家在使用中一定要多加防范，我的个人建议是大家尽量使用`eslint-plugin-react-hooks`插件来辅助开发，因为它真的可以在我们开发的过程中就帮我们发现代码存在的问题，不过有时候想方设法来去掉它的警告确实是很烦人的：）。
+
+在这个系列的下一篇文章中我将教大家如何测试我们自定义的Hook来提高我们的代码质量，大家敬请期待。
+## 参考文献
+* [When to useMemo and useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)
+* [Preventing rerenders with React.memo and useContext hook](https://github.com/facebook/react/issues/15156)
+* [React Hook Reference](https://reactjs.org/docs/hooks-reference.html#usereducer)
+* [useReducer vs useState in React](https://www.robinwieruch.de/react-usereducer-vs-usestate)
+
 
 ## 个人技术动态
-文章首发于我的[个人博客](https://superseany.com/2020/04/22/%E8%BF%9B%E5%87%BB%E7%9A%84JAMStack/)
+文章始发于我的[个人博客](https://superseany.com/2020/07/15/React-Hook%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/)
 
 欢迎关注公众号**进击的大葱**一起学习成长
 
-
-![](https://user-gold-cdn.xitu.io/2020/4/22/171a1bfa9d31d90d?w=258&h=258&f=jpeg&s=27469)
+![](https://user-gold-cdn.xitu.io/2020/7/15/17352093677fa593?w=258&h=258&f=webp&s=4242)
