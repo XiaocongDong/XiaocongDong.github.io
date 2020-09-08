@@ -28,9 +28,19 @@ export default () => {
     }
 
     try {
-      simple(code, { global })
+      const output = simple(code, { global })
+
+      const tokenizerTime = output.tokenizerTime
+      const astTime = output.astTime
+      const runTime = output.runTime
+
+      result += `\n\ntokenizer time: ${tokenizerTime}ns`
+      result += `\nast time: ${astTime}ns`
+      result += `\nexecution time: ${runTime}ns`
+
       setResult(result)
     } catch(e) {
+      console.log(e)
       setResult(e.message)
     }
   }
@@ -50,13 +60,15 @@ export default () => {
           </option>)
         }
       </select>
-      <AceEditor
-        mode='javascript'
-        theme='github'
-        onChange={setCode}
-        value={code}
-        width="100%"
-      />
+      <div style={{ display: 'flex' }}>
+        <AceEditor
+          mode='javascript'
+          theme='github'
+          onChange={setCode}
+          value={code}
+          width="100%"
+        />
+      </div>
       <div style={{
         display: 'flex',
         alignItems: 'center',
