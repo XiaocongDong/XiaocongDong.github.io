@@ -34,9 +34,9 @@ export default () => {
       const astTime = output.astTime
       const runTime = output.runTime
 
-      result += `\n\ntokenizer time: ${tokenizerTime}ns`
-      result += `\nast time: ${astTime}ns`
-      result += `\nexecution time: ${runTime}ns`
+      result += `\n\ntokenizer time: ${tokenizerTime}ms`
+      result += `\nast time: ${astTime}ms`
+      result += `\nexecution time: ${runTime}ms`
 
       setResult(result)
     } catch(e) {
