@@ -16,7 +16,7 @@ console.log(f(1,2,3));
 console.log(a[1]);
 console.log(o.name);
 `
-testCases['Counter(closure).simple'] = `function createCounter() {
+testCases['counter(closure).simple'] = `function createCounter() {
   let a = 0;
   return function() {
       a = a + 1;
@@ -31,7 +31,7 @@ console.log(c1());
 console.log(c2());
 console.log(c2());
 `
-testCases['Fibonacci(Closure).simple'] = `function fib() {
+testCases['fibonacci(Closure).simple'] = `function fib() {
   let a = 0;
   let b = 1;
   return function() {
@@ -47,7 +47,7 @@ for (let n = 0; n < 50; n++) {
   console.log(f());
 };
 `
-testCases['FunctionalProgramming.simple'] = `function caller(callback) {
+testCases['functionalProgramming.simple'] = `function caller(callback) {
   callback();
 };
 let b = 10;
@@ -57,6 +57,14 @@ caller(function() {
 caller(function() {
   console.log(11);
 });
+`
+testCases['thisBinding.simple'] = `let person = {
+  name: 'sean',
+  sayName: function() {
+    console.log(this.name);
+  }
+};
+person.sayName();
 `
 
 export default testCases
