@@ -9533,9 +9533,9 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
 simple-language@^0.1.0:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/simple-language/-/simple-language-0.1.5.tgz#7aef922a932637206d82898e7479a83c9d40068b"
-  integrity sha512-kXKXOuthbTRrI8YUYmOTMxUxPKMssKQ4wfLx2WZ7mU812k2q3e3PTsZo3sDJa6Itw/50MCt+9d4dDfJUm2J99A==
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/simple-language/-/simple-language-0.1.7.tgz#a49d178888eaec74ee0339c78e0ba6a3d5efe09e"
+  integrity sha512-aIkxExL9N+ZT62cSnDC/cuxR4ZCUUeiO2LMc3t6nnln09xMA6KT2xojMCmmSSfxcjqCc7I5zgMyOvFNgzzMvlA==
 
 simple-swizzle@^0.2.2:
   version "0.2.2"
