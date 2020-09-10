@@ -51,11 +51,13 @@ export default () => {
       setNode({})
     }
   }
-  console.log(tokens, node)
+
   return (
     <div>
       <select
         onChange={event => {
+          setTokens([])
+          setNode({})
           setExample(event.target.value)
         }}
       >
