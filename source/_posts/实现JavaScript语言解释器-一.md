@@ -1,5 +1,5 @@
 ---
-title: 实现JavaScript的语言解释器（一）
+title: 实现JavaScript语言解释器（一）
 tags:
   - TypeScript
   - Interpreter
