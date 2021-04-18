@@ -149,6 +149,65 @@ var _hmt = _hmt || [];
 <div class="card">
     
     <div class="card-image">
+        <a href="/2019/12/27/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%BA%8C/" class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/chrome.png" alt="窥探现代浏览器架构(二)">
+        </a>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-12-27T00:04:45.000Z">2019-12-27</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    27 分钟 读完 (大约 4110 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/12/27/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%BA%8C/">窥探现代浏览器架构(二)</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文是笔者对<a href="https://developers.google.com/web/resources/contributors/kosamari" target="_blank" rel="noopener">Mario Kosaka</a>写的<a href="https://developers.google.com/web/updates/2018/09/inside-browser-part2" target="_blank" rel="noopener">inside look at modern web browser</a>系列文章的翻译。这里的翻译不是指直译，而是结合个人的理解将作者想表达的意思表达出来，而且会尽量补充一些相关的内容来帮助大家更好地理解。</p>
+<h2 id="导航的时候都发生了什么"><a href="#导航的时候都发生了什么" class="headerlink" title="导航的时候都发生了什么"></a>导航的时候都发生了什么</h2><p>这篇文章是探究Chrome内部工作原理的<strong>四集系列文章</strong>中的第二篇，在<a href="/2019/12/25/窥探现代浏览器架构-一/">上一篇</a>文章中我们探讨了不同进程或者线程是如何负责浏览器各个不同部分的工作的。在这篇文章中，我们将会深入了解每个进程和线程是如何沟通协作来为我们呈现出网站内容的。</p>
+<p>让我们来看一个用户浏览网页最简单的情景：你在浏览器导航栏里面输入一个URL然后按下回车键，浏览器接着会从互联网上获取相关的数据并把网页展示出来。在本篇文章中，我们将会重点关注这个简单场景中网站数据请求以及浏览器在呈现网页之前做的准备工作 - 也就是导航（navigation）的过程。</p>
+<h2 id="一切都从浏览器进程开始"><a href="#一切都从浏览器进程开始" class="headerlink" title="一切都从浏览器进程开始"></a>一切都从浏览器进程开始</h2><p>我们在上一篇文章<a href="/2019/12/25/窥探现代浏览器架构-一/">CPU，GPU，内存和多进程架构</a>中提到，浏览器中tab外面发生的一切都是由浏览器进程（browser process）控制的。浏览器进程有很多负责不同工作的线程（worker thread），其中包括绘制浏览器顶部按钮和导航栏输入框等组件的UI线程（UI thread）、管理网络请求的网络线程（network thread）、以及控制文件读写的存储线程（storage thread）等。当你在导航栏里面输入一个URL的时候，其实就是UI线程在处理你的输入。<br><img src="/images/chrome/browserprocesses.png" alt></p>
+<p align="center">UI，网络和存储线程都是属于浏览器进程的</p>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            <div class="level-start">
+                <div class="level-item">
+                <a class="button is-size-7 is-light" href="/2019/12/27/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%BA%8C/#more">阅读更多</a>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    
+<div class="card">
+    
+    <div class="card-image">
         <a href="/2019/12/25/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%B8%80/" class="image is-7by1">
             <img class="thumbnail" src="/gallery/thumbnails/chrome.png" alt="窥探现代浏览器架构(一)">
         </a>
