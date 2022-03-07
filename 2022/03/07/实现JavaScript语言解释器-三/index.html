@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.1" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>实现JavaScript语言解释器-三 - Xiaocong Dong</title>
+
+
+    <meta name="description" content="前言上篇文章我为大家介绍了语法解析的一些基本概念，以及如何通过自定义的DSL语言实现Simple语言解释器的语法树解析。在本篇也是这个系列最后一篇文章中我将为大家介绍Simple解释器是如何执行生成的语法树的。 evaluate函数和作用域前面在介绍语法解析相关知识的时候有出现过evaluate函数，其实基本每一个AST节点都会有一个对应的evaluate函数，这个函数的作用就是告诉Simple解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现JavaScript语言解释器-三">
+<meta property="og:url" content="http://yoursite.com/2022/03/07/%E5%AE%9E%E7%8E%B0JavaScript%E8%AF%AD%E8%A8%80%E8%A7%A3%E9%87%8A%E5%99%A8-%E4%B8%89/index.html">
+<meta property="og:site_name" content="Xiaocong Dong">
+<meta property="og:description" content="前言上篇文章我为大家介绍了语法解析的一些基本概念，以及如何通过自定义的DSL语言实现Simple语言解释器的语法树解析。在本篇也是这个系列最后一篇文章中我将为大家介绍Simple解释器是如何执行生成的语法树的。 evaluate函数和作用域前面在介绍语法解析相关知识的时候有出现过evaluate函数，其实基本每一个AST节点都会有一个对应的evaluate函数，这个函数的作用就是告诉Simple解">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/gallery/thumbnails/simple-js.jpg">
+<meta property="article:published_time" content="2022-03-07T13:11:16.000Z">
+<meta property="article:modified_time" content="2022-03-07T13:50:51.004Z">
+<meta property="article:author" content="Xiaocong Dong">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta property="article:tag" content="Interpreter">
+<meta property="article:tag" content="编译原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/gallery/thumbnails/simple-js.jpg">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/gopherjs.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156001580-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-156001580-1');
+</script>
+
+    
+    <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?e89dd89c33d3b42b7d556cc0f001340c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<script data-ad-client="ca-pub-8011576684331395" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</head>
+<body class="is-1-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/gopherjs.png" alt="实现JavaScript语言解释器-三" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-12 has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/simple-js.jpg" alt="实现JavaScript语言解释器-三">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2022-03-07T13:11:16.000Z">2022-03-07</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    14 分钟 读完 (大约 2152 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                实现JavaScript语言解释器-三
+            
+        </h1>
+        <div class="content">
+            <html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="https://superseany.com/2021/04/18/%E5%AE%9E%E7%8E%B0JavaScript%E8%AF%AD%E8%A8%80%E8%A7%A3%E9%87%8A%E5%99%A8-%E4%BA%8C/" target="_blank" rel="noopener">上篇文章</a>我为大家介绍了<code>语法解析</code>的一些基本概念，以及如何通过自定义的DSL语言实现Simple语言解释器的语法树解析。在本篇也是这个系列最后一篇文章中我将为大家介绍Simple解释器是如何执行生成的语法树的。</p>
+<h2 id="evaluate函数和作用域"><a href="#evaluate函数和作用域" class="headerlink" title="evaluate函数和作用域"></a>evaluate函数和作用域</h2><p>前面在介绍语法解析相关知识的时候有出现过<code>evaluate</code>函数，其实<code>基本每一个AST节点都会有一个对应的evaluate函数</code>，这个函数的作用就是告诉Simple解释器如何执行当前AST节点。因此Simple解释器执行代码的过程就是：<code>从根节点开始执行当前节点的evaluate函数然后递归地执行子节点evalute函数的过程</code>。</p>
+<p>我们知道JavaScript代码执行的时候有一个概念叫做<code>作用域</code>，当我们访问一个变量的时候，会先看看当前作用域有没有定义这个变量，如果没有就会沿着作用域链向上一直寻找到全局作用域，如果作用域链上都没有该变量的定义的话就会抛出一个<code>Uncaught ReferenceError: xx is not defined</code>的错误。在实现Simple语言解释器的时候，我参照了JavaScript作用域的概念实现了一个叫做<code>Environment</code>的类，我们来看看Evironment类的实现：</p>
+<figure class="highlight ts hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// lib/runtime/Environment.ts</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// Environment类就是Simple语言的作用域</span></span><br><span class="line"><span class="hljs-keyword">class</span> Environment {</span><br><span class="line">  <span class="hljs-comment">// parent指向当前作用域的父级作用域</span></span><br><span class="line">  <span class="hljs-keyword">private</span> parent: Environment = <span class="hljs-literal">null</span></span><br><span class="line">  <span class="hljs-comment">// values对象会以key-value的形式存储当前作用域变量的引用和值</span></span><br><span class="line">  <span class="hljs-comment">// 例如values = {a: 10}，代表当前作用域有一个变量a，它的值是10</span></span><br><span class="line">  <span class="hljs-keyword">protected</span> values: <span class="hljs-built_in">Object</span> = {}</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// 当前作用域有新的变量定义的时候会调用create函数进行值的设置</span></span><br><span class="line">  <span class="hljs-comment">// 例如执行 let a = 10 时，会调用env.create('a', 10)</span></span><br><span class="line">  create(key: <span class="hljs-built_in">string</span>, value: <span class="hljs-built_in">any</span>) {</span><br><span class="line">    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.values.hasOwnProperty(key)) {</span><br><span class="line">      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`<span class="hljs-subst">${key}</span> has been initialized`</span>)</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">this</span>.values[key] = value</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// 如果某个变量被重新赋值，Simple会沿着当前作用域链进行寻找，找到最近的符合条件的作用域，然后在该作用域上进行重新赋值</span></span><br><span class="line">  update(key: <span class="hljs-built_in">string</span>, value: <span class="hljs-built_in">any</span>) {</span><br><span class="line">    <span class="hljs-keyword">const</span> matchedEnvironment = <span class="hljs-keyword">this</span>.getEnvironmentWithKey(key)</span><br><span class="line">    <span class="hljs-keyword">if</span> (!matchedEnvironment) {</span><br><span class="line">      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`Uncaught ReferenceError: <span class="hljs-subst">${key}</span> hasn't been defined`</span>)</span><br><span class="line">    }</span><br><span class="line">    matchedEnvironment.values = {</span><br><span class="line">      ...matchedEnvironment.values,</span><br><span class="line">      [key]: value</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// 在作用域链上寻找某个变量，如果没有找到就抛出Uncaught ReferenceError的错误</span></span><br><span class="line">  <span class="hljs-keyword">get</span>(key: <span class="hljs-built_in">string</span>) {</span><br><span class="line">    <span class="hljs-keyword">const</span> matchedEnvironment = <span class="hljs-keyword">this</span>.getEnvironmentWithKey(key)</span><br><span class="line">    <span class="hljs-keyword">if</span> (!matchedEnvironment) {</span><br><span class="line">      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`Uncaught ReferenceError: <span class="hljs-subst">${key}</span> is not defined`</span>)</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">return</span> matchedEnvironment.values[key]</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// 沿着作用域链向上寻找某个变量的值，如果没有找到就返回null</span></span><br><span class="line">  <span class="hljs-keyword">private</span> getEnvironmentWithKey(key: <span class="hljs-built_in">string</span>): Environment {</span><br><span class="line">    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.values.hasOwnProperty(key)) {</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></span><br><span class="line">    }</span><br><span class="line">  </span><br><span class="line">    <span class="hljs-keyword">let</span> currentEnvironment = <span class="hljs-keyword">this</span>.parent</span><br><span class="line">    <span class="hljs-keyword">while</span>(currentEnvironment) {</span><br><span class="line">      <span class="hljs-keyword">if</span> (currentEnvironment.values.hasOwnProperty(key)) {</span><br><span class="line">        <span class="hljs-keyword">return</span> currentEnvironment</span><br><span class="line">      }</span><br><span class="line">      currentEnvironment = currentEnvironment.parent</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span></span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>从上面的代码以及注释可以看出，所谓的作用域链其实就是由Environment实例组成的<code>单向链表</code>。解析某个变量值的时候会沿着这个作用域链进行寻找，如果没有找到该变量的定义就会报错。接着我们以for循环执行的过程来看一下具体过程是怎么样的：</p>
+<p>被执行的代码：</p>
+<figure class="highlight ts hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(i);</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<p>ForStatement代码的执行过程：</p>
+<figure class="highlight ts hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// lib/ast/node/ForStatement.ts</span></span><br><span class="line"><span class="hljs-keyword">class</span> ForStatement <span class="hljs-keyword">extends</span> Node {</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// evaluate函数会接受一个作用域对象，这个对象代表当前AST节点的执行作用域</span></span><br><span class="line">  evaluate(env: Environment): <span class="hljs-built_in">any</span> {</span><br><span class="line">    <span class="hljs-comment">// 上面for循环括号里面的内容是在一个独立的作用域里面的，所以需要基于父级节点传递过来的作用域新建一个作用域，取名为bridgeEnvironment</span></span><br><span class="line">    <span class="hljs-keyword">const</span> bridgeEnvironment = <span class="hljs-keyword">new</span> Environment(env)</span><br><span class="line">    <span class="hljs-comment">// if括号内的变量初始化(let i = 0)会在这个作用域里面进行</span></span><br><span class="line">    <span class="hljs-keyword">this</span>.init.evaluate(bridgeEnvironment)</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 如果当前作用域没有被break语句退出 &amp;&amp; return语句返回 &amp;&amp; 测试表达式(i &lt; 10)是真值，for循环就会继续执行，否则for循环中断</span></span><br><span class="line">    <span class="hljs-keyword">while</span>(!runtime.isBreak &amp;&amp; !runtime.isReturn &amp;&amp; <span class="hljs-keyword">this</span>.test.evaluate(bridgeEnvironment)) {</span><br><span class="line">      <span class="hljs-comment">// 因为for循环体(console.log(i))是一个新的作用域，所以要基于当前的brigeEnvironment新建一个子作用域</span></span><br><span class="line">      <span class="hljs-keyword">const</span> executionEnvironment = <span class="hljs-keyword">new</span> Environment(bridgeEnvironment)</span><br><span class="line">      <span class="hljs-keyword">this</span>.body.evaluate(executionEnvironment)</span><br><span class="line">      <span class="hljs-comment">// 循环变量的更新(i++)会在brigeEnvironment里面执行</span></span><br><span class="line">      <span class="hljs-keyword">this</span>.update.evaluate(bridgeEnvironment)</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="闭包和this绑定"><a href="#闭包和this绑定" class="headerlink" title="闭包和this绑定"></a>闭包和this绑定</h2><p>在理解了evalute函数的一般执行过程后，我们再来看看<code>闭包</code>是如何实现的。我们都知道JavaScript是<code>词法作用域</code>，也就是说一个<code>函数的作用域链在这个函数被定义的时候就决定了</code>。我们通过函数声明节点<code>FunctionDeclaration</code>的evaluate函数的代码来看一下Simple语言的闭包是如何实现的:</p>
+<figure class="highlight ts hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// lib/ast/node/FunctionDeclaration.ts</span></span><br><span class="line"><span class="hljs-keyword">class</span> FunctionDeclaration <span class="hljs-keyword">extends</span> Node {</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// 当函数声明语句被执行的时候，这个evaluate函数会被执行，传进来的对象就是当前的执行作用域</span></span><br><span class="line">  evaluate(env: Environment): <span class="hljs-built_in">any</span> {</span><br><span class="line">    <span class="hljs-comment">// 生成一个新的FunctionDeclaration对象，因为同一个函数可能被多次定义（例如这个函数被嵌套定义在某个父级函数的时候）</span></span><br><span class="line">    <span class="hljs-keyword">const</span> func = <span class="hljs-keyword">new</span> FunctionDeclaration()</span><br><span class="line">    <span class="hljs-comment">// 函数复制</span></span><br><span class="line">    func.loc = <span class="hljs-keyword">this</span>.loc</span><br><span class="line">    func.id = <span class="hljs-keyword">this</span>.id</span><br><span class="line">    func.params = [...this.params]</span><br><span class="line">    func.body = <span class="hljs-keyword">this</span>.body</span><br><span class="line">    </span><br><span class="line">    <span class="hljs-comment">// 函数被声明的时候会通过parentEnv属性记录下当前的执行作用域，这就是闭包了！！！</span></span><br><span class="line">    func.parentEnv = env</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 将函数注册到当前的执行作用域上面，该函数就可以被递归调用了</span></span><br><span class="line">    env.create(<span class="hljs-keyword">this</span>.id.name, func)</span><br><span class="line">  }</span><br><span class="line">  ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>从上面的代码可以看出，要实现Simple语言的闭包，<code>其实只需要在函数声明的时候记录一下当前作用域(parentEnv)就可以了</code>。</p>
+<p>接着我们再来看一下函数执行的时候是如何判断<code>this</code>绑定的是哪个对象的：</p>
+<figure class="highlight ts hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// lib/ast/node/FunctionDeclaration.ts</span></span><br><span class="line"><span class="hljs-keyword">class</span> FunctionDeclaration <span class="hljs-keyword">extends</span> Node {</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// 函数执行的时候，如果存在调用函数的实例，该实例会被当做参数传进来，例如a.test()，a就是test的这个参数</span></span><br><span class="line">  call(args: <span class="hljs-built_in">Array</span>&lt;<span class="hljs-built_in">any</span>&gt;, callerInstance?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">any</span> {</span><br><span class="line">    <span class="hljs-comment">// 函数执行时传进来的参数如果少于声明的参数会报错</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.params.length !== args.length) {</span><br><span class="line">      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'function declared parameters are not matched with arguments'</span>)</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 这是实现闭包的重点，函数执行时的父级作用域是之前函数被定义的时候记录下来的父级作用域！！</span></span><br><span class="line">    <span class="hljs-keyword">const</span> callEnvironment = <span class="hljs-keyword">new</span> Environment(<span class="hljs-keyword">this</span>.parentEnv)</span><br><span class="line">    </span><br><span class="line">    <span class="hljs-comment">// 函数参数进行初始化</span></span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; args.length; i++) {</span><br><span class="line">      <span class="hljs-keyword">const</span> argument = args[i]</span><br><span class="line">      <span class="hljs-keyword">const</span> param = <span class="hljs-keyword">this</span>.params[i]</span><br><span class="line"></span><br><span class="line">      callEnvironment.create(param.name, argument)</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-comment">// 创建函数的arguments对象</span></span><br><span class="line">    callEnvironment.create(<span class="hljs-string">'arguments'</span>, args)</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 如果当前函数有调用实例，那么这个函数的this将会是调用实例</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (callerInstance) {</span><br><span class="line">      callEnvironment.create(<span class="hljs-string">'this'</span>, callerInstance)</span><br><span class="line">    } <span class="hljs-keyword">else</span> {</span><br><span class="line">      <span class="hljs-comment">// 如果函数没有调用实例，就会沿着函数的作用域链就行寻找，直到全局的process(node)或者window(browser)对象</span></span><br><span class="line">      callEnvironment.create(<span class="hljs-string">'this'</span>, <span class="hljs-keyword">this</span>.parentEnv.getRootEnv().get(<span class="hljs-string">'process'</span>))</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 函数体的执行</span></span><br><span class="line">    <span class="hljs-keyword">this</span>.body.evaluate(callEnvironment)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>上面的代码大概给大家介绍了Simple语言的this是如何绑定的，实际上JavaScript的实现可能和这个有比较大的出入，这里只是给大家一个参考而已。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在本篇文章中我给大家介绍了Simple解释器是如何执行代码的，其中包括闭包和this绑定的内容，由于篇幅限制这里忽略了很多内容，例如for和while循环的break语句是如何退出的，函数的return语句是如何将值传递给父级函数的，大家如果感兴趣可以看一下我的源码：<br><a href="https://github.com/XiaocongDong/simple。" target="_blank" rel="noopener">https://github.com/XiaocongDong/simple。</a></p>
+<p>最后希望大家经过这三篇系列文章的学习可以对编译原理和JavaScript一些比较难懂的语言特性有一定的了解，也希望后面我可以继续给大家带来优质的内容来让我们共同进步。</p>
+<ul>
+<li><a href="https://superseany.com/2020/10/29/%E5%AE%9E%E7%8E%B0JavaScript%E8%AF%AD%E8%A8%80%E8%A7%A3%E9%87%8A%E5%99%A8-%E4%B8%80/" target="_blank" rel="noopener">实现JavaScript语言解释器-一</a></li>
+<li><a href="https://superseany.com/2021/04/18/%E5%AE%9E%E7%8E%B0JavaScript%E8%AF%AD%E8%A8%80%E8%A7%A3%E9%87%8A%E5%99%A8-%E4%BA%8C/" target="_blank" rel="noopener">实现JavaScript语言解释器-二</a></li>
+</ul>
+<h2 id="个人技术动态"><a href="#个人技术动态" class="headerlink" title="个人技术动态"></a>个人技术动态</h2><p>欢迎关注公众号<strong>进击的大葱</strong>一起学习成长</p>
+<p><img src="/images/wechat_qr.jpg" alt=""></p>
+</body></html>
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/Interpreter/" rel="tag">Interpreter</a>, <a class="has-link-grey -link" href="/tags/JavaScript/" rel="tag">JavaScript</a>, <a class="has-link-grey -link" href="/tags/TypeScript/" rel="tag">TypeScript</a>, <a class="has-link-grey -link" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag">编译原理</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="/images/wechat_pay.jpg" alt="微信"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2021/04/18/%E5%AE%9E%E7%8E%B0JavaScript%E8%AF%AD%E8%A8%80%E8%A7%A3%E9%87%8A%E5%99%A8-%E4%BA%8C/">
+                <span class="level-item">实现JavaScript语言解释器-（二）</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '9f8248396688b3a9dfdfc2e76001cc88',
+		owner: 'XiaocongDong',
+		repo: 'XiaocongDong.github.io',
+		oauth: {
+			client_id: '9a8b4c4057518a9704d3',
+			client_secret: '541c790c4f2386c7d15cec89076baa08d1a9a9ad',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+                
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/gopherjs.png" alt="实现JavaScript语言解释器-三" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2022 Xiaocong Dong&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+<script>
+var IcarusThemeSettings = {
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+    
+    
+<script src="/js/animation.js"></script>
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+    
+    
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+    
+    
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.1" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>CSS in JS的好与坏 - Xiaocong Dong</title>
+
+
+    <meta name="description" content="是什么CSS-in-JS是一种技术（technique），而不是一个具体的库实现（library）。简单来说CSS-in-JS就是将应用的CSS样式写在JavaScript文件里面，而不是独立为一些.css，.scss或者less之类的文件，这样你就可以在CSS中使用一些属于JS的诸如模块声明，变量定义，函数调用和条件判断等语言特性来提供灵活的可扩展的样式定义。值得一提的是，虽然CSS-in-JS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS in JS的好与坏">
+<meta property="og:url" content="http://yoursite.com/2020/01/19/CSS-in-JS%E7%9A%84%E5%A5%BD%E4%B8%8E%E5%9D%8F/index.html">
+<meta property="og:site_name" content="Xiaocong Dong">
+<meta property="og:description" content="是什么CSS-in-JS是一种技术（technique），而不是一个具体的库实现（library）。简单来说CSS-in-JS就是将应用的CSS样式写在JavaScript文件里面，而不是独立为一些.css，.scss或者less之类的文件，这样你就可以在CSS中使用一些属于JS的诸如模块声明，变量定义，函数调用和条件判断等语言特性来提供灵活的可扩展的样式定义。值得一提的是，虽然CSS-in-JS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/gallery/thumbnails/css-in-js.png">
+<meta property="article:published_time" content="2020-01-19T10:57:50.000Z">
+<meta property="article:modified_time" content="2022-03-07T13:50:50.999Z">
+<meta property="article:author" content="Xiaocong Dong">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="CSS-in-JS">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/gallery/thumbnails/css-in-js.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/gopherjs.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156001580-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-156001580-1');
+</script>
+
+    
+    <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?e89dd89c33d3b42b7d556cc0f001340c";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<script data-ad-client="ca-pub-8011576684331395" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</head>
+<body class="is-1-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/gopherjs.png" alt="CSS in JS的好与坏" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-12 has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/css-in-js.png" alt="CSS in JS的好与坏">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-01-19T10:57:50.000Z">2020-01-19</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    35 分钟 读完 (大约 5261 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                CSS in JS的好与坏
+            
+        </h1>
+        <div class="content">
+            <html><head></head><body><h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><p>CSS-in-JS是一种技术（technique），而不是一个具体的库实现（library）。简单来说CSS-in-JS就是<strong>将应用的CSS样式写在JavaScript文件里面</strong>，而不是独立为一些<code>.css</code>，<code>.scss</code>或者<code>less</code>之类的文件，这样你就可以在CSS中使用一些属于JS的诸如模块声明，变量定义，函数调用和条件判断等语言特性来提供灵活的可扩展的样式定义。值得一提的是，虽然CSS-in-JS不是一种很新的技术，可是它在国内普及度好像并不是很高，它当初的出现是因为一些<code>component-based</code>的Web框架（例如React，Vue和Angular）的逐渐流行，使得开发者也想将组件的CSS样式也一块封装到组件中去以<strong>解决原生CSS写法的一系列问题</strong>。还有就是CSS-in-JS在React社区的热度是最高的，这是因为React本身不会管用户怎么去为组件定义样式的问题，而Vue和Angular都有属于框架自己的一套定义样式的方案。</p>
+<p>本文将通过分析CSS-in-JS这项技术带来的好处以及它存在的一些问题来帮助大家判断自己是不是要在项目中使用CSS-in-JS。</p>
+<a id="more"></a>
+
+<h2 id="不同的实现"><a href="#不同的实现" class="headerlink" title="不同的实现"></a>不同的实现</h2><p>实现了CSS-in-JS的库有很多，<a href="https://github.com/MicheleBertoli/css-in-js" target="_blank" rel="noopener">据统计</a>现在已经超过了61种。虽然每个库解决的问题都差不多，可是它们的实现方法和语法却大相径庭。从实现方法上区分大体分为两种：唯一CSS选择器和内联样式（Unique Selector VS Inline Styles）。接下来我们会分别看一下对应于这两种实现方式的两个比较有代表性的实现：<a href="https://www.styled-components.com/" target="_blank" rel="noopener">styled-components</a>和<a href="https://formidable.com/open-source/radium/" target="_blank" rel="noopener">radium</a>。</p>
+<h3 id="Styled-components"><a href="#Styled-components" class="headerlink" title="Styled-components"></a>Styled-components</h3><p><a href="https://www.styled-components.com/" target="_blank" rel="noopener">Styled-components</a> 应该是CSS-in-JS最热门的一个库了，到目前为止github的star数已经超过了27k。通过styled-components，你可以使用ES6的<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" target="_blank" rel="noopener">标签模板字符串</a>语法（Tagged Templates）为需要<code>styled</code>的Component定义一系列CSS属性，当该组件的JS代码被解析执行的时候，styled-components会动态生成一个CSS选择器，并把对应的CSS样式通过style标签的形式插入到head标签里面。动态生成的CSS选择器会有一小段哈希值来保证全局唯一性来避免样式发生冲突。</p>
+<p><a href="https://www.cssinjsplayground.com/" target="_blank" rel="noopener">CSS-in-JS Playground</a>是一个可以快速尝试不同CSS-in-JS实现的网站，上面有一个简单的用styled-components实现表单的例子：</p>
+<p><img src="/images/css-in-js/styled-component-form.png" alt=""></p>
+<p>从上面的例子可以看出，styled-components不需要你为需要设置样式的DOM节点设置一个样式名，使用完标签模板字符串定义后你会得到一个styled好的Component，直接在JSX中使用这个Component就可以了。接着让我们打开DevTools查看一下生成的CSS：</p>
+<p><img src="/images/css-in-js/styled-component-form-devtools.png" alt=""></p>
+<p>从上面DevTools可以看出styled的Component样式存在于style标签内，而且选择器名字是一串随机的哈希字符串，这样其实实现了局部CSS作用域的效果（scoping styles），各个组件的样式不会发生冲突。除了styled-components，采用唯一CSS选择器做法的实现还有：<a href="https://github.com/cssinjs/jss" target="_blank" rel="noopener">jss</a>，<a href="https://github.com/emotion-js/emotion" target="_blank" rel="noopener">emotion</a>，<a href="https://github.com/paypal/glamorous" target="_blank" rel="noopener">glamorous</a>等。</p>
+<h3 id="Radium"><a href="#Radium" class="headerlink" title="Radium"></a>Radium</h3><p><a href="https://formidable.com/open-source/radium/" target="_blank" rel="noopener">Radium</a>是由FormidableLabs创建的在github上有超过7.2k star的CSS-in-JS库。Radium和styled-components的最大区别是它生成的是标签内联样式（inline styles）。由于标签内联样式在处理诸如<code>media query</code>以及<code>:hover</code>，<code>:focus</code>，<code>:active</code>等和浏览器状态相关的样式的时候非常不方便，所以radium为这些样式封装了一些标准的接口以及抽象。</p>
+<p>再来看一下radium在CSS-in-JS Playground的例子：</p>
+<p><img src="/images/css-in-js/radium-form.png" alt=""></p>
+<p>从上面的例子可以看出radium定义样式的语法和styled-components有很大的区别，它要求你使用style属性为DOM添加相应的样式。打开DevTools查看一下radium生成的CSS：</p>
+<p><img src="/images/css-in-js/radium-form-css.png" alt=""></p>
+<p>从DevTools上面inspect的结果可以看出，radium会直接在标签内生成内联样式。内联样式相比于CSS选择器的方法有以下的优点：</p>
+<ul>
+<li>自带局部样式作用域的效果，无需额外的操作</li>
+<li>内联样式的权重（specificity）是最高的，可以避免权重冲突的烦恼</li>
+<li>由于样式直接写在HTML中，十分方便开发者调试</li>
+</ul>
+<h3 id="其他区别"><a href="#其他区别" class="headerlink" title="其他区别"></a>其他区别</h3><p>不同的CSS-in-JS实现除了生成的CSS样式和编写语法有所区别外，它们实现的功能也不尽相同，除了一些最基本的诸如CSS局部作用域的功能，下面这些功能有的实现会包含而有的却不支持：</p>
+<ul>
+<li>自动生成浏览器引擎前缀 - built-in vendor prefix</li>
+<li>支持抽取独立的CSS样式表 - extract css file</li>
+<li>自带支持动画 - built-in support for animations</li>
+<li>伪类 - pseudo classes</li>
+<li>媒体查询 - media query</li>
+<li>其他</li>
+</ul>
+<p>想了解更多关于不同CSS-in-JS的对比，可以看一下Michele Bertoli整理的不同实现的<a href="https://github.com/michelebertoli/css-in-js#features" target="_blank" rel="noopener">对比图</a>。</p>
+<h2 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h2><p>看完了一些不同的实现，大家应该对CSS-in-JS一些基本的概念和用法有了大概的理解，接着我们可以来聊一下CSS-in-JS都有什么好处和坏处了。</p>
+<h3 id="局部样式-Scoping-Styles"><a href="#局部样式-Scoping-Styles" class="headerlink" title="局部样式 - Scoping Styles"></a>局部样式 - Scoping Styles</h3><p>CSS有一个被大家诟病的问题就是没有本地作用域，所有声明的样式都是全局的（global styles）。换句话来说页面上任意元素只要匹配上某个选择器的规则，这个规则就会被应用上，而且规则和规则之间可以叠加作用（cascading）。SPA应用流行了之后这个问题变得更加突出了，因为对于SPA应用来说所有页面的样式代码都会加载到同一个环境中，样式冲突的概率会大大加大。由于这个问题的存在，我们在日常开发中会遇到以下这些问题：</p>
+<ul>
+<li>很难为选择器起名字。为了避免和页面上其他元素的样式发生冲突，我们在起选择器名的时候一定要深思熟虑，起的名字一定不能太普通。举个例子，假如你为页面上某个作为标题的DOM节点定义一个叫做<code>.title</code>的样式名，这个类名很大概率已经或者将会和页面上的其他选择器发生冲突，所以你不得不<strong>手动</strong>为这个类名添加一些前缀，例如<code>.home-page-title</code>来避免这个问题。</li>
+<li>团队多人合作困难。当多个人一起开发同一个项目的时候，特别是多个分支同时开发的时候，大家各自取的选择器名字可能有会冲突，可是在本地独立开发的时候这个问题几乎发现不了。当大家的代码合并到同一个分支的时候，一些样式的问题就会随之出现。</li>
+</ul>
+<p>CSS-in-JS会提供<strong>自动</strong>局部CSS作用域的功能，你为组件定义的样式会被限制在这个组件，而不会对其他组件的样式产生影响。不同的CSS-in-JS库实现局部作用域的方法可能有所不一样，一般来说它们会通过为组件的样式生成唯一的选择器来限制CSS样式的作用域。以下是一个简化了的CSS-in-JS库生成唯一选择器的示例代码：</p>
+<figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> css = <span class="hljs-function"><span class="hljs-params">styleBlock</span> =&gt;</span> {</span><br><span class="line">  <span class="hljs-keyword">const</span> className = someHash(styleBlock);</span><br><span class="line">  <span class="hljs-keyword">const</span> styleEl = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'style'</span>);</span><br><span class="line">  styleEl.textContent = <span class="hljs-string">`</span></span><br><span class="line"><span class="hljs-string">    .<span class="hljs-subst">${className}</span> {</span></span><br><span class="line"><span class="hljs-string">      <span class="hljs-subst">${styleBlock}</span></span></span><br><span class="line"><span class="hljs-string">    }</span></span><br><span class="line"><span class="hljs-string">  `</span>;</span><br><span class="line">  <span class="hljs-built_in">document</span>.head.appendChild(styleEl);</span><br><span class="line">  <span class="hljs-keyword">return</span> className;</span><br><span class="line">};</span><br><span class="line"><span class="hljs-keyword">const</span> className = css(<span class="hljs-string">`</span></span><br><span class="line"><span class="hljs-string">  color: red;</span></span><br><span class="line"><span class="hljs-string">  padding: 20px;</span></span><br><span class="line"><span class="hljs-string">`</span>); <span class="hljs-comment">// 'c23j4'</span></span><br></pre></td></tr></tbody></table></figure>
+<p>从上面的代码可以看出，CSS-in-JS的实现会根据定义的样式字符串生成一个唯一的CSS选择器，然后把对应的样式插入到页面头部的style标签中，styled-components使用的就是类似的方法。</p>
+<h3 id="避免无用的CSS样式堆积-Dead-Code-Elimination"><a href="#避免无用的CSS样式堆积-Dead-Code-Elimination" class="headerlink" title="避免无用的CSS样式堆积 - Dead Code Elimination"></a>避免无用的CSS样式堆积 - Dead Code Elimination</h3><p>进行过大型Web项目开发的同学应该都有经历过这个情景：在开发新的功能或者进行代码重构的时候，由于HTML代码和CSS样式之间没有<strong>显式的一一对应关系</strong>，我们很难辨认出项目中哪些CSS样式代码是有用的哪些是无用的，这就导致了我们不敢轻易删除代码中可能是无用的样式。这样随着时间的推移，项目中的CSS样式只会增加而不会减少(<a href="https://css-tricks.com/oh-no-stylesheet-grows-grows-grows-append-stylesheet-problem/" target="_blank" rel="noopener">append-only stylesheets</a>）。无用的样式代码堆积会导致以下这些问题：</p>
+<ul>
+<li>项目变得越来越重量级，加载到浏览器的CSS样式会越来越多，会造成一定的性能影响。</li>
+<li>开发者发现他们很难理解项目中的样式代码，甚至可能被大量的样式代码吓到，这就导致了开发效率的降低以及一些奇奇怪怪的样式问题的出现。</li>
+</ul>
+<p>CSS-in-JS的思路就可以很好地解决这个问题。我们先来看一段styled-components的作者Max Stoiber说过的话：</p>
+<blockquote>
+<p>“For three years, I have styled my web apps without any .css files. Instead, I have written all the CSS in JavaScript. … I can add, change and delete CSS without any unexpected consequences. My changes to the styling of a component will not affect anything else. If I delete a component, I delete its CSS too. No more append-only stylesheets!” – Max Stoiber</p>
+</blockquote>
+<p>Max Stoiber大体就是说由于CSS-in-JS会把样式和组件绑定在一起，当这个组件要被删除掉的时候，直接把这些代码删除掉就好了，不用担心删掉的样式代码会对项目的其他组件样式产生影响。而且由于CSS是写在JavaScript里面的，我们还可以利用JS显式的变量定义，模块引用等语言特性来追踪样式的使用情况，这大大方便了我们对样式代码的更改或者重构。</p>
+<h3 id="Critical-CSS"><a href="#Critical-CSS" class="headerlink" title="Critical CSS"></a>Critical CSS</h3><p>浏览器在将我们的页面呈现给用户之前一定要先完成页面引用到的CSS文件的下载和解析（download and parse），所以link标签链接的CSS资源是渲染阻塞的（render-blocking）。如果CSS文件非常大或者网络的状况很差，渲染阻塞的CSS会严重影响用户体验。针对这个问题，社区有一种优化方案就是将一些重要的CSS代码（Critical CSS）直接放在头部的style标签内，其余的CSS代码再进行异步加载，这样浏览器在解析完HTML后就可以直接渲染页面了。具体做法类似于以下代码：</p>
+<figure class="highlight html hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span></span><br><span class="line"><span class="hljs-css">      <span class="hljs-comment">/* critical CSS */</span></span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-actionscript">asyncLoadCSS(<span class="hljs-string">"non-critical.css"</span>)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="line">    ...body goes here</span><br><span class="line">  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<p>那么如何定义Critical CSS呢？放在head标签内的CSS当然是越少越好，因为太多的内容会加大html的体积，所以我们一般把<strong>用户需要在首屏看到的（above the fold）页面要用到的最少CSS提取为Critical CSS</strong>。以下是示意图：<br><img src="/images/css-in-js/above-the-fold.png" alt=""></p>
+<p>上图中above the fold的CSS就是Critical CSS，因为它们需要立即展示在用户面前。由于页面在不同的设备上展示的效果不同，对应着的Critical CSS内容也会有所差别，因此Critical CSS的提取是一个十分复杂的过程，虽然社区有很多对应的工具可是效果都差强人意。CSS-in-JS却可以很好地支持Critical CSS的生成。在CSS-in-JS中，由于CSS是和组件绑定在一起的，只有当组件挂载到页面上的时候，它们的CSS样式才会被插入到页面的style标签内，所以很容易就可以知道哪些CSS样式需要在首屏渲染的时候发送给客户端，再配合打包工具的Code Splitting功能，可以将加载到页面的代码最小化，从而达到Critical CSS的效果。换句话来说，CSS-in-JS通过增加一点加载的JS体积就可以避免另外发一次请求来获取其它的CSS文件。而且一些CSS-in-JS的实现（例如styled-components）对Critical CSS是<strong>自动支持的</strong>。</p>
+<h3 id="基于状态的样式定义-State-based-styling"><a href="#基于状态的样式定义-State-based-styling" class="headerlink" title="基于状态的样式定义 - State-based styling"></a>基于状态的样式定义 - State-based styling</h3><p>CSS-in-JS最吸引我的地方就是它可以根据组件的状态动态地生成样式。对于SPA应用来说，特别是一些交互复杂的页面，页面的样式通常要根据组件的状态变化而发生变化。如果不使用CSS-in-JS，处理这些逻辑复杂的情况会比较麻烦。举个例子，假如你现在页面有一个圆点，它根据不同的状态展示不同的颜色，<code>running</code>的时候是绿色，<code>stop</code>的时候是红色，<code>ready</code>的时候是黄色。如果使用的是CSS modules方案你可能会写下面的代码：</p>
+<p><code>style.css</code>文件</p>
+<figure class="highlight css hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-selector-class">.circle</span> {</span><br><span class="line">  ... circle base styles</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-selector-class">.healthy</span> {</span><br><span class="line">  <span class="hljs-attribute">composes</span>: circle;</span><br><span class="line">  <span class="hljs-attribute">background-color</span>: green;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-selector-class">.stop</span> {</span><br><span class="line">  <span class="hljs-attribute">composes</span>: circle;</span><br><span class="line">  <span class="hljs-attribute">background-color</span>: red;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-selector-class">.ready</span> {</span><br><span class="line">  <span class="hljs-attribute">composes</span>: circle;</span><br><span class="line">  <span class="hljs-attribute">background-color</span>: </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p><code>index.js</code>文件</p>
+<figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span></span><br><span class="line"><span class="hljs-keyword">import</span> styles <span class="hljs-keyword">from</span> <span class="hljs-string">'./style.css'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> styleLookup = {</span><br><span class="line">  healthy: styles.healthy,</span><br><span class="line">  stop: styles.stop,</span><br><span class="line">  ready: styles.ready</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> ({ status }) =&gt; (</span><br><span class="line">  &lt;div</span><br><span class="line">    className={styleLookup[status]}</span><br><span class="line">  /&gt;</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+<p>在style.css中我们使用了CSS modules的继承写法来在不同状态的CSS类中共用circle基类的样式，代码看起来十分冗余和繁琐。由于CSS-in-JS会直接将CSS样式写在JS文件里面，所以样式复用以及逻辑判断都十分方便，如果上面的例子用styled-components来写是这样的：</p>
+<figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> styled <span class="hljs-keyword">from</span> <span class="hljs-string">'styled-components'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> circleColorLookup = {</span><br><span class="line">  healthy: <span class="hljs-string">'green'</span>,</span><br><span class="line">  stop: <span class="hljs-string">'red'</span>,</span><br><span class="line">  ready: <span class="hljs-string">'yellow'</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> styled.div<span class="hljs-string">`</span></span><br><span class="line"><span class="hljs-string">  ... circle base styles</span></span><br><span class="line"><span class="hljs-string">  background-color: <span class="hljs-subst">${({ status }</span>) =&gt; circleColorLookup[status]};</span></span><br><span class="line"><span class="hljs-string">`</span></span><br></pre></td></tr></tbody></table></figure>
+<p>对比起来，styled-components的逻辑更加清晰和简洁，如果后面需要增加一个状态，只需要为<code>circleColorLookup</code>添加一个键值对就好，而CSS modules的写法需要同时改动style.css和index.js文件，代码不好维护和扩展。</p>
+<h3 id="封装得更好的组件库"><a href="#封装得更好的组件库" class="headerlink" title="封装得更好的组件库"></a>封装得更好的组件库</h3><p>大家在日常开发的过程中可能会封装一些组件在不同的项目中使用，如果你的组件的样式使用的CSS预处理方案和另外一个项目的预处理方案不一样，例如组件使用的是less，项目使用的是css modules，组件复用会变得很麻烦。可是如果CSS是写在JS里面的，项目想要使用封装的组件库只需要进行简单的<code>npm install</code>就可以了，非常方便。</p>
+<h2 id="坏处"><a href="#坏处" class="headerlink" title="坏处"></a>坏处</h2><p><strong>任何事物都有好的地方和坏的地方，只有对好处和坏处都了解清楚我们才能更好地做出判断。</strong>接着我们就来说一下CSS-in-JS不好的地方吧。</p>
+<h3 id="陡峭的学习曲线-Steep-learning-curve"><a href="#陡峭的学习曲线-Steep-learning-curve" class="headerlink" title="陡峭的学习曲线 - Steep learning curve"></a>陡峭的学习曲线 - Steep learning curve</h3><p>这其实可以从两方面来说明。首先CSS-in-JS是针对component-based的框架的，这就意味着要学习CSS-in-JS你必须得学习：component-based框架（例如React），JavaScript和CSS这三样技能。其次，即使你已经会用React，JavaScript和CSS来构建SPA应用，你还要学习某个CSS-in-JS实现（例如styled-components），以及学习一种全新的基于组件定义样式的思考问题方式。我们团队在刚开始使用styled-components的时候，适应了好一段时间才学会如何用好这个库。因为学习成本比较高，在项目中引入CSS-in-JS可能会降低你们的开发效率。</p>
+<h3 id="运行时消耗-Runtime-cost"><a href="#运行时消耗-Runtime-cost" class="headerlink" title="运行时消耗 - Runtime cost"></a>运行时消耗 - Runtime cost</h3><p>由于大多数的CSS-in-JS的库都是在动态生成CSS的。这会有两方面的影响。首先你发送到客户端的代码会包括使用到的CSS-in-JS运行时（runtime）代码，这些代码一般都不是很小，例如styled-components的runtime大小是<code>12.42kB min + gzip</code>，如果你希望你首屏加载的代码很小，你得考虑这个问题。其次大多数CSS-in-JS实现都是在客户端动态生成CSS的，这就意味着会有一定的性能代价。不同的CSS-in-JS实现由于具体的实现细节不一样，所以它们的性能也会有很大的区别，你可以通过<a href="http://necolas.github.io/react-native-web/benchmarks/" target="_blank" rel="noopener">这个工具</a>来查看和衡量各个实现的性能差异。</p>
+<h3 id="代码可读性差-Unreadable-class-names"><a href="#代码可读性差-Unreadable-class-names" class="headerlink" title="代码可读性差 - Unreadable class names"></a>代码可读性差 - Unreadable class names</h3><p>大多数CSS-in-JS实现会通过生成唯一的CSS选择器来达到CSS局部作用域的效果。这些自动生成的选择器会大大降低代码的可读性，给开发人员debug造成一定的影响。</p>
+<h3 id="没有统一的业界标准-No-interoperability"><a href="#没有统一的业界标准-No-interoperability" class="headerlink" title="没有统一的业界标准 - No interoperability"></a>没有统一的业界标准 - No interoperability</h3><p>由于CSS-in-JS只是一种技术思路而没有一个社区统一遵循的标准和规范，所以不同实现的语法和功能可能有很大的差异。这就意味着你不能从一个实现快速地切换到另外一个实现。举个例子，假如你先在项目使用radium，可是随着项目规模的变大，你发现radium可能不适合你现在的业务，更好的解决方案应该是styled-components。可是由于写法差异巨大，这时候你要对代码进行脱胎换骨的改动才能将代码迁移到styled-components。不过令人欣慰的是，现在已经有人在制定相关的标准了，有兴趣的同学可以看一下<a href="https://github.com/cssinjs/istf-spec" target="_blank" rel="noopener">Interoperable Style Transfer Format</a>。</p>
+<h2 id="个人思考与总结"><a href="#个人思考与总结" class="headerlink" title="个人思考与总结"></a>个人思考与总结</h2><p>CSS-in-JS有好处也有坏处，我们一定要根据自己的实际情况进行衡量和取舍来确定是不是要在自己的项目中使用它。<strong>永远不要为了使用一个技术而用一个技术</strong>。例如在下面几种情况下你就不需要它:</p>
+<ul>
+<li>你是前端开发的初学者： 由于CSS-in-JS的学习坡度很陡，刚开始学习Web开发的同学没必要学习，可能会有挫败感。</li>
+<li>你只想制作一些功能简单的静态页面：逻辑交互不复杂的网站没有必要使用CSS-in-JS。</li>
+<li>你很注重样式名的可读性以及调试体验： CSS-in-JS动态生成的选择器很影响代码的可读性，可能会降低你的调试效率。</li>
+</ul>
+<p>相反如果你的应用交互逻辑复杂的话，CSS-in-JS可能会给你带来很大的开发便利，没有使用过的人十分值得一试。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a href="https://webdesign.tutsplus.com/articles/an-introduction-to-css-in-js-examples-pros-and-cons--cms-33574" target="_blank" rel="noopener">An Introduction to CSS-in-JS: Examples, Pros, and Cons</a></li>
+<li><a href="https://mxstbr.com/thoughts/css-in-js" target="_blank" rel="noopener">Why I Write CSS in JavaScript</a></li>
+<li><a href="https://css-tricks.com/oh-no-stylesheet-grows-grows-grows-append-stylesheet-problem/" target="_blank" rel="noopener">Oh No! Our Stylesheet Only Grows and Grows and Grows!</a></li>
+<li><a href="https://medium.com/dailyjs/what-is-actually-css-in-js-f2f529a2757" target="_blank" rel="noopener">What actually is CSS-in-JS</a></li>
+<li><a href="https://medium.com/free-code-camp/the-tradeoffs-of-css-in-js-bee5cf926fdb" target="_blank" rel="noopener">The tradeoffs of CSS-in-JS</a></li>
+<li><a href="https://blog.bitsrc.io/9-css-in-js-libraries-you-should-know-in-2018-25afb4025b9b" target="_blank" rel="noopener">9 CSS in JS Libraries you should Know in 2019</a></li>
+<li><a href="https://web.dev/extract-critical-css/" target="_blank" rel="noopener">Extract Critical CSS</a></li>
+</ul>
+<h2 id="个人技术动态"><a href="#个人技术动态" class="headerlink" title="个人技术动态"></a>个人技术动态</h2><p>欢迎关注公众号<strong>进击的大葱</strong>一起学习成长<br><img src="/images/wechat_qr.jpg" alt=""></p>
+</body></html>
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/CSS/" rel="tag">CSS</a>, <a class="has-link-grey -link" href="/tags/CSS-in-JS/" rel="tag">CSS-in-JS</a>, <a class="has-link-grey -link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="/images/wechat_pay.jpg" alt="微信"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/02/17/yarnv2/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">Yarn v2介绍</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2020/01/08/%E7%AA%A5%E6%8E%A2%E7%8E%B0%E4%BB%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84-%E4%B8%89/">
+                <span class="level-item">窥探现代浏览器架构-三</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="https://billts.site/js/gitment.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '2bf7e616eba79cfc2d9c7425a91333e6',
+		owner: 'XiaocongDong',
+		repo: 'XiaocongDong.github.io',
+		oauth: {
+			client_id: '9a8b4c4057518a9704d3',
+			client_secret: '541c790c4f2386c7d15cec89076baa08d1a9a9ad',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+                
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/gopherjs.png" alt="CSS in JS的好与坏" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2022 Xiaocong Dong&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+<script>
+var IcarusThemeSettings = {
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+    
+    
+<script src="/js/animation.js"></script>
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+    
+    
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+    
+    
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
