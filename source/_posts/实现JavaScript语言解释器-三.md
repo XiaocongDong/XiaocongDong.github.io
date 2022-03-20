@@ -16,6 +16,8 @@ date: 2022-03-07 21:11:16
 ## evaluate函数和作用域
 前面在介绍语法解析相关知识的时候有出现过`evaluate`函数，其实`基本每一个AST节点都会有一个对应的evaluate函数`，这个函数的作用就是告诉Simple解释器如何执行当前AST节点。因此Simple解释器执行代码的过程就是：`从根节点开始执行当前节点的evaluate函数然后递归地执行子节点evalute函数的过程`。
 
+<!-- more-->
+
 我们知道JavaScript代码执行的时候有一个概念叫做`作用域`，当我们访问一个变量的时候，会先看看当前作用域有没有定义这个变量，如果没有就会沿着作用域链向上一直寻找到全局作用域，如果作用域链上都没有该变量的定义的话就会抛出一个`Uncaught ReferenceError: xx is not defined`的错误。在实现Simple语言解释器的时候，我参照了JavaScript作用域的概念实现了一个叫做`Environment`的类，我们来看看Evironment类的实现：
 ```ts
 // lib/runtime/Environment.ts
